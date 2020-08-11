@@ -1,0 +1,17 @@
+include *.txt
+include README.md
+include pyproject.toml
+
+graft gliderpy
+
+prune docs
+prune tests
+prune notebooks
+prune *.egg-info
+
+global-exclude *.nc
+
+exclude *.yml
+exclude *.enc
+exclude .gitignore
+exclude .isort.cfg
