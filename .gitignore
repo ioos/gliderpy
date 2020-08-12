@@ -8,3 +8,5 @@ build/
 dist/
 docs/source/tutorial.ipynb
 gliderpy/_version.py
+*.idea
+*__pycache__/
