@@ -1,10 +1,12 @@
 from typing import Optional
 
+import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
 import pandas as pd
 
 from erddapy import ERDDAP
 
-from .plotters import plot_track, plot transect
+from .plotters import plot_track, plot_transect
 
 OptionalStr = Optional[str]
 
@@ -66,7 +68,6 @@ class GliderDataFetcher(object):
         }
         return self
 
-
 class DatasetList:
     """ Search servers for glider dataset ids. Defaults to the string "glider"
 
@@ -89,7 +90,9 @@ class DatasetList:
         for term in self.search_terms:
             url = self.e.get_search_url(search_for=term, response="csv")
 
-            dataset_ids = dataset_ids.append(pd.read_csv(url)["Dataset ID"], ignore_index=True)
-        self.dataset_ids = dataset_ids.str.split(';',expand=True).stack().unique()
+            dataset_ids = dataset_ids.append(
+                pd.read_csv(url)["Dataset ID"], ignore_index=True
+            )
+        self.dataset_ids = dataset_ids.str.split(";", expand=True).stack().unique()
 
         return self.dataset_ids
