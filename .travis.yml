@@ -48,7 +48,7 @@ script:
   - |
     if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
       set -e
-      jupyter nbconvert --to notebook --execute notebooks/demo.ipynb --output=demo-output.ipynb
+      travis_wait jupyter nbconvert --to notebook --execute notebooks/demo.ipynb --output=demo-output.ipynb
       cp notebooks/demo-output.ipynb docs/source/
       pushd docs
       make clean html linkcheck
