@@ -4,8 +4,7 @@ import pandas as pd
 
 from erddapy import ERDDAP
 
-import cartopy.crs as ccrs
-import matplotlib.pyplot as plt
+from .plotters import plot_track, plot transect
 
 OptionalStr = Optional[str]
 
@@ -67,59 +66,6 @@ class GliderDataFetcher(object):
         }
         return self
 
-    def plot_track(self):
-        """
-        Plots a track of glider path coloured by temperature
-        :return: figures, axes
-        """
-        
-        idx = self.to_pandas()
-        x = idx["longitude (degrees_east)"]
-        y = idx["latitude (degrees_north)"]
-        dx, dy = 2, 4
-
-        fig, ax = plt.subplots(
-            figsize=(9, 9), subplot_kw={"projection": ccrs.PlateCarree()}
-        )
-        cs = ax.scatter(
-            x, y, c=idx["temperature (Celsius)"], s=50, alpha=0.5, edgecolor="none"
-        )
-        cbar = fig.colorbar(
-            cs, orientation="vertical", fraction=0.1, shrink=0.9, extend="both"
-        )
-        ax.coastlines("10m")
-        ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
-        return fig, ax
-    
-    def plot_transect(self,var):
-        """
-        Makes a scatter plot of depth vs time coloured by a user defined variable
-        :param var: variable to colour the scatter plot
-        :return: figure, axes
-        """
-        
-        idx = self.to_pandas()
-        cmap = Haline_20.mpl_colormap
-        fig, ax = plt.subplots(figsize=(17, 2))
-        cs = ax.scatter(
-            idx.index,
-            idx["depth (m)"],
-            s=15,
-            c=idx[var],
-            marker="o",
-            edgecolor="none",
-            cmap=cmap,
-        )
-
-        ax.invert_yaxis()
-        xfmt = mdates.DateFormatter("%H:%Mh\n%d-%b")
-        ax.xaxis.set_major_formatter(xfmt)
-
-        cbar = fig.colorbar(cs, orientation="vertical", extend="both")
-        cbar.ax.set_ylabel(var)
-        ax.set_ylabel("Depth (m)")
-        return fig, ax
-    
 
 class DatasetList:
     """ Search servers for glider dataset ids. Defaults to the string "glider"
