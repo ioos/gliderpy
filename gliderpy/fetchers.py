@@ -6,7 +6,7 @@ import pandas as pd
 
 from erddapy import ERDDAP
 
-from .plotters import plot_track, plot_transect
+from gliderpy.plotters import plot_track, plot_transect
 
 OptionalStr = Optional[str]
 
