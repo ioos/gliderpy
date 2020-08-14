@@ -1,5 +1,7 @@
 ## gliderpy
 
+Try it out on binder [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/oceanhackweek/ohw20-proj-glide-data-fetcher/master)
+
 Quick description
 
 ### Documentation and code

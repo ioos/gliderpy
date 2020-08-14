@@ -1,19 +1,30 @@
+from typing import Optional
+
 import pandas as pd
+
 from erddapy import ERDDAP
 
 
+OptionalStr = Optional[str]
+
+# This is hardcoded to the IOOS glider DAC.
+# We aim to support more sources in the near future.
+_server = "https://gliders.ioos.us/erddap"
+
+
 class GliderDataFetcher(object):
-    """ Fetch glider data
-    Currently harcoded to search oos server only
-    Default variables and glider dataset id provided
+    """
+    Args:
+        server: a glider ERDDAP server URL
+
+    Attributes:
+        dataset_id: a dataset unique id.
+        constraints: download constraints, default None (opendap-like url)
+
     """
 
     def __init__(self):
-        self.fetcher = ERDDAP(
-            server="https://gliders.ioos.us/erddap",
-            protocol="tabledap",
-            response="csv",
-        )
+        self.fetcher = ERDDAP(server=_server, protocol="tabledap",)
         self.fetcher.variables = [
             "depth",
             "latitude",
@@ -22,7 +33,10 @@ class GliderDataFetcher(object):
             "temperature",
             "time",
         ]
-        self.fetcher.dataset_id = "whoi_406-20160902T1700"
+        self.fetcher.dataset_id: OptionalStr = None
+
+    def to_pandas(self):
+        return self.fetcher.to_pandas(index_col="time (UTC)", parse_dates=True,)
 
     def query(self, min_lat, max_lat, min_lon, max_lon, start_time, end_time):
         """Takes user supplied geographical and time constraints and adds them to the query
@@ -43,10 +57,7 @@ class DatasetList:
     """
 
     def __init__(self):
-        self.e = ERDDAP(
-            server="https://gliders.ioos.us/erddap",
-            protocol="tabledap",
-        )
+        self.e = ERDDAP(server="https://gliders.ioos.us/erddap", protocol="tabledap",)
         self.search_terms = ["glider"]
 
     def get_ids(self):
@@ -55,6 +66,8 @@ class DatasetList:
         dataset_ids = pd.Series(dtype=str)
         for term in self.search_terms:
             url = self.e.get_search_url(search_for=term, response="csv")
+
             dataset_ids = dataset_ids.append(pd.read_csv(url)["Dataset ID"], ignore_index=True)
         self.dataset_ids = dataset_ids.str.split(';',expand=True).stack().unique()
+
         return self.dataset_ids
