@@ -12,7 +12,7 @@ functionality to browse, fetch, and plot glider data.
    :maxdepth: 3
    :caption: Contents:
 
-   demo.ipynb
+   demo-output.ipynb
 
 Indices and tables
 ==================
