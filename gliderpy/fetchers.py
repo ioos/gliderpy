@@ -73,10 +73,10 @@ class GliderDataFetcher(object):
         ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
         return fig, ax
     
-    def plot_transect(self,var):
+    def plot_transect(self, var):
+        import matplotlib.dates as mdates
         
         idx = self.to_pandas()
-        cmap = Haline_20.mpl_colormap
         fig, ax = plt.subplots(figsize=(17, 2))
         cs = ax.scatter(
             idx.index,
@@ -85,7 +85,6 @@ class GliderDataFetcher(object):
             c=idx[var],
             marker="o",
             edgecolor="none",
-            cmap=cmap,
         )
 
         ax.invert_yaxis()
