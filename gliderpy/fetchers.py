@@ -1,11 +1,11 @@
 from typing import Optional
 
+import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
 import pandas as pd
 
 from erddapy import ERDDAP
 
-import cartopy.crs as ccrs
-import matplotlib.pyplot as plt
 
 OptionalStr = Optional[str]
 
@@ -72,7 +72,7 @@ class GliderDataFetcher(object):
         Plots a track of glider path coloured by temperature
         :return: figures, axes
         """
-        
+
         idx = self.to_pandas()
         x = idx["longitude (degrees_east)"]
         y = idx["latitude (degrees_north)"]
@@ -90,24 +90,20 @@ class GliderDataFetcher(object):
         ax.coastlines("10m")
         ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
         return fig, ax
-    
+
     def plot_transect(self, var):
         import matplotlib.dates as mdates
+
         """
         Makes a scatter plot of depth vs time coloured by a user defined variable
         :param var: variable to colour the scatter plot
         :return: figure, axes
         """
-        
+
         idx = self.to_pandas()
         fig, ax = plt.subplots(figsize=(17, 2))
         cs = ax.scatter(
-            idx.index,
-            idx["depth (m)"],
-            s=15,
-            c=idx[var],
-            marker="o",
-            edgecolor="none",
+            idx.index, idx["depth (m)"], s=15, c=idx[var], marker="o", edgecolor="none",
         )
 
         ax.invert_yaxis()
@@ -118,7 +114,7 @@ class GliderDataFetcher(object):
         cbar.ax.set_ylabel(var)
         ax.set_ylabel("Depth (m)")
         return fig, ax
-    
+
 
 class DatasetList:
     """ Search servers for glider dataset ids. Defaults to the string "glider"
@@ -142,7 +138,9 @@ class DatasetList:
         for term in self.search_terms:
             url = self.e.get_search_url(search_for=term, response="csv")
 
-            dataset_ids = dataset_ids.append(pd.read_csv(url)["Dataset ID"], ignore_index=True)
-        self.dataset_ids = dataset_ids.str.split(';',expand=True).stack().unique()
+            dataset_ids = dataset_ids.append(
+                pd.read_csv(url)["Dataset ID"], ignore_index=True
+            )
+        self.dataset_ids = dataset_ids.str.split(";", expand=True).stack().unique()
 
         return self.dataset_ids
