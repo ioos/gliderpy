@@ -6,8 +6,6 @@ import pandas as pd
 
 from erddapy import ERDDAP
 
-from gliderpy.plotters import plot_track, plot_transect
-
 OptionalStr = Optional[str]
 
 # This is hardcoded to the IOOS glider DAC.
