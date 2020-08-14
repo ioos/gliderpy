@@ -44,3 +44,19 @@ script:
       check-manifest --verbose && \
       twine check dist/*
     fi
+
+  - |
+    if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
+      set -e
+      jupyter nbconvert --to notebook --execute notebooks/demo.ipynb --output=demo-output.ipynb
+      cp notebooks/demo-output.ipynb docs/source/
+      pushd docs
+      make clean html linkcheck
+      popd
+      # if [[ -z "$TRAVIS_TAG" ]]; then
+      #   python -m doctr deploy --build-tags --key-path github_deploy_key.enc --built-docs docs/build/html dev
+      # else
+      #   python -m doctr deploy --build-tags --key-path github_deploy_key.enc --built-docs docs/build/html "version-$TRAVIS_TAG"
+      #   python -m doctr deploy --build-tags --key-path github_deploy_key.enc --built-docs docs/build/html .
+      # fi
+    fi
