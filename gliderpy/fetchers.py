@@ -68,6 +68,10 @@ class GliderDataFetcher(object):
         return self
 
     def plot_track(self):
+        """
+        Plots a track of glider path coloured by temperature
+        :return: figures, axes
+        """
         
         idx = self.to_pandas()
         x = idx["longitude (degrees_east)"]
@@ -88,6 +92,11 @@ class GliderDataFetcher(object):
         return fig, ax
     
     def plot_transect(self,var):
+        """
+        Makes a scatter plot of depth vs time coloured by a user defined variable
+        :param var: variable to colour the scatter plot
+        :return: figure, axes
+        """
         
         idx = self.to_pandas()
         cmap = Haline_20.mpl_colormap
@@ -117,7 +126,7 @@ class DatasetList:
 
 
     Attributes:
-        e: an ERDDAP server
+        e: an ERDDAP server instance
         search_terms: A list of terms to search the server for. Multiple terms will be combined as AND
 
     """
