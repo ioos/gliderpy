@@ -66,9 +66,8 @@ class DatasetList:
         dataset_ids = pd.Series(dtype=str)
         for term in self.search_terms:
             url = self.e.get_search_url(search_for=term, response="csv")
-            dataset_ids = dataset_ids.append(
-                pd.read_csv(url)["Dataset ID"], ignore_index=True
-            )
-            dataset_ids_uniq = dataset_ids.str.split(";", expand=True).stack().unique()
-        self.dataset_ids = pd.read_csv(url)["Dataset ID"]
+
+            dataset_ids = dataset_ids.append(pd.read_csv(url)["Dataset ID"], ignore_index=True)
+        self.dataset_ids = dataset_ids.str.split(';',expand=True).stack().unique()
+
         return self.dataset_ids
