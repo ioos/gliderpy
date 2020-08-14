@@ -6,3 +6,4 @@ dependencies:
         - erddapy
         - matplotlib
         - cartopy
+        - palettable
