@@ -13,6 +13,7 @@ functionality to browse, fetch, and plot glider data.
    :caption: Contents:
 
    demo-output.ipynb
+   gliderpy
 
 Indices and tables
 ==================
