@@ -1,10 +1,15 @@
-import cartopy.crs as ccrs
-import matplotlib.pyplot as plt
+"""
+Some convenience functions to help visualize glider data.
+"""
 
+
+import cartopy.crs as ccrs
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import palettable
+
 from palettable.cmocean.sequential import Thermal_20
+
 
 def plot_track(df):
     """
@@ -29,14 +34,15 @@ def plot_track(df):
     ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
     return fig, ax
 
-def plot_transect(df,var):
+
+def plot_transect(df, var):
     """
     Makes a scatter plot of depth vs time coloured by a user defined variable
     :param var: variable to colour the scatter plot
     :return: figure, axes
     """
     cmap = Thermal_20.mpl_colormap
-        
+
     fig, ax = plt.subplots(figsize=(17, 2))
     cs = ax.scatter(
         df.index,

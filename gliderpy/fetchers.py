@@ -1,3 +1,8 @@
+"""
+Helper methods to fetch glider data from multiple ERDDAP serves
+
+"""
+
 from typing import Optional
 
 import cartopy.crs as ccrs
@@ -6,19 +11,23 @@ import pandas as pd
 
 from erddapy import ERDDAP
 
+
 OptionalStr = Optional[str]
 
 # This is hardcoded to the IOOS glider DAC.
 # We aim to support more sources in the near future.
 _server = "https://gliders.ioos.us/erddap"
 
-ifremer_vars = ['time',
- 'latitude',
- 'longitude',
- 'PSAL',
- 'TEMP',
- 'PRES',
- 'platform_deployment']
+ifremer_vars = [
+    "time",
+    "latitude",
+    "longitude",
+    "PSAL",
+    "TEMP",
+    "PRES",
+    "platform_deployment",
+]
+
 
 class GliderDataFetcher(object):
     """
@@ -32,7 +41,10 @@ class GliderDataFetcher(object):
     """
 
     def __init__(self, server=_server):
-        self.fetcher = ERDDAP(server=server, protocol="tabledap",)
+        self.fetcher = ERDDAP(
+            server=server,
+            protocol="tabledap",
+        )
         if "ifremer" in self.fetcher.server:
             self.fetcher.variables = ifremer_vars
         else:
@@ -52,7 +64,10 @@ class GliderDataFetcher(object):
 
         :return: pandas dataframe with datetime UTC as index
         """
-        return self.fetcher.to_pandas(index_col="time (UTC)", parse_dates=True,)
+        return self.fetcher.to_pandas(
+            index_col="time (UTC)",
+            parse_dates=True,
+        )
 
     def query(self, min_lat, max_lat, min_lon, max_lon, start_time, end_time):
         """
@@ -82,11 +97,12 @@ class GliderDataFetcher(object):
         :param platform: platform and deployment id from ifremer
         :return: search query with platform constraint applied
         """
-        self.fetcher.constraints['platform_deployment='] = platform
+        self.fetcher.constraints["platform_deployment="] = platform
         return self
 
+
 class DatasetList:
-    """ Search servers for glider dataset ids. Defaults to the string "glider"
+    """Search servers for glider dataset ids. Defaults to the string "glider"
 
 
     Attributes:
@@ -96,7 +112,10 @@ class DatasetList:
     """
 
     def __init__(self, server=_server):
-        self.e = ERDDAP(server=server, protocol="tabledap",)
+        self.e = ERDDAP(
+            server=server,
+            protocol="tabledap",
+        )
         self.search_terms = ["glider"]
 
     def get_ids(self):
