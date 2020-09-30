@@ -12,6 +12,13 @@ OptionalStr = Optional[str]
 # We aim to support more sources in the near future.
 _server = "https://gliders.ioos.us/erddap"
 
+ifremer_vars = ['time',
+ 'latitude',
+ 'longitude',
+ 'PSAL',
+ 'TEMP',
+ 'PRES',
+ 'platform_deployment']
 
 class GliderDataFetcher(object):
     """
@@ -24,16 +31,19 @@ class GliderDataFetcher(object):
 
     """
 
-    def __init__(self):
-        self.fetcher = ERDDAP(server=_server, protocol="tabledap",)
-        self.fetcher.variables = [
-            "depth",
-            "latitude",
-            "longitude",
-            "salinity",
-            "temperature",
-            "time",
-        ]
+    def __init__(self, server=_server):
+        self.fetcher = ERDDAP(server=server, protocol="tabledap",)
+        if "ifremer" in self.fetcher.server:
+            self.fetcher.variables = ifremer_vars
+        else:
+            self.fetcher.variables = [
+                "depth",
+                "latitude",
+                "longitude",
+                "salinity",
+                "temperature",
+                "time",
+            ]
         self.fetcher.dataset_id: OptionalStr = None
 
     def to_pandas(self):
@@ -66,6 +76,15 @@ class GliderDataFetcher(object):
         }
         return self
 
+    def platform(self, platform):
+        """
+
+        :param platform: platform and deployment id from ifremer
+        :return: search query with platform constraint applied
+        """
+        self.fetcher.constraints['platform_deployment='] = platform
+        return self
+
 class DatasetList:
     """ Search servers for glider dataset ids. Defaults to the string "glider"
 
@@ -76,8 +95,8 @@ class DatasetList:
 
     """
 
-    def __init__(self):
-        self.e = ERDDAP(server="https://gliders.ioos.us/erddap", protocol="tabledap",)
+    def __init__(self, server=_server):
+        self.e = ERDDAP(server=server, protocol="tabledap",)
         self.search_terms = ["glider"]
 
     def get_ids(self):
