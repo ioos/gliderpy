@@ -3,6 +3,8 @@ Helper methods to fetch glider data from multiple ERDDAP serves
 
 """
 
+import functools
+
 from typing import Optional
 
 import cartopy.crs as ccrs
@@ -116,14 +118,12 @@ class DatasetList:
             server=server,
             protocol="tabledap",
         )
-        self.search_terms = ["glider"]
 
-    def get_ids(self):
-        """Search the database using a user supplied list of strings
-        :return: Unique list of dataset ids
-        """
+    @functools.lru_cache(maxsize=None)
+    def _get_ids(self, search_terms):
+        """Thin wrapper where inputs can be hashed for lru_cache."""
         dataset_ids = pd.Series(dtype=str)
-        for term in self.search_terms:
+        for term in search_terms:
             url = self.e.get_search_url(search_for=term, response="csv")
 
             dataset_ids = dataset_ids.append(
@@ -132,3 +132,10 @@ class DatasetList:
         self.dataset_ids = dataset_ids.str.split(";", expand=True).stack().unique()
 
         return self.dataset_ids
+
+    def get_ids(self, search_terms=["glider"]):
+        """Search the database using a user supplied list of comma separated strings
+        :return: Unique list of dataset ids
+        """
+        search_terms = tuple(search_terms)
+        return self._get_ids(search_terms)
