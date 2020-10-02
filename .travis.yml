@@ -52,7 +52,8 @@ script:
     if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
       set -e
       travis_wait jupyter nbconvert --to notebook --execute notebooks/quick_intro.ipynb --output=quick_intro-output.ipynb
-      mv notebooks/quick_intro-output.ipynb docs/source/
+      travis_wait jupyter nbconvert --to notebook --execute notebooks/quick_intro.ipynb --output=plotting.ipynb-output.ipynb
+      mv notebooks/*-output.ipynb docs/source/
       pushd docs
       make clean html linkcheck
       popd
