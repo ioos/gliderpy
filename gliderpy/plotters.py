@@ -6,9 +6,6 @@ Some convenience functions to help visualize glider data.
 import cartopy.crs as ccrs
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
-import palettable
-
-from palettable.cmocean.sequential import Thermal_20
 
 
 def plot_track(df):
@@ -24,24 +21,19 @@ def plot_track(df):
     fig, ax = plt.subplots(
         figsize=(9, 9), subplot_kw={"projection": ccrs.PlateCarree()}
     )
-    cs = ax.scatter(
-        x, y, c=df["temperature (Celsius)"], s=50, alpha=0.5, edgecolor="none"
-    )
-    cbar = fig.colorbar(
-        cs, orientation="vertical", fraction=0.1, shrink=0.9, extend="both"
-    )
+    ax.scatter(x, y, c=None, s=25, alpha=0.25, edgecolor="none")
     ax.coastlines("10m")
     ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
     return fig, ax
 
 
-def plot_transect(df, var):
+def plot_transect(df, var, **kw):
     """
     Makes a scatter plot of depth vs time coloured by a user defined variable
     :param var: variable to colour the scatter plot
     :return: figure, axes
     """
-    cmap = Thermal_20.mpl_colormap
+    cmap = kw.get("cmap", None)
 
     fig, ax = plt.subplots(figsize=(17, 2))
     cs = ax.scatter(
