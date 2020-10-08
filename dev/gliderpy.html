@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gliderpy API &#8212; gliderpy 0.1.dev76+ga8a3c9d documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Quick introduction" href="plotting.ipynb-output.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ioos&repo=gliderpy&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a class="badge" href="https://travis-ci.org/ioos/gliderpy">
+    <img
+        alt="https://secure.travis-ci.org/ioos/gliderpy.svg?branch=master"
+        src="https://secure.travis-ci.org/ioos/gliderpy.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_intro-output.html">Quick introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plotting.ipynb-output.html">Quick introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gliderpy</span> <span class="pre">API</span></code></a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="plotting.ipynb-output.html" title="previous chapter">Quick introduction</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gliderpy.fetchers">
+<span id="gliderpy-api"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">gliderpy</span> <span class="pre">API</span></code><a class="headerlink" href="#module-gliderpy.fetchers" title="Permalink to this headline">¶</a></h1>
+<p>Helper methods to fetch glider data from multiple ERDDAP serves</p>
+<dl class="py class">
+<dt id="gliderpy.fetchers.DatasetList">
+<em class="property">class </em><code class="sig-prename descclassname">gliderpy.fetchers.</code><code class="sig-name descname">DatasetList</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">server</span><span class="o">=</span><span class="default_value">'https://gliders.ioos.us/erddap'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#DatasetList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gliderpy.fetchers.DatasetList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Search servers for glider dataset ids. Defaults to the string “glider”</p>
+<dl class="py attribute">
+<dt id="gliderpy.fetchers.DatasetList.e">
+<code class="sig-name descname">e</code><a class="headerlink" href="#gliderpy.fetchers.DatasetList.e" title="Permalink to this definition">¶</a></dt>
+<dd><p>an ERDDAP server instance</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gliderpy.fetchers.DatasetList.search_terms">
+<code class="sig-name descname">search_terms</code><a class="headerlink" href="#gliderpy.fetchers.DatasetList.search_terms" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of terms to search the server for. Multiple terms will be combined as AND</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gliderpy.fetchers.DatasetList.get_ids">
+<code class="sig-name descname">get_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">search_terms</span><span class="o">=</span><span class="default_value">['glider']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#DatasetList.get_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gliderpy.fetchers.DatasetList.get_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the database using a user supplied list of comma separated strings
+:return: Unique list of dataset ids</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gliderpy.fetchers.GliderDataFetcher">
+<em class="property">class </em><code class="sig-prename descclassname">gliderpy.fetchers.</code><code class="sig-name descname">GliderDataFetcher</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">server</span><span class="o">=</span><span class="default_value">'https://gliders.ioos.us/erddap'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#GliderDataFetcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>server</strong> – a glider ERDDAP server URL</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="gliderpy.fetchers.GliderDataFetcher.dataset_id">
+<code class="sig-name descname">dataset_id</code><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.dataset_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>a dataset unique id.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gliderpy.fetchers.GliderDataFetcher.constraints">
+<code class="sig-name descname">constraints</code><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>download constraints, default None (opendap-like url)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gliderpy.fetchers.GliderDataFetcher.platform">
+<code class="sig-name descname">platform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">platform</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#GliderDataFetcher.platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.platform" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>platform</strong> – platform and deployment id from ifremer</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>search query with platform constraint applied</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gliderpy.fetchers.GliderDataFetcher.query">
+<code class="sig-name descname">query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">min_lat</span></em>, <em class="sig-param"><span class="n">max_lat</span></em>, <em class="sig-param"><span class="n">min_lon</span></em>, <em class="sig-param"><span class="n">max_lon</span></em>, <em class="sig-param"><span class="n">start_time</span></em>, <em class="sig-param"><span class="n">end_time</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#GliderDataFetcher.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes user supplied geographical and time constraints and adds them to the query</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_lat</strong> – southernmost lat</p></li>
+<li><p><strong>max_lat</strong> – northermost lat</p></li>
+<li><p><strong>min_lon</strong> – westernmost lon (-180 to +180)</p></li>
+<li><p><strong>max_lon</strong> – easternmost lon (-180 to +180)</p></li>
+<li><p><strong>start_time</strong> – start time, can be datetime object or string</p></li>
+<li><p><strong>end_time</strong> – end time, can be datetime object or string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>search query with argument constraints applied</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gliderpy.fetchers.GliderDataFetcher.to_pandas">
+<code class="sig-name descname">to_pandas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#GliderDataFetcher.to_pandas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.to_pandas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches data from the server and reads into a pandas dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>pandas dataframe with datetime UTC as index</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2017, Filipe Fernandes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/gliderpy.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/ioos/gliderpy" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
