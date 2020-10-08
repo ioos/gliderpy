@@ -23,3 +23,25 @@ def test_variables(glider_grab):
         "time",
     ]
     assert sorted(glider_grab.fetcher.variables) == sorted(expected)
+
+# As above for ifremer ERDDAP
+
+@pytest.fixture
+@pytest.mark.web
+def glider_grab_ifr():
+    g = GliderDataFetcher("http://www.ifremer.fr/erddap")
+    g.fetcher.dataset_id = "OceanGlidersGDACTrajectories"
+    yield g
+
+def test_variables_ifr(glider_grab_ifr):
+    expected = [
+        "latitude",
+        "longitude",
+        "platform_deployment",
+        "PRES",
+        "PSAL",
+        "TEMP",
+        "time",
+    ]
+    assert sorted(glider_grab_ifr.fetcher.variables) == sorted(expected)
+
