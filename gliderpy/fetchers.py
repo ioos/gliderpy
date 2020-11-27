@@ -30,6 +30,18 @@ ifremer_vars = [
     "platform_deployment",
 ]
 
+ooi_vars = [
+    "latitude",
+    "longitude",
+    "ctdgv_m_glider_instrument_practical_salinity",
+    "ctdgv_m_glider_instrument_sci_water_temp",
+    "ctdgv_m_glider_instrument_sci_water_pressure_dbar",
+    "time",
+    "quality_flag",
+    "trajectory"
+]
+
+
 
 class GliderDataFetcher(object):
     """
@@ -47,7 +59,9 @@ class GliderDataFetcher(object):
             server=server,
             protocol="tabledap",
         )
-        if "ifremer" in self.fetcher.server:
+        if "oceanobservatories" in self.fetcher.server:
+            self.fetcher.variables = ooi_vars
+        elif "ifremer" in self.fetcher.server:
             self.fetcher.variables = ifremer_vars
         else:
             self.fetcher.variables = [
