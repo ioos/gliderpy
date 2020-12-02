@@ -13,6 +13,7 @@ import pandas as pd
 
 from erddapy import ERDDAP
 
+
 OptionalStr = Optional[str]
 
 # This is hardcoded to the IOOS glider DAC.
@@ -45,8 +46,8 @@ server_vars = {
         "ctdgv_m_glider_instrument_sci_water_pressure_dbar",
         "time",
         "quality_flag",
-        "trajectory"
-    ]
+        "trajectory",
+    ],
 }
 
 
