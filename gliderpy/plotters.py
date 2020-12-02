@@ -2,10 +2,17 @@
 Some convenience functions to help visualize glider data.
 """
 
+import warnings
 
-import cartopy.crs as ccrs
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
+
+try:
+
+    import cartopy.crs as ccrs
+    import matplotlib.dates as mdates
+    import matplotlib.pyplot as plt
+except ModuleNotFoundError as err:
+    warnings.warn("gliderpy requires matplotlib and cartopy for plotting.")
+    raise err
 
 
 def plot_track(df):
