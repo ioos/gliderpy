@@ -13,34 +13,41 @@ import pandas as pd
 
 from erddapy import ERDDAP
 
-
 OptionalStr = Optional[str]
 
 # This is hardcoded to the IOOS glider DAC.
 # We aim to support more sources in the near future.
 _server = "https://gliders.ioos.us/erddap"
 
-ifremer_vars = [
-    "time",
-    "latitude",
-    "longitude",
-    "PSAL",
-    "TEMP",
-    "PRES",
-    "platform_deployment",
-]
-
-ooi_vars = [
-    "latitude",
-    "longitude",
-    "ctdgv_m_glider_instrument_practical_salinity",
-    "ctdgv_m_glider_instrument_sci_water_temp",
-    "ctdgv_m_glider_instrument_sci_water_pressure_dbar",
-    "time",
-    "quality_flag",
-    "trajectory"
-]
-
+server_vars = {
+    "https://gliders.ioos.us/erddap": [
+        "depth",
+        "latitude",
+        "longitude",
+        "salinity",
+        "temperature",
+        "time",
+    ],
+    "http://www.ifremer.fr/erddap": [
+        "time",
+        "latitude",
+        "longitude",
+        "PSAL",
+        "TEMP",
+        "PRES",
+        "platform_deployment",
+    ],
+    "https://erddap-uncabled.oceanobservatories.org/uncabled/erddap": [
+        "latitude",
+        "longitude",
+        "ctdgv_m_glider_instrument_practical_salinity",
+        "ctdgv_m_glider_instrument_sci_water_temp",
+        "ctdgv_m_glider_instrument_sci_water_pressure_dbar",
+        "time",
+        "quality_flag",
+        "trajectory"
+    ]
+}
 
 
 class GliderDataFetcher(object):
@@ -59,19 +66,7 @@ class GliderDataFetcher(object):
             server=server,
             protocol="tabledap",
         )
-        if "oceanobservatories" in self.fetcher.server:
-            self.fetcher.variables = ooi_vars
-        elif "ifremer" in self.fetcher.server:
-            self.fetcher.variables = ifremer_vars
-        else:
-            self.fetcher.variables = [
-                "depth",
-                "latitude",
-                "longitude",
-                "salinity",
-                "temperature",
-                "time",
-            ]
+        self.fetcher.variables = server_vars[server]
         self.fetcher.dataset_id: OptionalStr = None
 
     def to_pandas(self):
