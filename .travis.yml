@@ -5,18 +5,6 @@ env:
     # Doctr deploy key for ioos/gliderpy
     - secure: "Z+q3ksUzicSSnONR1BQjIKaUQG6wWWu0SkuZT9jnSkBxpbf9g6DJlBAq2jeThe895jtGwQYatrprzBAbnxz11GkL2loj5fQkYSZenDsIUE1Ah9duT+Y2Oy1dsXCanvG4WOVDnYEOp/S/sq7KijD6aSokoZnti2e3LHFp/jTPOwo+7mjBfjC0y0OHIf5BuZxR8LvD6ft/EVQegD1DcuBM8Jv7gornZXW459Pxx9UG151VAHKbpNyqj+jQYIH/p8Bz8lxC9njRxdnUtfqEx3hzj66VXUlP6PbSa6G6g1MW4hekSE9cV0g6e8U9/EceKHLla5zu+h2ZOXHXYZKkqj/HsYOUOhepFNktusPIb8/j8A22mupad9t1FkO2z/cFpRD5IcIuanQYRHaU8Bnlvzx/rpc4MfMhT+TLrBS/E48swbBh5a1qyv7CnwPoBbFzRC8lrqlceQ8Vkag48rEHRZBLDUiMl3/+P0JxrOHwQcf+ymBGMgaUewOvsdhTsggEjsw/f9FPpwL58j/FK3w5x7thwo6BmLpLjX2Ab2AQ4xa0KSFLjX0LpLvQmHkEA+vcEOFVs5sYU9NPyVx2OYf+614ELjIQlQUhMjjknVpif7d5sssREGP+OOxHvTIhJ2mjcbROfEs4dZxg7cQHKHH1TZ4iF1E9TxtzLKQJAprshgZWcwA="
 
-matrix:
-  fast_finish: true
-  include:
-    - name: "python-3.7"
-      env: PY=3.7
-    - name: "python-3.8"
-      env: PY=3.8
-    - name: "tarball"
-      env: PY=3
-    - name: "docs"
-      env: PY=3
-
 before_install:
   # Install micromamba and create TEST env.
   - |
@@ -27,40 +15,24 @@ before_install:
     . ${MAMBA_ROOT_PREFIX}/etc/profile.d/mamba.sh
 
     echo "micromamba version $(micromamba --version)"
-    micromamba create --yes --name TEST python=$PY pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
+    micromamba create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
     micromamba activate TEST
 
 install:
   - pip install -e . --no-deps --force-reinstall
 
 script:
-  - if [[ $TRAVIS_JOB_NAME == python-* ]]; then
-      cp -r tests/ /tmp ;
-      pushd /tmp && pytest -n 2 -rxs --cov=gliderpy tests && popd ;
-    fi
-
   - |
-    if [[ $TRAVIS_JOB_NAME == 'tarball' ]]; then
-      python setup.py --version && \
-      python setup.py sdist && \
-      pip wheel . -w dist --no-deps && \
-      check-manifest --verbose && \
-      twine check dist/*
-    fi
-
-  - |
-    if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
-      set -e
-      travis_wait jupyter nbconvert --to notebook --execute notebooks/quick_intro.ipynb --output=quick_intro-output.ipynb
-      travis_wait jupyter nbconvert --to notebook --execute notebooks/quick_intro.ipynb --output=plotting.ipynb-output.ipynb
-      mv notebooks/*-output.ipynb docs/source/
-      pushd docs
-      make clean html linkcheck
-      popd
-      if [[ -z "$TRAVIS_TAG" ]]; then
-        python -m doctr deploy --build-tags --key-path github_deploy_key_ioos_gliderpy.enc --built-docs docs/build/html dev
-      else
-        python -m doctr deploy --build-tags --key-path github_deploy_key_ioos_gliderpy.enc --built-docs docs/build/html "version-$TRAVIS_TAG"
-        python -m doctr deploy --build-tags --key-path github_deploy_key_ioos_gliderpy.enc --built-docs docs/build/html .
-      fi
+    set -e
+    travis_wait jupyter nbconvert --to notebook --execute notebooks/quick_intro.ipynb --output=quick_intro-output.ipynb
+    travis_wait jupyter nbconvert --to notebook --execute notebooks/quick_intro.ipynb --output=plotting.ipynb-output.ipynb
+    mv notebooks/*-output.ipynb docs/source/
+    pushd docs
+    make clean html linkcheck
+    popd
+    if [[ -z "$TRAVIS_TAG" ]]; then
+      python -m doctr deploy --build-tags --key-path github_deploy_key_ioos_gliderpy.enc --built-docs docs/build/html dev
+    else
+      python -m doctr deploy --build-tags --key-path github_deploy_key_ioos_gliderpy.enc --built-docs docs/build/html "version-$TRAVIS_TAG"
+      python -m doctr deploy --build-tags --key-path github_deploy_key_ioos_gliderpy.enc --built-docs docs/build/html .
     fi
