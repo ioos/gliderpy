@@ -13,22 +13,13 @@ import pandas as pd
 
 from erddapy import ERDDAP
 
+from gliderpy.servers import server_select, server_vars
+
 
 OptionalStr = Optional[str]
 
-# This is hardcoded to the IOOS glider DAC.
-# We aim to support more sources in the near future.
+# This defaults to the IOOS glider DAC.
 _server = "https://gliders.ioos.us/erddap"
-
-ifremer_vars = [
-    "time",
-    "latitude",
-    "longitude",
-    "PSAL",
-    "TEMP",
-    "PRES",
-    "platform_deployment",
-]
 
 
 class GliderDataFetcher(object):
@@ -43,21 +34,12 @@ class GliderDataFetcher(object):
     """
 
     def __init__(self, server=_server):
+        server = server_select(server)
         self.fetcher = ERDDAP(
             server=server,
             protocol="tabledap",
         )
-        if "ifremer" in self.fetcher.server:
-            self.fetcher.variables = ifremer_vars
-        else:
-            self.fetcher.variables = [
-                "depth",
-                "latitude",
-                "longitude",
-                "salinity",
-                "temperature",
-                "time",
-            ]
+        self.fetcher.variables = server_vars[server]
         self.fetcher.dataset_id: OptionalStr = None
 
     def to_pandas(self):
