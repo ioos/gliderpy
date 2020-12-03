@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gliderpy.fetchers &#8212; gliderpy 0.1.dev85+gefd670d documentation</title>
+    <title>gliderpy.fetchers &#8212; gliderpy 0.1.dev93+gd0c2795 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -124,15 +124,35 @@
 <span class="c1"># We aim to support more sources in the near future.</span>
 <span class="n">_server</span> <span class="o">=</span> <span class="s2">&quot;https://gliders.ioos.us/erddap&quot;</span>
 
-<span class="n">ifremer_vars</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;time&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PSAL&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TEMP&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PRES&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;platform_deployment&quot;</span><span class="p">,</span>
-<span class="p">]</span>
+<span class="n">server_vars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;https://gliders.ioos.us/erddap&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;depth&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;salinity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;http://www.ifremer.fr/erddap&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PSAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TEMP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PRES&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;platform_deployment&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;https://erddap-uncabled.oceanobservatories.org/uncabled/erddap&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ctdgv_m_glider_instrument_practical_salinity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ctdgv_m_glider_instrument_sci_water_temp&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ctdgv_m_glider_instrument_sci_water_pressure_dbar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;quality_flag&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;trajectory&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
 
 
 <div class="viewcode-block" id="GliderDataFetcher"><a class="viewcode-back" href="../../gliderpy.html#gliderpy.fetchers.GliderDataFetcher">[docs]</a><span class="k">class</span> <span class="nc">GliderDataFetcher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -151,17 +171,7 @@
             <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
             <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;tabledap&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;ifremer&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">server</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">ifremer_vars</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;depth&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;salinity&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;time&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">server_vars</span><span class="p">[</span><span class="n">server</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span><span class="p">:</span> <span class="n">OptionalStr</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="GliderDataFetcher.to_pandas"><a class="viewcode-back" href="../../gliderpy.html#gliderpy.fetchers.GliderDataFetcher.to_pandas">[docs]</a>    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
