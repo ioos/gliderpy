@@ -64,5 +64,5 @@ def server_select(server_string):
     # If the server is not recognised, print options of working servers and exit
     raise ValueError(
         "Supplied server/alias not recognised. Please use one of the following supported servers:\n"
-        + str(server_vars.keys())[10:-1]
+        f"{str(server_vars.keys())[10:-1]}"
     )
