@@ -1,7 +1,5 @@
 import pytest
 
-from requests.exceptions import HTTPError
-
 from gliderpy.fetchers import GliderDataFetcher
 
 

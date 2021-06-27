@@ -7,8 +7,6 @@ import functools
 
 from typing import Optional
 
-import cartopy.crs as ccrs
-import matplotlib.pyplot as plt
 import pandas as pd
 
 from erddapy import ERDDAP
