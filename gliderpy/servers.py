@@ -51,9 +51,15 @@ server_parameter_rename = {
     "longitude (degrees_east)": "longitude",
     "salinity (1)": "salinity",
     "PSAL (PSU)": "salinity",
+    "ctdgv_m_glider_instrument_practical_salinity (1)": "salinity",
     "temperature (Celsius)": "temperature",
     "TEMP (degree_Celsius)": "temperature",
+    "ctdgv_m_glider_instrument_sci_water_temp (deg_C)": "temperature",
     "PRES (decibar)": "pressure",
+    "ctdgv_m_glider_instrument_sci_water_pressure_dbar (dbar)": "pressure",
+    "platform_deployment": "platform_deployment",
+    "quality_flag": "flag",
+    "trajectory": "platform_deployment",
 }
 
 
