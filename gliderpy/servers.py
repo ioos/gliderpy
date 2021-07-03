@@ -45,6 +45,17 @@ server_vars = {
     ],
 }
 
+server_parameter_rename = {
+    "depth (m)": "depth",
+    "latitude (degrees_north)": "latitude",
+    "longitude (degrees_east)": "longitude",
+    "salinity (1)": "salinity",
+    "PSAL (PSU)": "salinity",
+    "temperature (Celsius)": "temperature",
+    "TEMP (degree_Celsius)": "temperature",
+    "PRES (decibar)": "pressure",
+}
+
 
 def server_select(server_string):
     """

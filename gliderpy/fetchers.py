@@ -11,7 +11,7 @@ import pandas as pd
 
 from erddapy import ERDDAP
 
-from gliderpy.servers import server_select, server_vars
+from gliderpy.servers import server_parameter_rename, server_select, server_vars
 
 
 OptionalStr = Optional[str]
@@ -33,6 +33,7 @@ class GliderDataFetcher(object):
 
     def __init__(self, server=_server):
         server = server_select(server)
+        self.server = server
         self.fetcher = ERDDAP(
             server=server,
             protocol="tabledap",
@@ -46,10 +47,14 @@ class GliderDataFetcher(object):
 
         :return: pandas dataframe with datetime UTC as index
         """
-        return self.fetcher.to_pandas(
+        df = self.fetcher.to_pandas(
             index_col="time (UTC)",
             parse_dates=True,
         )
+        # Standardize variable names
+        df.rename(columns=dict(server_parameter_rename), inplace=True)
+        df.index.rename("time", inplace=True)
+        return df
 
     def query(self, min_lat, max_lat, min_lon, max_lon, start_time, end_time):
         """
