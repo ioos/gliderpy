@@ -17,7 +17,7 @@ server_alias = {
 
 server_vars = {
     "https://gliders.ioos.us/erddap": [
-        "depth",
+        "pressure",
         "latitude",
         "longitude",
         "salinity",
@@ -31,7 +31,6 @@ server_vars = {
         "PSAL",
         "TEMP",
         "PRES",
-        "platform_deployment",
     ],
     "https://erddap-uncabled.oceanobservatories.org/uncabled/erddap": [
         "latitude",
@@ -40,13 +39,10 @@ server_vars = {
         "ctdgv_m_glider_instrument_sci_water_temp",
         "ctdgv_m_glider_instrument_sci_water_pressure_dbar",
         "time",
-        "quality_flag",
-        "trajectory",
     ],
 }
 
 server_parameter_rename = {
-    "depth (m)": "depth",
     "latitude (degrees_north)": "latitude",
     "longitude (degrees_east)": "longitude",
     "salinity (1)": "salinity",
@@ -56,10 +52,8 @@ server_parameter_rename = {
     "TEMP (degree_Celsius)": "temperature",
     "ctdgv_m_glider_instrument_sci_water_temp (deg_C)": "temperature",
     "PRES (decibar)": "pressure",
+    "pressure (dbar)": "pressure",
     "ctdgv_m_glider_instrument_sci_water_pressure_dbar (dbar)": "pressure",
-    "platform_deployment": "platform_deployment",
-    "quality_flag": "flag",
-    "trajectory": "platform_deployment",
 }
 
 

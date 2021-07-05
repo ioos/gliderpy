@@ -14,7 +14,7 @@ def glider_grab():
 
 def test_variables(glider_grab):
     expected = [
-        "depth",
+        "pressure",
         "latitude",
         "longitude",
         "salinity",
@@ -39,7 +39,6 @@ def test_variables_ifr(glider_grab_ifr):
     expected = [
         "latitude",
         "longitude",
-        "platform_deployment",
         "PRES",
         "PSAL",
         "TEMP",
