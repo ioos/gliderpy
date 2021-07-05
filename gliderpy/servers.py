@@ -54,6 +54,7 @@ server_parameter_rename = {
     "pres (decibar)": "pressure",
     "pressure (dbar)": "pressure",
     "ctdgv_m_glider_instrument_sci_water_pressure_dbar (dbar)": "pressure",
+    "dataset_url": "dataset_url",
 }
 
 

@@ -55,6 +55,8 @@ class GliderDataFetcher(object):
         df.columns = df.columns.str.lower()
         df.rename(columns=dict(server_parameter_rename), inplace=True)
         df.index.rename("time", inplace=True)
+        dataset_url = self.fetcher.get_download_url().split("?")[0]
+        df["dataset_url"] = dataset_url
         return df
 
     def query(self, min_lat, max_lat, min_lon, max_lon, start_time, end_time):
