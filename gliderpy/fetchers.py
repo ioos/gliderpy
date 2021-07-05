@@ -52,6 +52,7 @@ class GliderDataFetcher(object):
             parse_dates=True,
         )
         # Standardize variable names
+        df.columns = df.columns.str.lower()
         df.rename(columns=dict(server_parameter_rename), inplace=True)
         df.index.rename("time", inplace=True)
         return df
