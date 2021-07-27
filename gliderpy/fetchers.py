@@ -9,6 +9,7 @@ from typing import Optional
 
 import pandas as pd
 import requests
+
 from erddapy import ERDDAP
 from erddapy.url_handling import urlopen
 
@@ -81,13 +82,26 @@ class GliderDataFetcher(object):
             "longitude<=": max_lon,
         }
         if not self.fetcher.dataset_id:
-            url = self.fetcher.get_search_url(search_for='glider', response="csv", min_lat=min_lat, max_lat=max_lat, min_lon=min_lon, max_lon=max_lon, min_time=min_time, max_time=max_time)
+            url = self.fetcher.get_search_url(
+                search_for="glider",
+                response="csv",
+                min_lat=min_lat,
+                max_lat=max_lat,
+                min_lon=min_lon,
+                max_lon=max_lon,
+                min_time=min_time,
+                max_time=max_time,
+            )
             try:
                 data = urlopen(url)
             except requests.exceptions.HTTPError:
-                print("Error, no datasets found in supplied range. Try relaxing your constraints")
+                print(
+                    "Error, no datasets found in supplied range. Try relaxing your constraints"
+                )
                 return
-            return pd.read_csv(data)
+            df = pd.read_csv(data)
+            return df[["Title", "Institution", "Dataset ID"]]
+
         return self
 
     def platform(self, platform):
