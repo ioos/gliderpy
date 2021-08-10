@@ -32,7 +32,12 @@ jobs:
       run: |
         ls dist
       shell: bash
-
+    - name: Test version
+      run: |
+        if [[ $(python setup.py --version) == "0.0.0" ]]; then
+          exit 1
+        fi
+      shell: bash
     - name: Test wheels
       run: |
         cd dist && python -m pip install gliderpy*.whl
