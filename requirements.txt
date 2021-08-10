@@ -1,1 +1,4 @@
 erddapy
+pandas
+requests
+setuptools
