@@ -8,7 +8,7 @@ server_alias = {
     "National Glider Data Assembly Center": "https://gliders.ioos.us/erddap",
     "NGDAC": "https://gliders.ioos.us/erddap",
     "IOOS": "https://gliders.ioos.us/erddap",
-    "Ocean Observatories Initiative": "https://erddap-uncabled.oceanobservatories.org/uncabled/erddap",
+    "Ocean Observatories Initiative": "https://erddap-uncabled.oceanobservatories.org/uncabled/erddap",  # noqa
     "OOI": "https://erddap-uncabled.oceanobservatories.org/uncabled/erddap",
     "Institut français de recherche pour l'exploitation de la mer": "http://www.ifremer.fr/erddap",
     "ifremer": "http://www.ifremer.fr/erddap",
