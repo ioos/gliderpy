@@ -64,7 +64,6 @@ class GliderDataFetcher(object):
         if type(self.datasets) is pd.Series:
             df_all = pd.DataFrame()
             for dataset_id in self.datasets:
-                print(dataset_id)
                 self.fetcher.dataset_id = dataset_id
                 df = self.fetcher.to_pandas(
                     index_col="time (UTC)",
