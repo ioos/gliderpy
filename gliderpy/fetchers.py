@@ -22,6 +22,17 @@ OptionalStr = Optional[str]
 _server = "https://gliders.ioos.us/erddap"
 
 
+def standardise_df(df, dataset_url):
+    """
+    Standardise variable names in a dataset and add column for url
+    """
+    df.columns = df.columns.str.lower()
+    df.rename(columns=dict(server_parameter_rename), inplace=True)
+    df.index.rename("time", inplace=True)
+    df["dataset_url"] = dataset_url
+    return df
+
+
 class GliderDataFetcher(object):
     """
     Args:
@@ -42,6 +53,7 @@ class GliderDataFetcher(object):
         )
         self.fetcher.variables = server_vars[server]
         self.fetcher.dataset_id: OptionalStr = None
+        self.datasets: Optional = None
 
     def to_pandas(self):
         """
@@ -49,16 +61,29 @@ class GliderDataFetcher(object):
 
         :return: pandas dataframe with datetime UTC as index
         """
+        if type(self.datasets) is pd.Series:
+            df_all = pd.DataFrame()
+            for dataset_id in self.datasets:
+                self.fetcher.dataset_id = dataset_id
+                df = self.fetcher.to_pandas(
+                    index_col="time (UTC)",
+                    parse_dates=True,
+                )
+                dataset_url = self.fetcher.get_download_url().split("?")[0]
+                df = standardise_df(df, dataset_url)
+                df_all = df_all.append(df)
+            return df_all
+
+        if not self.fetcher.dataset_id:
+            return None
+
         df = self.fetcher.to_pandas(
             index_col="time (UTC)",
             parse_dates=True,
         )
         # Standardize variable names
-        df.columns = df.columns.str.lower()
-        df.rename(columns=dict(server_parameter_rename), inplace=True)
-        df.index.rename("time", inplace=True)
         dataset_url = self.fetcher.get_download_url().split("?")[0]
-        df["dataset_url"] = dataset_url
+        df = standardise_df(df, dataset_url)
         return df
 
     def query(self, min_lat, max_lat, min_lon, max_lon, min_time, max_time):
@@ -100,6 +125,7 @@ class GliderDataFetcher(object):
                 )
                 return
             df = pd.read_csv(data)
+            self.datasets = df["Dataset ID"]
             return df[["Title", "Institution", "Dataset ID"]]
 
         return self
