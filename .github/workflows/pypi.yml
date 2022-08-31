@@ -9,10 +9,10 @@ jobs:
   packages:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: 3.x
 
@@ -32,12 +32,14 @@ jobs:
       run: |
         ls dist
       shell: bash
+
     - name: Test version
       run: |
         if [[ $(python setup.py --version) == "0.0.0" ]]; then
           exit 1
         fi
       shell: bash
+
     - name: Test wheels
       run: |
         cd dist && python -m pip install gliderpy*.whl
@@ -45,7 +47,7 @@ jobs:
       shell: bash
 
     - name: Publish a Python distribution to PyPI
-      uses: pypa/gh-action-pypi-publish@master
+      uses: pypa/gh-action-pypi-publish@1.5.1
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}

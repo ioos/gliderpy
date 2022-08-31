@@ -4,17 +4,14 @@ Helper methods to fetch glider data from multiple ERDDAP serves
 """
 
 import functools
-
 from typing import Optional
 
 import pandas as pd
 import requests
-
 from erddapy import ERDDAP
 from erddapy.url_handling import urlopen
 
 from gliderpy.servers import server_parameter_rename, server_select, server_vars
-
 
 OptionalStr = Optional[str]
 

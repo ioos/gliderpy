@@ -62,7 +62,6 @@ author = "Filipe Fernandes"
 #
 from gliderpy import __version__ as VERSION  # noqa
 
-
 version = VERSION
 # The full version, including alpha/beta/rc tags.
 release = VERSION
