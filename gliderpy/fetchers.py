@@ -9,7 +9,7 @@ from typing import Optional
 import pandas as pd
 import requests
 from erddapy import ERDDAP
-from erddapy.url_handling import urlopen
+from erddapy.erddapy import urlopen
 
 from gliderpy.servers import server_parameter_rename, server_select, server_vars
 
