@@ -66,6 +66,7 @@ def test_standardise_variables_ifremer():
         assert var in server_parameter_rename.values()
 
 
+@pytest.mark.xfail
 def test_standardise_variables_uncabled():
     glider_grab = GliderDataFetcher(
         "https://erddap-uncabled.oceanobservatories.org/uncabled/erddap"
