@@ -4,7 +4,6 @@ Some convenience functions to help visualize glider data.
 
 import warnings
 
-
 try:
 
     import cartopy.crs as ccrs
