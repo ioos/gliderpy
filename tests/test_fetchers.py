@@ -64,18 +64,3 @@ def test_standardise_variables_ifremer():
     variables = df.columns
     for var in variables:
         assert var in server_parameter_rename.values()
-
-
-@pytest.mark.xfail
-def test_standardise_variables_uncabled():
-    glider_grab = GliderDataFetcher(
-        "https://erddap-uncabled.oceanobservatories.org/uncabled/erddap"
-    )
-    glider_grab.fetcher.dataset_id = (
-        "CP05MOAS-GL336-02-FLORTM000-flort_m_glider_"
-        "instrument-telemetered-deployment0005-tabledap"
-    )
-    df = glider_grab.to_pandas()
-    variables = df.columns
-    for var in variables:
-        assert var in server_parameter_rename.values()

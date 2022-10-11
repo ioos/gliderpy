@@ -32,14 +32,6 @@ server_vars = {
         "TEMP",
         "PRES",
     ],
-    "https://erddap-uncabled.oceanobservatories.org/uncabled/erddap": [
-        "latitude",
-        "longitude",
-        "ctdgv_m_glider_instrument_practical_salinity",
-        "ctdgv_m_glider_instrument_sci_water_temp",
-        "ctdgv_m_glider_instrument_sci_water_pressure_dbar",
-        "time",
-    ],
 }
 
 server_parameter_rename = {
