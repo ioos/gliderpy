@@ -17,6 +17,7 @@ server_alias = {
 
 server_vars = {
     "https://gliders.ioos.us/erddap": [
+        "depth",
         "pressure",
         "latitude",
         "longitude",
@@ -35,6 +36,7 @@ server_vars = {
 }
 
 server_parameter_rename = {
+    "depth (m)": "depth",
     "latitude (degrees_north)": "latitude",
     "longitude (degrees_east)": "longitude",
     "salinity (1)": "salinity",
