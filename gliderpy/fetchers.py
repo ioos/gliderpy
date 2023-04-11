@@ -3,7 +3,6 @@ Helper methods to fetch glider data from multiple ERDDAP serves
 
 """
 
-import functools
 from typing import Optional
 
 import httpx
@@ -63,7 +62,7 @@ class GliderDataFetcher:
         :return: pandas dataframe with datetime UTC as index
         """
         if type(self.datasets) is pd.Series:
-            df_all = pd.DataFrame()
+            df_all = []
             for dataset_id in self.datasets:
                 self.fetcher.dataset_id = dataset_id
                 df = self.fetcher.to_pandas(
@@ -72,8 +71,8 @@ class GliderDataFetcher:
                 )
                 dataset_url = self.fetcher.get_download_url().split("?")[0]
                 df = standardise_df(df, dataset_url)
-                df_all = df_all.append(df)
-            return df_all
+                df_all.append(df)
+            return pd.concat(df_all)
 
         if not self.fetcher.dataset_id:
             return None
@@ -142,12 +141,12 @@ class GliderDataFetcher:
 
 
 class DatasetList:
-    """Search servers for glider dataset ids. Defaults to the string "glider"
+    """Build a glider dataset ids list.
 
 
     Attributes:
         e: an ERDDAP server instance
-        search_terms: A list of terms to search the server for. Multiple terms will be combined as AND
+        TODO: search_terms: A list of terms to search the server for. Multiple terms will be combined as AND
 
     """
 
@@ -157,27 +156,17 @@ class DatasetList:
             protocol="tabledap",
         )
 
-    def get_ids(self, search_terms=None):
-        """Search the database using a user supplied list of comma separated strings
-        :return: Unique list of dataset ids
-        """
-        if not search_terms:
-            search_terms = "gliders"
-        self.dataset_ids = _get_ids(self.e, search_terms)
-        return self.dataset_ids
-
-
-@functools.lru_cache(maxsize=None)
-def _get_ids(e, search_terms):
-    """Thin wrapper where inputs can be hashed for lru_cache."""
-    dataset_ids = pd.Series(dtype=str)
-    for term in search_terms:
-        url = e.get_search_url(search_for=term, response="csv")
-
-        dataset_ids = dataset_ids.append(
-            pd.read_csv(url)["Dataset ID"],
-            ignore_index=True,
-        )
-    dataset_ids = dataset_ids.str.split(";", expand=True).stack().unique()
-
-    return dataset_ids
+    def get_ids(self):
+        """Return the allDatasets list for the glider server."""
+        if self.e.server == "https://gliders.ioos.us/erddap":
+            self.e.dataset_id = "allDatasets"
+            dataset_ids = self.e.to_pandas()["datasetID"].to_list()
+            dataset_ids.remove("allDatasets")
+            self.dataset_ids = dataset_ids
+            return self.dataset_ids
+        else:
+            raise ValueError(f"The {self.e.server} does not supported this operation.")
+        # TODO: List the platform_deployment variable
+        # if self.e.server == "https://erddap.ifremer.fr/erddap":
+        #     dataset_id = OceanGlidersGDACTrajectories
+        #     platform_deployment
