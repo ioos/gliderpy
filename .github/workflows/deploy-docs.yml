@@ -1,9 +1,14 @@
-name: Build and Deploy docs
+
+name: Documentation
 
 on:
+  pull_request:
   push:
     branches:
       - main
+  release:
+    types:
+      - published
 
 jobs:
   build-docs:
@@ -11,12 +16,12 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v3.1.0
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
     - name: Setup Mamba
-      uses: mamba-org/provision-with-micromamba@v13
+      uses: mamba-org/provision-with-micromamba@v15
       with:
         environment-file: false
 
@@ -27,26 +32,20 @@ jobs:
         micromamba activate TEST
         python -m pip install -e . --no-deps --force-reinstall
 
-    - name: Get the version
-      id: get_version
-      run: echo ::set-output name=VERSION::$(python setup.py --version)
-
     - name: Build documentation
       shell: bash -l {0}
       run: |
         set -e
         micromamba activate TEST
-        jupyter nbconvert --to notebook --execute notebooks/quick_intro.ipynb --output=quick_intro-output.ipynb
-        jupyter nbconvert --to notebook --execute notebooks/data_var_attr.ipynb --output=data_var_attr-output.ipynb
-        jupyter nbconvert --to notebook --execute notebooks/non_ioos_sources.ipynb --output=non_ioos_sources-output.ipynb
-        jupyter nbconvert --to notebook --execute notebooks/plotting.ipynb --output=plotting-output.ipynb
-        mv notebooks/*-output.ipynb docs/source/
+        jupyter nbconvert --to notebook --execute notebooks/00-quick_intro.ipynb --output=00-quick_intro-output.ipynb
+        mv notebooks/*output.ipynb docs/source/
         pushd docs
         make clean html linkcheck
         popd
 
     - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3.8.0
+      if: success() && github.event_name == 'release'
+      uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/build/html

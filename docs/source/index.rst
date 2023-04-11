@@ -12,8 +12,7 @@ functionality to browse, fetch, and plot glider data.
    :maxdepth: 3
    :caption: Contents:
 
-   quick_intro-output.ipynb
-   plotting.ipynb-output.ipynb
+   00-quick_intro-output.ipynb
    gliderpy
 
 Indices and tables

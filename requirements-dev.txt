@@ -2,6 +2,7 @@ cartopy
 check-manifest
 jupyter
 matplotlib
+nbconvert<7.3.0
 nbsphinx
 palettable
 pre-commit

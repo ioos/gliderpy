@@ -35,7 +35,6 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "nbsphinx",
-    "recommonmark",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -52,7 +51,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "gliderpy"
-copyright = "2020, Filipe Fernandes"
+copyright = "2023, Filipe Fernandes"
 author = "Filipe Fernandes"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -70,7 +69,7 @@ release = VERSION
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -101,7 +100,6 @@ html_theme_options = {
     "github_user": "ioos",
     "github_repo": "gliderpy",
     "github_banner": True,
-    "travis_button": True,
     "fixed_sidebar": True,
 }
 
