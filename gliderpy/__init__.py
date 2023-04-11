@@ -1,3 +1,5 @@
+"""Easier access to glider data."""
+
 try:
     from ._version import __version__
 except ImportError:

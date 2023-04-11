@@ -6,12 +6,16 @@ Helper methods to fetch glider data from multiple ERDDAP serves
 import functools
 from typing import Optional
 
+import httpx
 import pandas as pd
-import requests
 from erddapy import ERDDAP
 from erddapy.erddapy import urlopen
 
-from gliderpy.servers import server_parameter_rename, server_select, server_vars
+from gliderpy.servers import (
+    server_parameter_rename,
+    server_select,
+    server_vars,
+)
 
 OptionalStr = Optional[str]
 
@@ -30,7 +34,7 @@ def standardise_df(df, dataset_url):
     return df
 
 
-class GliderDataFetcher(object):
+class GliderDataFetcher:
     """
     Args:
         server: a glider ERDDAP server URL
@@ -116,11 +120,11 @@ class GliderDataFetcher(object):
             )
             try:
                 data = urlopen(url)
-            except requests.exceptions.HTTPError:
-                print(
-                    "Error, no datasets found in supplied range. Try relaxing your constraints"
-                )
-                return
+            except httpx.HTTPError as err:
+                raise Exception(
+                    f"Error, no datasets found in supplied range. Try relaxing your constraints: {self.fetcher.constraints}",
+                ) from err
+                return None
             df = pd.read_csv(data)
             self.datasets = df["Dataset ID"]
             return df[["Title", "Institution", "Dataset ID"]]
@@ -153,23 +157,27 @@ class DatasetList:
             protocol="tabledap",
         )
 
-    @functools.lru_cache(maxsize=None)
-    def _get_ids(self, search_terms):
-        """Thin wrapper where inputs can be hashed for lru_cache."""
-        dataset_ids = pd.Series(dtype=str)
-        for term in search_terms:
-            url = self.e.get_search_url(search_for=term, response="csv")
-
-            dataset_ids = dataset_ids.append(
-                pd.read_csv(url)["Dataset ID"], ignore_index=True
-            )
-        self.dataset_ids = dataset_ids.str.split(";", expand=True).stack().unique()
-
-        return self.dataset_ids
-
-    def get_ids(self, search_terms=["glider"]):
+    def get_ids(self, search_terms=None):
         """Search the database using a user supplied list of comma separated strings
         :return: Unique list of dataset ids
         """
-        search_terms = tuple(search_terms)
-        return self._get_ids(search_terms)
+        if not search_terms:
+            search_terms = "gliders"
+        self.dataset_ids = _get_ids(self.e, search_terms)
+        return self.dataset_ids
+
+
+@functools.lru_cache(maxsize=None)
+def _get_ids(e, search_terms):
+    """Thin wrapper where inputs can be hashed for lru_cache."""
+    dataset_ids = pd.Series(dtype=str)
+    for term in search_terms:
+        url = e.get_search_url(search_for=term, response="csv")
+
+        dataset_ids = dataset_ids.append(
+            pd.read_csv(url)["Dataset ID"],
+            ignore_index=True,
+        )
+    dataset_ids = dataset_ids.str.split(";", expand=True).stack().unique()
+
+    return dataset_ids

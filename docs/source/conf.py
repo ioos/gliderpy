@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # gliderpy documentation build configuration file, created by
 # sphinx-quickstart on Mon Oct  9 21:28:42 2017.
@@ -124,7 +123,7 @@ html_sidebars = {
         "relations.html",  # needs 'show_related': True theme option to display
         "searchbox.html",
         "donate.html",
-    ]
+    ],
 }
 
 
@@ -161,7 +160,7 @@ latex_documents = [
         "gliderpy Documentation",
         "Filipe Fernandes",
         "manual",
-    )
+    ),
 ]
 
 
@@ -186,5 +185,5 @@ texinfo_documents = [
         "gliderpy",
         "One line description of project.",
         "Miscellaneous",
-    )
+    ),
 ]
