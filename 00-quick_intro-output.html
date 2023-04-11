@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Quick introduction &#8212; gliderpy 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gliderpy API" href="gliderpy.html" />
+    <link rel="prev" title="gliderpy" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ioos&repo=gliderpy&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Single-dataset">Single dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Multiple-datasets">Multiple datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Dataset-search">Dataset search</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gliderpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gliderpy</span> <span class="pre">API</span></code></a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">gliderpy</a></li>
+      <li>Next: <a href="gliderpy.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gliderpy</span> <span class="pre">API</span></code></a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="Quick-introduction">
+<h1>Quick introduction<a class="headerlink" href="#Quick-introduction" title="Permalink to this heading">¶</a></h1>
+<p>gliderpy can be installed with conda</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda install --channel conda-forge gliderpy
+</pre></div>
+</div>
+<p>or pip</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install gliderpy
+</pre></div>
+</div>
+<p>gliderpy aims to make querying and downloading glider data easier. Here is how one would build a query using <code class="docutils literal notranslate"><span class="pre">erddapy</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">erddapy</span> <span class="kn">import</span> <span class="n">ERDDAP</span>
+
+<span class="n">e</span> <span class="o">=</span> <span class="n">ERDDAP</span><span class="p">(</span>
+    <span class="n">server</span><span class="o">=</span><span class="s2">&quot;https://gliders.ioos.us/erddap&quot;</span><span class="p">,</span>
+    <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;tabledap&quot;</span><span class="p">,</span>
+    <span class="n">response</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">e</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">=</span> <span class="s2">&quot;whoi_406-20160902T1700&quot;</span>
+
+<span class="n">e</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;depth&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;salinity&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span>
+    <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;time (UTC)&quot;</span><span class="p">,</span>
+    <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>depth (m)</th>
+      <th>latitude (degrees_north)</th>
+      <th>longitude (degrees_east)</th>
+      <th>salinity (1)</th>
+      <th>temperature (Celsius)</th>
+    </tr>
+    <tr>
+      <th>time (UTC)</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>6.43</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.079258</td>
+      <td>20.5407</td>
+    </tr>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>7.82</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.095406</td>
+      <td>20.5071</td>
+    </tr>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>8.69</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.111920</td>
+      <td>20.4904</td>
+    </tr>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>9.54</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.126587</td>
+      <td>20.4897</td>
+    </tr>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>10.32</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.140717</td>
+      <td>20.4909</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>With gliderpy attain the same output as erddapy with fewer lines and a cleaner UI.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gliderpy.fetchers</span> <span class="kn">import</span> <span class="n">GliderDataFetcher</span>
+
+<span class="n">glider_grab</span> <span class="o">=</span> <span class="n">GliderDataFetcher</span><span class="p">()</span>
+
+<span class="n">glider_grab</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">=</span> <span class="s2">&quot;whoi_406-20160902T1700&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">glider_grab</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pressure</th>
+      <th>latitude</th>
+      <th>longitude</th>
+      <th>salinity</th>
+      <th>temperature</th>
+      <th>dataset_url</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>6.43</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.079258</td>
+      <td>20.5407</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>7.82</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.095406</td>
+      <td>20.5071</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>8.69</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.111920</td>
+      <td>20.4904</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>9.54</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.126587</td>
+      <td>20.4897</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+    <tr>
+      <th>2016-09-02 17:05:38+00:00</th>
+      <td>10.32</td>
+      <td>41.120018</td>
+      <td>-71.017118</td>
+      <td>32.140717</td>
+      <td>20.4909</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>The variable names are also standardised by gliderpy</p>
+<section id="Single-dataset">
+<h2>Single dataset<a class="headerlink" href="#Single-dataset" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">gliderpy</span></code> can subset the data on the server side by passing a geographic bounding box and time interval.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">glider_grab</span> <span class="o">=</span> <span class="n">GliderDataFetcher</span><span class="p">()</span>
+<span class="n">glider_grab</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">=</span> <span class="s2">&quot;whoi_406-20160902T1700&quot;</span>
+<span class="n">glider_grab</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="o">-</span><span class="mi">72</span><span class="p">,</span> <span class="o">-</span><span class="mi">69</span><span class="p">,</span> <span class="s2">&quot;2016-09-20T01:00:00&quot;</span><span class="p">,</span> <span class="s2">&quot;25th sept 2016&quot;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">glider_grab</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pressure</th>
+      <th>latitude</th>
+      <th>longitude</th>
+      <th>salinity</th>
+      <th>temperature</th>
+      <th>dataset_url</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-09-20 01:52:37+00:00</th>
+      <td>5.12</td>
+      <td>40.997719</td>
+      <td>-70.946457</td>
+      <td>32.844220</td>
+      <td>19.5836</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+    <tr>
+      <th>2016-09-20 01:52:37+00:00</th>
+      <td>5.83</td>
+      <td>40.997719</td>
+      <td>-70.946457</td>
+      <td>32.788895</td>
+      <td>19.4810</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+    <tr>
+      <th>2016-09-20 01:52:37+00:00</th>
+      <td>6.90</td>
+      <td>40.997719</td>
+      <td>-70.946457</td>
+      <td>32.543550</td>
+      <td>19.0221</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+    <tr>
+      <th>2016-09-20 01:52:37+00:00</th>
+      <td>7.62</td>
+      <td>40.997719</td>
+      <td>-70.946457</td>
+      <td>32.582150</td>
+      <td>18.7567</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+    <tr>
+      <th>2016-09-20 01:52:37+00:00</th>
+      <td>8.33</td>
+      <td>40.997719</td>
+      <td>-70.946457</td>
+      <td>32.714066</td>
+      <td>18.6578</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Multiple-datasets">
+<h2>Multiple datasets<a class="headerlink" href="#Multiple-datasets" title="Permalink to this heading">¶</a></h2>
+<p>If a user does not specify a <code class="docutils literal notranslate"><span class="pre">dataset_id</span></code>, <code class="docutils literal notranslate"><span class="pre">gliderpy</span></code> will search all datasets for data that falls within the query bounds.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">glider_grab</span> <span class="o">=</span> <span class="n">GliderDataFetcher</span><span class="p">()</span>
+
+<span class="n">glider_grab</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;2010-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2013-06-02&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">glider_grab</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pressure</th>
+      <th>latitude</th>
+      <th>longitude</th>
+      <th>salinity (1e-3)</th>
+      <th>temperature</th>
+      <th>dataset_url</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2013-03-05 22:46:47+00:00</th>
+      <td>1.22</td>
+      <td>39.124726</td>
+      <td>-73.958488</td>
+      <td>34.211002</td>
+      <td>7.1495</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>
+    </tr>
+    <tr>
+      <th>2013-03-05 22:46:47+00:00</th>
+      <td>NaN</td>
+      <td>39.124726</td>
+      <td>-73.958488</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>
+    </tr>
+    <tr>
+      <th>2013-03-05 22:46:47+00:00</th>
+      <td>NaN</td>
+      <td>39.124726</td>
+      <td>-73.958488</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>
+    </tr>
+    <tr>
+      <th>2013-03-05 22:46:47+00:00</th>
+      <td>1.62</td>
+      <td>39.124726</td>
+      <td>-73.958488</td>
+      <td>34.212910</td>
+      <td>7.1487</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>
+    </tr>
+    <tr>
+      <th>2013-03-05 22:46:47+00:00</th>
+      <td>NaN</td>
+      <td>39.124726</td>
+      <td>-73.958488</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Dataset-search">
+<h2>Dataset search<a class="headerlink" href="#Dataset-search" title="Permalink to this heading">¶</a></h2>
+<p>One can query all datasets available.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gliderpy.fetchers</span> <span class="kn">import</span> <span class="n">DatasetList</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="n">DatasetList</span><span class="p">()</span>
+<span class="n">ds_ids</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">get_ids</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ds_ids</span><span class="p">)</span><span class="si">}</span><span class="s2"> glider datasets on the server </span><span class="si">{</span><span class="n">datasets</span><span class="o">.</span><span class="n">e</span><span class="o">.</span><span class="n">server</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+found 1496 glider datasets on the server https://gliders.ioos.us/erddap
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2023, Filipe Fernandes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/00-quick_intro-output.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/ioos/gliderpy" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
