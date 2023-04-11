@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # gliderpy documentation build configuration file, created by
 # sphinx-quickstart on Mon Oct  9 21:28:42 2017.
@@ -36,7 +35,6 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "nbsphinx",
-    "recommonmark",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -53,7 +51,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "gliderpy"
-copyright = "2020, Filipe Fernandes"
+copyright = "2023, Filipe Fernandes"
 author = "Filipe Fernandes"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -71,7 +69,7 @@ release = VERSION
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -102,7 +100,6 @@ html_theme_options = {
     "github_user": "ioos",
     "github_repo": "gliderpy",
     "github_banner": True,
-    "travis_button": True,
     "fixed_sidebar": True,
 }
 
@@ -124,7 +121,7 @@ html_sidebars = {
         "relations.html",  # needs 'show_related': True theme option to display
         "searchbox.html",
         "donate.html",
-    ]
+    ],
 }
 
 
@@ -161,7 +158,7 @@ latex_documents = [
         "gliderpy Documentation",
         "Filipe Fernandes",
         "manual",
-    )
+    ),
 ]
 
 
@@ -186,5 +183,5 @@ texinfo_documents = [
         "gliderpy",
         "One line description of project.",
         "Miscellaneous",
-    )
+    ),
 ]

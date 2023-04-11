@@ -5,12 +5,14 @@ Some convenience functions to help visualize glider data.
 import warnings
 
 try:
-
     import cartopy.crs as ccrs
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
 except ModuleNotFoundError as err:
-    warnings.warn("gliderpy requires matplotlib and cartopy for plotting.")
+    warnings.warn(
+        "gliderpy requires matplotlib and cartopy for plotting.",
+        stacklevel=1,
+    )
     raise err
 
 
@@ -25,7 +27,8 @@ def plot_track(df):
     dx, dy = 2, 4
 
     fig, ax = plt.subplots(
-        figsize=(9, 9), subplot_kw={"projection": ccrs.PlateCarree()}
+        figsize=(9, 9),
+        subplot_kw={"projection": ccrs.PlateCarree()},
     )
     ax.scatter(x, y, c=None, s=25, alpha=0.25, edgecolor="none")
     ax.coastlines("10m")
