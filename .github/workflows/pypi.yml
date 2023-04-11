@@ -1,9 +1,17 @@
 name: Publish to PyPI
 
 on:
+  pull_request:
+  push:
+    branches:
+      - main
   release:
     types:
       - published
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   packages:
@@ -14,16 +22,14 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.x
+        python-version: "3.x"
 
     - name: Get tags
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      shell: bash
 
     - name: Install build tools
       run: |
-        python -m pip install --upgrade pip wheel setuptools setuptools_scm build twine
-      shell: bash
+        python -m pip install --upgrade build
 
     - name: Build binary wheel
       run: python -m build --sdist --wheel . --outdir dist
@@ -31,23 +37,18 @@ jobs:
     - name: CheckFiles
       run: |
         ls dist
-      shell: bash
-
-    - name: Test version
-      run: |
-        if [[ $(python setup.py --version) == "0.0.0" ]]; then
-          exit 1
-        fi
-      shell: bash
+        python -m pip install --upgrade check-manifest
+        check-manifest --verbose
 
     - name: Test wheels
       run: |
-        cd dist && python -m pip install gliderpy*.whl
+        cd dist && python -m pip install *.whl
+        python -m pip install --upgrade build twine
         python -m twine check *
-      shell: bash
 
     - name: Publish a Python distribution to PyPI
-      uses: pypa/gh-action-pypi-publish@1.5.1
+      if: success() && github.event_name == 'release'
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
