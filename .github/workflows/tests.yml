@@ -25,7 +25,7 @@ jobs:
         create-args: >-
           python=3 pip
           --file requirements.txt
-          --file requirements.txt
+          --file requirements-dev.txt
           --channel conda-forge
 
     - name: Install gliderpy
