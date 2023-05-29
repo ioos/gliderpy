@@ -20,23 +20,26 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup Mamba
-      uses: mamba-org/provision-with-micromamba@v16
+    - name: Setup Micromamba ${{ matrix.python-version }}
+      uses: mamba-org/setup-micromamba@v1
       with:
-        environment-file: false
+        environment-name: TEST
+        init-shell: bash
+        create-args: >-
+          python=3 pip
+          --file requirements.txt
+          --file requirements.txt
+          --channel conda-forge
 
-    - name: Build environment
+    - name: Install gliderpy
       shell: bash -l {0}
       run: |
-        micromamba create --name TEST python=3 --file requirements.txt --file requirements-dev.txt --channel conda-forge
-        micromamba activate TEST
         python -m pip install -e . --no-deps --force-reinstall
 
     - name: Build documentation
       shell: bash -l {0}
       run: |
         set -e
-        micromamba activate TEST
         jupyter nbconvert --to notebook --execute notebooks/00-quick_intro.ipynb --output=00-quick_intro-output.ipynb
         mv notebooks/*output.ipynb docs/source/
         pushd docs
