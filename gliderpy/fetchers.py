@@ -168,5 +168,4 @@ class DatasetList:
             raise ValueError(f"The {self.e.server} does not supported this operation.")
         # TODO: List the platform_deployment variable
         # if self.e.server == "https://erddap.ifremer.fr/erddap":
-        #     dataset_id = OceanGlidersGDACTrajectories
         #     platform_deployment

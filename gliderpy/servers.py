@@ -8,7 +8,7 @@ server_alias = {
     "National Glider Data Assembly Center": "https://gliders.ioos.us/erddap",
     "NGDAC": "https://gliders.ioos.us/erddap",
     "IOOS": "https://gliders.ioos.us/erddap",
-    "Ocean Observatories Initiative": "https://erddap.dataexplorer.oceanobservatories.org/erddap/index.html",  # noqa
+    "Ocean Observatories Initiative": "https://erddap.dataexplorer.oceanobservatories.org/erddap/index.html",
     "OOI": "https://erddap.dataexplorer.oceanobservatories.org/erddap/index.html",
     "Institut français de recherche pour l'exploitation de la mer": "https://www.ifremer.fr/erddap",
     "ifremer": "https://www.ifremer.fr/erddap",
@@ -54,10 +54,10 @@ def server_select(server_string):
     """
     Attempts to match the supplied string to a known ERDDAP server by address or alias
     """
-    if server_string in server_vars.keys():
+    if server_string in server_vars:
         # If string matches exactly, return unchanged
         return server_string
-    for server in server_vars.keys():
+    for server in server_vars:
         # If string contains base ERDDAP address, return base ERDDAP address
         if server in server_string:
             return server
