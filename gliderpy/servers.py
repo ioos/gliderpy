@@ -54,10 +54,10 @@ def server_select(server_string):
     """
     Attempts to match the supplied string to a known ERDDAP server by address or alias
     """
-    if server_string in server_vars.keys():
+    if server_string in server_vars:
         # If string matches exactly, return unchanged
         return server_string
-    for server in server_vars.keys():
+    for server in server_vars:
         # If string contains base ERDDAP address, return base ERDDAP address
         if server in server_string:
             return server
