@@ -40,7 +40,7 @@ class GliderDataFetcher:
 
     Attributes:
         dataset_id: a dataset unique id.
-        constraints: download constraints, default None (opendap-like url)
+        constraints: download constraints, default
 
     """
 

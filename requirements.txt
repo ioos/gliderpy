@@ -1,3 +1,4 @@
 erddapy
 httpx
 pandas
+xarray
