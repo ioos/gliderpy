@@ -3,6 +3,8 @@ Helper methods to fetch glider data from multiple ERDDAP serves
 
 """
 
+import functools
+from copy import copy
 from typing import Optional
 
 import httpx
@@ -19,6 +21,23 @@ OptionalStr = Optional[str]
 
 # Defaults to the IOOS glider DAC.
 _server = "https://gliders.ioos.us/erddap"
+
+
+@functools.lru_cache(maxsize=128)
+def _to_pandas_multiple(glider_grab):
+    """Thin wrapper to cache the results when multiple datasets are requested."""
+    df_all = {}
+    glider_grab_copy = copy(glider_grab)
+    for dataset_id in glider_grab_copy.datasets["Dataset ID"]:
+        glider_grab_copy.fetcher.dataset_id = dataset_id
+        df = glider_grab_copy.fetcher.to_pandas(
+            index_col="time (UTC)",
+            parse_dates=True,
+        )
+        dataset_url = glider_grab_copy.fetcher.get_download_url().split("?")[0]
+        df = standardise_df(df, dataset_url)
+        df_all.update({dataset_id: df})
+    return df_all
 
 
 def standardise_df(df, dataset_url):
@@ -57,7 +76,7 @@ class GliderDataFetcher:
         """
         Fetches data from the server and reads into a pandas dataframe
 
-        :return: pandas dataframe with datetime UTC as index
+        :return: pandas dataframe with datetime UTC as index, multiple dataset_ids dataframes are stored in a dictionary
         """
         if self.fetcher.dataset_id:
             df = self.fetcher.to_pandas(
@@ -65,17 +84,10 @@ class GliderDataFetcher:
                 parse_dates=True,
             )
         elif not self.fetcher.dataset_id and self.datasets is not None:
-            df_all = []
-            for dataset_id in self.datasets["Dataset ID"]:
-                self.fetcher.dataset_id = dataset_id
-                df = self.fetcher.to_pandas(
-                    index_col="time (UTC)",
-                    parse_dates=True,
-                )
-                dataset_url = self.fetcher.get_download_url().split("?")[0]
-                df = standardise_df(df, dataset_url)
-                df_all.append(df)
-            return pd.concat(df_all)
+            df_all = _to_pandas_multiple(self)
+            # We need to reset to avoid fetching a single dataset_id when making multiple requests.
+            self.fetcher.dataset_id = None
+            return df_all
         else:
             raise ValueError(
                 f"Must provide a {self.fetcher.dataset_id} or `query` terms to download data.",
