@@ -59,9 +59,14 @@ class GliderDataFetcher:
 
         :return: pandas dataframe with datetime UTC as index
         """
-        if type(self.datasets) is pd.Series:
+        if self.fetcher.dataset_id:
+            df = self.fetcher.to_pandas(
+                index_col="time (UTC)",
+                parse_dates=True,
+            )
+        elif not self.fetcher.dataset_id and self.datasets is not None:
             df_all = []
-            for dataset_id in self.datasets:
+            for dataset_id in self.datasets["Dataset ID"]:
                 self.fetcher.dataset_id = dataset_id
                 df = self.fetcher.to_pandas(
                     index_col="time (UTC)",
@@ -71,14 +76,11 @@ class GliderDataFetcher:
                 df = standardise_df(df, dataset_url)
                 df_all.append(df)
             return pd.concat(df_all)
+        else:
+            raise ValueError(
+                f"Must provide a {self.fetcher.dataset_id} or `query` terms to download data.",
+            )
 
-        if not self.fetcher.dataset_id:
-            return None
-
-        df = self.fetcher.to_pandas(
-            index_col="time (UTC)",
-            parse_dates=True,
-        )
         # Standardize variable names.
         dataset_url = self.fetcher.get_download_url().split("?")[0]
         df = standardise_df(df, dataset_url)
