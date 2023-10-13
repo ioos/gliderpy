@@ -1,9 +1,0 @@
-name: gliderpy
-channels:
-  - conda-forge
-dependencies:
-        - pandas
-        - erddapy
-        - matplotlib
-        - cartopy
-        - palettable
