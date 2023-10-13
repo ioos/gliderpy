@@ -19,7 +19,7 @@
     "```\n",
     "\n",
     "gliderpy aims to make querying and downloading glider data easier.\n",
-    "Here is how one would build a query using `erddapy`:"
+    "Here is how one would build a query using erddapy:"
    ]
   },
   {
@@ -27,10 +27,10 @@
    "execution_count": 1,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-04-11T19:25:21.341539Z",
-     "iopub.status.busy": "2023-04-11T19:25:21.341348Z",
-     "iopub.status.idle": "2023-04-11T19:25:24.072904Z",
-     "shell.execute_reply": "2023-04-11T19:25:24.072441Z"
+     "iopub.execute_input": "2023-10-13T19:14:46.986787Z",
+     "iopub.status.busy": "2023-10-13T19:14:46.986474Z",
+     "iopub.status.idle": "2023-10-13T19:14:49.723888Z",
+     "shell.execute_reply": "2023-10-13T19:14:49.723396Z"
     }
    },
    "outputs": [
@@ -60,9 +60,11 @@
        "      <th>longitude (degrees_east)</th>\n",
        "      <th>salinity (1)</th>\n",
        "      <th>temperature (Celsius)</th>\n",
+       "      <th>profile_id</th>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>time (UTC)</th>\n",
+       "      <th></th>\n",
        "      <th></th>\n",
        "      <th></th>\n",
        "      <th></th>\n",
@@ -78,6 +80,7 @@
        "      <td>-71.017118</td>\n",
        "      <td>32.079258</td>\n",
        "      <td>20.5407</td>\n",
+       "      <td>1</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
@@ -86,6 +89,7 @@
        "      <td>-71.017118</td>\n",
        "      <td>32.095406</td>\n",
        "      <td>20.5071</td>\n",
+       "      <td>1</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
@@ -94,6 +98,7 @@
        "      <td>-71.017118</td>\n",
        "      <td>32.111920</td>\n",
        "      <td>20.4904</td>\n",
+       "      <td>1</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
@@ -102,6 +107,7 @@
        "      <td>-71.017118</td>\n",
        "      <td>32.126587</td>\n",
        "      <td>20.4897</td>\n",
+       "      <td>1</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
@@ -110,6 +116,7 @@
        "      <td>-71.017118</td>\n",
        "      <td>32.140717</td>\n",
        "      <td>20.4909</td>\n",
+       "      <td>1</td>\n",
        "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
@@ -132,13 +139,13 @@
        "2016-09-02 17:05:38+00:00                -71.017118     32.126587   \n",
        "2016-09-02 17:05:38+00:00                -71.017118     32.140717   \n",
        "\n",
-       "                           temperature (Celsius)  \n",
-       "time (UTC)                                        \n",
-       "2016-09-02 17:05:38+00:00                20.5407  \n",
-       "2016-09-02 17:05:38+00:00                20.5071  \n",
-       "2016-09-02 17:05:38+00:00                20.4904  \n",
-       "2016-09-02 17:05:38+00:00                20.4897  \n",
-       "2016-09-02 17:05:38+00:00                20.4909  "
+       "                           temperature (Celsius)  profile_id  \n",
+       "time (UTC)                                                    \n",
+       "2016-09-02 17:05:38+00:00                20.5407           1  \n",
+       "2016-09-02 17:05:38+00:00                20.5071           1  \n",
+       "2016-09-02 17:05:38+00:00                20.4904           1  \n",
+       "2016-09-02 17:05:38+00:00                20.4897           1  \n",
+       "2016-09-02 17:05:38+00:00                20.4909           1  "
       ]
      },
      "execution_count": 1,
@@ -162,6 +169,7 @@
     "    \"longitude\",\n",
     "    \"salinity\",\n",
     "    \"temperature\",\n",
+    "    \"profile_id\",\n",
     "    \"time\",\n",
     "]\n",
     "\n",
@@ -176,7 +184,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "With gliderpy attain the same output as erddapy with fewer lines and a cleaner UI."
+    "And here is how to use gliderpy to obtain the same results but with fewer lines and a cleaner code:"
    ]
   },
   {
@@ -184,10 +192,10 @@
    "execution_count": 2,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-04-11T19:25:24.102868Z",
-     "iopub.status.busy": "2023-04-11T19:25:24.102285Z",
-     "iopub.status.idle": "2023-04-11T19:25:26.322917Z",
-     "shell.execute_reply": "2023-04-11T19:25:26.322396Z"
+     "iopub.execute_input": "2023-10-13T19:14:49.758526Z",
+     "iopub.status.busy": "2023-10-13T19:14:49.757970Z",
+     "iopub.status.idle": "2023-10-13T19:14:52.028689Z",
+     "shell.execute_reply": "2023-10-13T19:14:52.028172Z"
     }
    },
    "outputs": [
@@ -212,9 +220,10 @@
        "  <thead>\n",
        "    <tr style=\"text-align: right;\">\n",
        "      <th></th>\n",
-       "      <th>pressure</th>\n",
        "      <th>latitude</th>\n",
        "      <th>longitude</th>\n",
+       "      <th>pressure</th>\n",
+       "      <th>profile_id</th>\n",
        "      <th>salinity</th>\n",
        "      <th>temperature</th>\n",
        "      <th>dataset_url</th>\n",
@@ -227,50 +236,56 @@
        "      <th></th>\n",
        "      <th></th>\n",
        "      <th></th>\n",
+       "      <th></th>\n",
        "    </tr>\n",
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
-       "      <td>6.43</td>\n",
        "      <td>41.120018</td>\n",
        "      <td>-71.017118</td>\n",
+       "      <td>6.43</td>\n",
+       "      <td>1</td>\n",
        "      <td>32.079258</td>\n",
        "      <td>20.5407</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
-       "      <td>7.82</td>\n",
        "      <td>41.120018</td>\n",
        "      <td>-71.017118</td>\n",
+       "      <td>7.82</td>\n",
+       "      <td>1</td>\n",
        "      <td>32.095406</td>\n",
        "      <td>20.5071</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
-       "      <td>8.69</td>\n",
        "      <td>41.120018</td>\n",
        "      <td>-71.017118</td>\n",
+       "      <td>8.69</td>\n",
+       "      <td>1</td>\n",
        "      <td>32.111920</td>\n",
        "      <td>20.4904</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
-       "      <td>9.54</td>\n",
        "      <td>41.120018</td>\n",
        "      <td>-71.017118</td>\n",
+       "      <td>9.54</td>\n",
+       "      <td>1</td>\n",
        "      <td>32.126587</td>\n",
        "      <td>20.4897</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2016-09-02 17:05:38+00:00</th>\n",
-       "      <td>10.32</td>\n",
        "      <td>41.120018</td>\n",
        "      <td>-71.017118</td>\n",
+       "      <td>10.32</td>\n",
+       "      <td>1</td>\n",
        "      <td>32.140717</td>\n",
        "      <td>20.4909</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
@@ -280,21 +295,21 @@
        "</div>"
       ],
       "text/plain": [
-       "                           pressure   latitude  longitude   salinity  \\\n",
-       "time                                                                   \n",
-       "2016-09-02 17:05:38+00:00      6.43  41.120018 -71.017118  32.079258   \n",
-       "2016-09-02 17:05:38+00:00      7.82  41.120018 -71.017118  32.095406   \n",
-       "2016-09-02 17:05:38+00:00      8.69  41.120018 -71.017118  32.111920   \n",
-       "2016-09-02 17:05:38+00:00      9.54  41.120018 -71.017118  32.126587   \n",
-       "2016-09-02 17:05:38+00:00     10.32  41.120018 -71.017118  32.140717   \n",
+       "                            latitude  longitude  pressure  profile_id  \\\n",
+       "time                                                                    \n",
+       "2016-09-02 17:05:38+00:00  41.120018 -71.017118      6.43           1   \n",
+       "2016-09-02 17:05:38+00:00  41.120018 -71.017118      7.82           1   \n",
+       "2016-09-02 17:05:38+00:00  41.120018 -71.017118      8.69           1   \n",
+       "2016-09-02 17:05:38+00:00  41.120018 -71.017118      9.54           1   \n",
+       "2016-09-02 17:05:38+00:00  41.120018 -71.017118     10.32           1   \n",
        "\n",
-       "                           temperature  \\\n",
-       "time                                     \n",
-       "2016-09-02 17:05:38+00:00      20.5407   \n",
-       "2016-09-02 17:05:38+00:00      20.5071   \n",
-       "2016-09-02 17:05:38+00:00      20.4904   \n",
-       "2016-09-02 17:05:38+00:00      20.4897   \n",
-       "2016-09-02 17:05:38+00:00      20.4909   \n",
+       "                            salinity  temperature  \\\n",
+       "time                                                \n",
+       "2016-09-02 17:05:38+00:00  32.079258      20.5407   \n",
+       "2016-09-02 17:05:38+00:00  32.095406      20.5071   \n",
+       "2016-09-02 17:05:38+00:00  32.111920      20.4904   \n",
+       "2016-09-02 17:05:38+00:00  32.126587      20.4897   \n",
+       "2016-09-02 17:05:38+00:00  32.140717      20.4909   \n",
        "\n",
        "                                                                 dataset_url  \n",
        "time                                                                          \n",
@@ -324,11 +339,20 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The variable names are also standardised by gliderpy\n",
+    "Much easier, right?\n",
+    "The variable names are standardized by gliderpy,\n",
+    "making it easier to fetch from different data sources and comparing the results.\n",
     "\n",
-    "### Single dataset\n",
+    "The gliderpy library can subset the data on the server side by passing a geographic bounding box and time interval."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Querying multiple datasets\n",
     "\n",
-    "`gliderpy` can subset the data on the server side by passing a geographic bounding box and time interval."
+    "The most common use is to search all datasets for data that falls within the certain space-time bounds."
    ]
   },
   {
@@ -336,10 +360,10 @@
    "execution_count": 3,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-04-11T19:25:26.325411Z",
-     "iopub.status.busy": "2023-04-11T19:25:26.325133Z",
-     "iopub.status.idle": "2023-04-11T19:25:26.578795Z",
-     "shell.execute_reply": "2023-04-11T19:25:26.578271Z"
+     "iopub.execute_input": "2023-10-13T19:14:52.031441Z",
+     "iopub.status.busy": "2023-10-13T19:14:52.030914Z",
+     "iopub.status.idle": "2023-10-13T19:14:52.113018Z",
+     "shell.execute_reply": "2023-10-13T19:14:52.112503Z"
     }
    },
    "outputs": [
@@ -364,97 +388,39 @@
        "  <thead>\n",
        "    <tr style=\"text-align: right;\">\n",
        "      <th></th>\n",
-       "      <th>pressure</th>\n",
-       "      <th>latitude</th>\n",
-       "      <th>longitude</th>\n",
-       "      <th>salinity</th>\n",
-       "      <th>temperature</th>\n",
-       "      <th>dataset_url</th>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>time</th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
+       "      <th>Title</th>\n",
+       "      <th>Institution</th>\n",
+       "      <th>Dataset ID</th>\n",
+       "      <th>info_url</th>\n",
        "    </tr>\n",
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>2016-09-20 01:52:37+00:00</th>\n",
-       "      <td>5.12</td>\n",
-       "      <td>40.997719</td>\n",
-       "      <td>-70.946457</td>\n",
-       "      <td>32.844220</td>\n",
-       "      <td>19.5836</td>\n",
-       "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
+       "      <th>0</th>\n",
+       "      <td>ru23-20130305T2004</td>\n",
+       "      <td>Rutgers University</td>\n",
+       "      <td>ru23-20130305T2004</td>\n",
+       "      <td>https://gliders.ioos.us/erddap/info/ru23-20130...</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2016-09-20 01:52:37+00:00</th>\n",
-       "      <td>5.83</td>\n",
-       "      <td>40.997719</td>\n",
-       "      <td>-70.946457</td>\n",
-       "      <td>32.788895</td>\n",
-       "      <td>19.4810</td>\n",
-       "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2016-09-20 01:52:37+00:00</th>\n",
-       "      <td>6.90</td>\n",
-       "      <td>40.997719</td>\n",
-       "      <td>-70.946457</td>\n",
-       "      <td>32.543550</td>\n",
-       "      <td>19.0221</td>\n",
-       "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2016-09-20 01:52:37+00:00</th>\n",
-       "      <td>7.62</td>\n",
-       "      <td>40.997719</td>\n",
-       "      <td>-70.946457</td>\n",
-       "      <td>32.582150</td>\n",
-       "      <td>18.7567</td>\n",
-       "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2016-09-20 01:52:37+00:00</th>\n",
-       "      <td>8.33</td>\n",
-       "      <td>40.997719</td>\n",
-       "      <td>-70.946457</td>\n",
-       "      <td>32.714066</td>\n",
-       "      <td>18.6578</td>\n",
-       "      <td>https://gliders.ioos.us/erddap/tabledap/whoi_4...</td>\n",
+       "      <th>1</th>\n",
+       "      <td>ru23-20121025T1944</td>\n",
+       "      <td>Rutgers University</td>\n",
+       "      <td>ru23-20121025T1944</td>\n",
+       "      <td>https://gliders.ioos.us/erddap/info/ru23-20121...</td>\n",
        "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
        "</div>"
       ],
       "text/plain": [
-       "                           pressure   latitude  longitude   salinity  \\\n",
-       "time                                                                   \n",
-       "2016-09-20 01:52:37+00:00      5.12  40.997719 -70.946457  32.844220   \n",
-       "2016-09-20 01:52:37+00:00      5.83  40.997719 -70.946457  32.788895   \n",
-       "2016-09-20 01:52:37+00:00      6.90  40.997719 -70.946457  32.543550   \n",
-       "2016-09-20 01:52:37+00:00      7.62  40.997719 -70.946457  32.582150   \n",
-       "2016-09-20 01:52:37+00:00      8.33  40.997719 -70.946457  32.714066   \n",
+       "                Title         Institution          Dataset ID  \\\n",
+       "0  ru23-20130305T2004  Rutgers University  ru23-20130305T2004   \n",
+       "1  ru23-20121025T1944  Rutgers University  ru23-20121025T1944   \n",
        "\n",
-       "                           temperature  \\\n",
-       "time                                     \n",
-       "2016-09-20 01:52:37+00:00      19.5836   \n",
-       "2016-09-20 01:52:37+00:00      19.4810   \n",
-       "2016-09-20 01:52:37+00:00      19.0221   \n",
-       "2016-09-20 01:52:37+00:00      18.7567   \n",
-       "2016-09-20 01:52:37+00:00      18.6578   \n",
-       "\n",
-       "                                                                 dataset_url  \n",
-       "time                                                                          \n",
-       "2016-09-20 01:52:37+00:00  https://gliders.ioos.us/erddap/tabledap/whoi_4...  \n",
-       "2016-09-20 01:52:37+00:00  https://gliders.ioos.us/erddap/tabledap/whoi_4...  \n",
-       "2016-09-20 01:52:37+00:00  https://gliders.ioos.us/erddap/tabledap/whoi_4...  \n",
-       "2016-09-20 01:52:37+00:00  https://gliders.ioos.us/erddap/tabledap/whoi_4...  \n",
-       "2016-09-20 01:52:37+00:00  https://gliders.ioos.us/erddap/tabledap/whoi_4...  "
+       "                                            info_url  \n",
+       "0  https://gliders.ioos.us/erddap/info/ru23-20130...  \n",
+       "1  https://gliders.ioos.us/erddap/info/ru23-20121...  "
       ]
      },
      "execution_count": 3,
@@ -464,20 +430,9 @@
    ],
    "source": [
     "glider_grab = GliderDataFetcher()\n",
-    "glider_grab.fetcher.dataset_id = \"whoi_406-20160902T1700\"\n",
-    "glider_grab.query(38, 41, -72, -69, \"2016-09-20T01:00:00\", \"25th sept 2016\")\n",
     "\n",
-    "df = glider_grab.to_pandas()\n",
-    "df.head()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### Multiple datasets\n",
-    "\n",
-    "If a user does not specify a `dataset_id`, `gliderpy` will search all datasets for data that falls within the query bounds."
+    "df = glider_grab.query(10, 40, -90, 8, \"2010-01-01\", \"2013-06-02\")\n",
+    "df"
    ]
   },
   {
@@ -485,10 +440,38 @@
    "execution_count": 4,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-04-11T19:25:26.581124Z",
-     "iopub.status.busy": "2023-04-11T19:25:26.580830Z",
-     "iopub.status.idle": "2023-04-11T19:25:46.264582Z",
-     "shell.execute_reply": "2023-04-11T19:25:46.264048Z"
+     "iopub.execute_input": "2023-10-13T19:14:52.115573Z",
+     "iopub.status.busy": "2023-10-13T19:14:52.115100Z",
+     "iopub.status.idle": "2023-10-13T19:15:18.095017Z",
+     "shell.execute_reply": "2023-10-13T19:15:18.094505Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "dict_keys(['ru23-20130305T2004', 'ru23-20121025T1944'])"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "datasets = glider_grab.to_pandas()\n",
+    "datasets.keys()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-10-13T19:15:18.097440Z",
+     "iopub.status.busy": "2023-10-13T19:15:18.097059Z",
+     "iopub.status.idle": "2023-10-13T19:15:18.105966Z",
+     "shell.execute_reply": "2023-10-13T19:15:18.105429Z"
     }
    },
    "outputs": [
@@ -513,9 +496,10 @@
        "  <thead>\n",
        "    <tr style=\"text-align: right;\">\n",
        "      <th></th>\n",
-       "      <th>pressure</th>\n",
        "      <th>latitude</th>\n",
        "      <th>longitude</th>\n",
+       "      <th>pressure</th>\n",
+       "      <th>profile_id</th>\n",
        "      <th>salinity (1e-3)</th>\n",
        "      <th>temperature</th>\n",
        "      <th>dataset_url</th>\n",
@@ -528,50 +512,56 @@
        "      <th></th>\n",
        "      <th></th>\n",
        "      <th></th>\n",
+       "      <th></th>\n",
        "    </tr>\n",
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>2013-03-05 22:46:47+00:00</th>\n",
-       "      <td>1.22</td>\n",
-       "      <td>39.124726</td>\n",
-       "      <td>-73.958488</td>\n",
-       "      <td>34.211002</td>\n",
-       "      <td>7.1495</td>\n",
+       "      <th>2012-10-27 18:20:25+00:00</th>\n",
+       "      <td>39.999821</td>\n",
+       "      <td>-73.510566</td>\n",
+       "      <td>1.67</td>\n",
+       "      <td>289</td>\n",
+       "      <td>31.973030</td>\n",
+       "      <td>16.9787</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2013-03-05 22:46:47+00:00</th>\n",
+       "      <th>2012-10-27 18:20:25+00:00</th>\n",
+       "      <td>39.999821</td>\n",
+       "      <td>-73.510566</td>\n",
+       "      <td>1.68</td>\n",
+       "      <td>289</td>\n",
+       "      <td>31.973806</td>\n",
+       "      <td>16.9775</td>\n",
+       "      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2012-10-27 18:20:25+00:00</th>\n",
+       "      <td>39.999821</td>\n",
+       "      <td>-73.510566</td>\n",
        "      <td>NaN</td>\n",
-       "      <td>39.124726</td>\n",
-       "      <td>-73.958488</td>\n",
+       "      <td>289</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2013-03-05 22:46:47+00:00</th>\n",
-       "      <td>NaN</td>\n",
-       "      <td>39.124726</td>\n",
-       "      <td>-73.958488</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
+       "      <th>2012-10-27 18:20:25+00:00</th>\n",
+       "      <td>39.999821</td>\n",
+       "      <td>-73.510566</td>\n",
+       "      <td>1.82</td>\n",
+       "      <td>289</td>\n",
+       "      <td>31.973087</td>\n",
+       "      <td>16.9778</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2013-03-05 22:46:47+00:00</th>\n",
-       "      <td>1.62</td>\n",
-       "      <td>39.124726</td>\n",
-       "      <td>-73.958488</td>\n",
-       "      <td>34.212910</td>\n",
-       "      <td>7.1487</td>\n",
-       "      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2013-03-05 22:46:47+00:00</th>\n",
+       "      <th>2012-10-27 18:20:25+00:00</th>\n",
+       "      <td>39.999821</td>\n",
+       "      <td>-73.510566</td>\n",
        "      <td>NaN</td>\n",
-       "      <td>39.124726</td>\n",
-       "      <td>-73.958488</td>\n",
+       "      <td>289</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
        "      <td>https://gliders.ioos.us/erddap/tabledap/ru23-2...</td>\n",
@@ -581,42 +571,38 @@
        "</div>"
       ],
       "text/plain": [
-       "                           pressure   latitude  longitude  salinity (1e-3)  \\\n",
-       "time                                                                         \n",
-       "2013-03-05 22:46:47+00:00      1.22  39.124726 -73.958488        34.211002   \n",
-       "2013-03-05 22:46:47+00:00       NaN  39.124726 -73.958488              NaN   \n",
-       "2013-03-05 22:46:47+00:00       NaN  39.124726 -73.958488              NaN   \n",
-       "2013-03-05 22:46:47+00:00      1.62  39.124726 -73.958488        34.212910   \n",
-       "2013-03-05 22:46:47+00:00       NaN  39.124726 -73.958488              NaN   \n",
+       "                            latitude  longitude  pressure  profile_id  \\\n",
+       "time                                                                    \n",
+       "2012-10-27 18:20:25+00:00  39.999821 -73.510566      1.67         289   \n",
+       "2012-10-27 18:20:25+00:00  39.999821 -73.510566      1.68         289   \n",
+       "2012-10-27 18:20:25+00:00  39.999821 -73.510566       NaN         289   \n",
+       "2012-10-27 18:20:25+00:00  39.999821 -73.510566      1.82         289   \n",
+       "2012-10-27 18:20:25+00:00  39.999821 -73.510566       NaN         289   \n",
        "\n",
-       "                           temperature  \\\n",
-       "time                                     \n",
-       "2013-03-05 22:46:47+00:00       7.1495   \n",
-       "2013-03-05 22:46:47+00:00          NaN   \n",
-       "2013-03-05 22:46:47+00:00          NaN   \n",
-       "2013-03-05 22:46:47+00:00       7.1487   \n",
-       "2013-03-05 22:46:47+00:00          NaN   \n",
+       "                           salinity (1e-3)  temperature  \\\n",
+       "time                                                      \n",
+       "2012-10-27 18:20:25+00:00        31.973030      16.9787   \n",
+       "2012-10-27 18:20:25+00:00        31.973806      16.9775   \n",
+       "2012-10-27 18:20:25+00:00              NaN          NaN   \n",
+       "2012-10-27 18:20:25+00:00        31.973087      16.9778   \n",
+       "2012-10-27 18:20:25+00:00              NaN          NaN   \n",
        "\n",
        "                                                                 dataset_url  \n",
        "time                                                                          \n",
-       "2013-03-05 22:46:47+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  \n",
-       "2013-03-05 22:46:47+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  \n",
-       "2013-03-05 22:46:47+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  \n",
-       "2013-03-05 22:46:47+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  \n",
-       "2013-03-05 22:46:47+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  "
+       "2012-10-27 18:20:25+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  \n",
+       "2012-10-27 18:20:25+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  \n",
+       "2012-10-27 18:20:25+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  \n",
+       "2012-10-27 18:20:25+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  \n",
+       "2012-10-27 18:20:25+00:00  https://gliders.ioos.us/erddap/tabledap/ru23-2...  "
       ]
      },
-     "execution_count": 4,
+     "execution_count": 5,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
-    "glider_grab = GliderDataFetcher()\n",
-    "\n",
-    "glider_grab.query(10, 40, -90, 8, \"2010-01-01\", \"2013-06-02\")\n",
-    "df = glider_grab.to_pandas()\n",
-    "df.head()"
+    "datasets[\"ru23-20121025T1944\"].head()"
    ]
   },
   {
@@ -625,18 +611,18 @@
    "source": [
     "### Dataset search\n",
     "\n",
-    "One can query all datasets available."
+    "One can query all dataset_ids available in the server."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 6,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-04-11T19:25:46.267253Z",
-     "iopub.status.busy": "2023-04-11T19:25:46.266845Z",
-     "iopub.status.idle": "2023-04-11T19:25:46.708722Z",
-     "shell.execute_reply": "2023-04-11T19:25:46.708195Z"
+     "iopub.execute_input": "2023-10-13T19:15:18.108240Z",
+     "iopub.status.busy": "2023-10-13T19:15:18.107946Z",
+     "iopub.status.idle": "2023-10-13T19:15:18.333383Z",
+     "shell.execute_reply": "2023-10-13T19:15:18.332794Z"
     }
    },
    "outputs": [
@@ -644,7 +630,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "found 1496 glider datasets on the server https://gliders.ioos.us/erddap\n"
+      "found 1699 glider datasets on the server https://gliders.ioos.us/erddap.\n"
      ]
     }
    ],
@@ -654,7 +640,7 @@
     "datasets = DatasetList()\n",
     "ds_ids = datasets.get_ids()\n",
     "\n",
-    "print(f\"found {len(ds_ids)} glider datasets on the server {datasets.e.server}\")"
+    "print(f\"found {len(ds_ids)} glider datasets on the server {datasets.e.server}.\")"
    ]
   }
  ],
@@ -674,7 +660,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.11.3"
+   "version": "3.11.6"
   }
  },
  "nbformat": 4,
