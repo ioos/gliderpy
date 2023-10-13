@@ -100,12 +100,12 @@ class GliderDataFetcher:
 
     def query(
         self,
-        min_lat,
-        max_lat,
-        min_lon,
-        max_lon,
-        min_time,
-        max_time,
+        min_lat=None,
+        max_lat=None,
+        min_lon=None,
+        max_lon=None,
+        min_time=None,
+        max_time=None,
         delayed=False,
     ):
         """
@@ -119,6 +119,14 @@ class GliderDataFetcher:
         :param max_time: end time, can be datetime object or string
         :return: search query with argument constraints applied
         """
+        # FIXME: The time constrain could be better implemented by just dropping it instead.
+        min_time = min_time if min_time else "1970-01-01"
+        max_time = max_time if max_time else "2038-01-19"
+        min_lat = min_lat if min_lat else -90.0
+        max_lat = max_lat if max_lat else 90.0
+        min_lon = min_lon if min_lon else -180.0
+        max_lon = max_lon if max_lon else 180.0
+
         self.fetcher.constraints = {
             "time>=": min_time,
             "time<=": max_time,
