@@ -14,9 +14,10 @@ def glider_grab():
 
 def test_variables(glider_grab):
     expected = [
-        "pressure",
         "latitude",
         "longitude",
+        "pressure",
+        "profile_id",
         "salinity",
         "temperature",
         "time",
@@ -24,42 +25,9 @@ def test_variables(glider_grab):
     assert sorted(glider_grab.fetcher.variables) == sorted(expected)
 
 
-# As above for ifremer ERDDAP
-
-
-@pytest.fixture
-@pytest.mark.web
-def glider_grab_ifr():
-    g = GliderDataFetcher("http://www.ifremer.fr/erddap")
-    g.fetcher.dataset_id = "OceanGlidersGDACTrajectories"
-    yield g
-
-
-def test_variables_ifr(glider_grab_ifr):
-    expected = [
-        "latitude",
-        "longitude",
-        "PRES",
-        "PSAL",
-        "TEMP",
-        "time",
-    ]
-    assert sorted(glider_grab_ifr.fetcher.variables) == sorted(expected)
-
-
 def test_standardise_variables_ioos():
     glider_grab = GliderDataFetcher()
     glider_grab.fetcher.dataset_id = "whoi_406-20160902T1700"
-    df = glider_grab.to_pandas()
-    variables = df.columns
-    for var in variables:
-        assert var in server_parameter_rename.values()
-
-
-def test_standardise_variables_ifremer():
-    glider_grab = GliderDataFetcher("http://www.ifremer.fr/erddap")
-    glider_grab.fetcher.dataset_id = "OceanGlidersGDACTrajectories"
-    glider_grab.query(-90, 90, -180, 180, "2015-09-20", "2015-09-27")
     df = glider_grab.to_pandas()
     variables = df.columns
     for var in variables:

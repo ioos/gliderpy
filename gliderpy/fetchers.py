@@ -12,13 +12,12 @@ from erddapy.erddapy import urlopen
 
 from gliderpy.servers import (
     server_parameter_rename,
-    server_select,
     server_vars,
 )
 
 OptionalStr = Optional[str]
 
-# This defaults to the IOOS glider DAC.
+# Defaults to the IOOS glider DAC.
 _server = "https://gliders.ioos.us/erddap"
 
 
@@ -36,16 +35,15 @@ def standardise_df(df, dataset_url):
 class GliderDataFetcher:
     """
     Args:
-        server: a glider ERDDAP server URL
+        server: A glider ERDDAP server URL.
 
     Attributes:
-        dataset_id: a dataset unique id.
-        constraints: download constraints, default
+        dataset_id: A dataset unique id.
+        constraints: Download constraints, defaults same as query.
 
     """
 
     def __init__(self, server=_server):
-        server = server_select(server)
         self.server = server
         self.fetcher = ERDDAP(
             server=server,
@@ -61,9 +59,14 @@ class GliderDataFetcher:
 
         :return: pandas dataframe with datetime UTC as index
         """
-        if type(self.datasets) is pd.Series:
+        if self.fetcher.dataset_id:
+            df = self.fetcher.to_pandas(
+                index_col="time (UTC)",
+                parse_dates=True,
+            )
+        elif not self.fetcher.dataset_id and self.datasets is not None:
             df_all = []
-            for dataset_id in self.datasets:
+            for dataset_id in self.datasets["Dataset ID"]:
                 self.fetcher.dataset_id = dataset_id
                 df = self.fetcher.to_pandas(
                     index_col="time (UTC)",
@@ -73,20 +76,26 @@ class GliderDataFetcher:
                 df = standardise_df(df, dataset_url)
                 df_all.append(df)
             return pd.concat(df_all)
+        else:
+            raise ValueError(
+                f"Must provide a {self.fetcher.dataset_id} or `query` terms to download data.",
+            )
 
-        if not self.fetcher.dataset_id:
-            return None
-
-        df = self.fetcher.to_pandas(
-            index_col="time (UTC)",
-            parse_dates=True,
-        )
-        # Standardize variable names
+        # Standardize variable names.
         dataset_url = self.fetcher.get_download_url().split("?")[0]
         df = standardise_df(df, dataset_url)
         return df
 
-    def query(self, min_lat, max_lat, min_lon, max_lon, min_time, max_time):
+    def query(
+        self,
+        min_lat,
+        max_lat,
+        min_lon,
+        max_lon,
+        min_time,
+        max_time,
+        delayed=False,
+    ):
         """
         Takes user supplied geographical and time constraints and adds them to the query
 
@@ -106,7 +115,7 @@ class GliderDataFetcher:
             "longitude>=": min_lon,
             "longitude<=": max_lon,
         }
-        if not self.fetcher.dataset_id:
+        if not self.datasets:
             url = self.fetcher.get_search_url(
                 search_for="glider",
                 response="csv",
@@ -117,6 +126,7 @@ class GliderDataFetcher:
                 min_time=min_time,
                 max_time=max_time,
             )
+            self.query_url = url
             try:
                 data = urlopen(url)
             except httpx.HTTPError as err:
@@ -124,20 +134,16 @@ class GliderDataFetcher:
                     f"Error, no datasets found in supplied range. Try relaxing your constraints: {self.fetcher.constraints}",
                 ) from err
                 return None
-            df = pd.read_csv(data)
-            self.datasets = df["Dataset ID"]
-            return df[["Title", "Institution", "Dataset ID"]]
-
-        return self
-
-    def platform(self, platform):
-        """
-
-        :param platform: platform and deployment id from ifremer
-        :return: search query with platform constraint applied
-        """
-        self.fetcher.constraints["platform_deployment="] = platform
-        return self
+            df = pd.read_csv(data)[["Title", "Institution", "Dataset ID"]]
+            if not delayed:
+                df = df.loc[~df["Dataset ID"].str.endswith("delayed")]
+                info_urls = [
+                    self.fetcher.get_info_url(dataset_id=dataset_id, response="html")
+                    for dataset_id in df["Dataset ID"]
+                ]
+                df["info_url"] = info_urls
+            self.datasets = df
+        return self.datasets
 
 
 class DatasetList:
@@ -146,7 +152,7 @@ class DatasetList:
 
     Attributes:
         e: an ERDDAP server instance
-        TODO: search_terms: A list of terms to search the server for. Multiple terms will be combined as AND
+        TODO: search_terms: A list of terms to search the server for. Multiple terms will be combined as "AND."
 
     """
 
@@ -166,6 +172,3 @@ class DatasetList:
             return self.dataset_ids
         else:
             raise ValueError(f"The {self.e.server} does not supported this operation.")
-        # TODO: List the platform_deployment variable
-        # if self.e.server == "https://erddap.ifremer.fr/erddap":
-        #     platform_deployment
