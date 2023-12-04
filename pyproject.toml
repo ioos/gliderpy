@@ -74,13 +74,6 @@ line-length = 79
   "ERA001",
 ]
 
-[tool.pytest.ini_options]
-filterwarnings = [
-    "error:::gliderpy.*",
-    "ignore::UserWarning",
-    "ignore::RuntimeWarning",
-]
-
 [tool.check-manifest]
 ignore = [
   "*.yml",
@@ -94,6 +87,13 @@ ignore = [
   "tests/*",
 ]
 ##
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error:::gliderpy.*",
+    "ignore::UserWarning",
+    "ignore::RuntimeWarning",
+]
 
 [tool.interrogate]
 ignore-init-method = true
