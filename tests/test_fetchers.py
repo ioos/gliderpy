@@ -15,6 +15,14 @@ def glider_grab():
     return g
 
 
+@pytest.fixture
+@pytest.mark.web
+def pandas_dataset():
+    glider_grab = GliderDataFetcher()
+    glider_grab.fetcher.dataset_id = "whoi_406-20160902T1700"
+    yield glider_grab.to_pandas()
+
+
 def test_variables(glider_grab):
     """Check if expected variables are being fetched."""
     expected = [
@@ -29,11 +37,9 @@ def test_variables(glider_grab):
     assert sorted(glider_grab.fetcher.variables) == sorted(expected)
 
 
-def test_standardise_variables_ioos():
+@pytest.mark.vcr()
+def test_standardise_variables(pandas_dataset):
     """Check if IOOS variables are properly renamed."""
-    glider_grab = GliderDataFetcher()
-    glider_grab.fetcher.dataset_id = "whoi_406-20160902T1700"
-    df = glider_grab.to_pandas()
-    variables = df.columns
+    variables = pandas_dataset.columns
     for var in variables:
         assert var in server_parameter_rename.values()
