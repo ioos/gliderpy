@@ -3,7 +3,6 @@ Server names and aliases that point to an ERDDAP instance
 
 """
 
-
 server_vars = {
     "https://gliders.ioos.us/erddap": [
         "latitude",
@@ -30,4 +29,5 @@ server_parameter_rename = {
     "salinity (1)": "salinity",
     "temp (degree_celsius)": "temperature",
     "temperature (celsius)": "temperature",
+    "time (utc)": "time",
 }
