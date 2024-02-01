@@ -14,7 +14,7 @@ repos:
       files: requirements-dev.txt
 
 - repo: https://github.com/psf/black
-  rev: 23.12.1
+  rev: 24.1.1
   hooks:
   - id: black
     language_version: python3
@@ -33,10 +33,10 @@ repos:
     - id: blackdoc
 
 - repo: https://github.com/econchick/interrogate
-  rev: 1.5.0
+  rev: 237be78f9c6135fc1a620d211cdfdc5d3885082b
   hooks:
     - id: interrogate
-      exclude: ^(docs|setup.py|tests)
+      exclude: ^(docs|tests)
       args: [--config=pyproject.toml]
 
 - repo: https://github.com/codespell-project/codespell
@@ -56,12 +56,12 @@ repos:
     - id: add-trailing-comma
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.1.9
+  rev: v0.1.15
   hooks:
     - id: ruff
 
 - repo: https://github.com/tox-dev/pyproject-fmt
-  rev: 1.5.3
+  rev: 1.7.0
   hooks:
     - id: pyproject-fmt
 
