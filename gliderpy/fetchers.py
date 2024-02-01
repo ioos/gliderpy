@@ -30,10 +30,7 @@ def _to_pandas_multiple(glider_grab):
     glider_grab_copy = copy(glider_grab)
     for dataset_id in glider_grab_copy.datasets["Dataset ID"]:
         glider_grab_copy.fetcher.dataset_id = dataset_id
-        df = glider_grab_copy.fetcher.to_pandas(
-            index_col="time (UTC)",
-            parse_dates=True,
-        )
+        df = glider_grab_copy.fetcher.to_pandas()
         dataset_url = glider_grab_copy.fetcher.get_download_url().split("?")[0]
         df = standardise_df(df, dataset_url)
         df_all.update({dataset_id: df})
@@ -45,8 +42,11 @@ def standardise_df(df, dataset_url):
     Standardise variable names in a dataset and add column for url
     """
     df.columns = df.columns.str.lower()
-    df.rename(columns=dict(server_parameter_rename), inplace=True)
-    df.index.rename("time", inplace=True)
+    df = df.set_index("time (utc)")
+    df = df.rename(columns=server_parameter_rename)
+    df.index = pd.to_datetime(df.index)
+    # We need to sort b/c of the non-sequential submission of files due to the nature of glider data transmission.
+    df = df.sort_index()
     df["dataset_url"] = dataset_url
     return df
 
@@ -79,10 +79,7 @@ class GliderDataFetcher:
         :return: pandas dataframe with datetime UTC as index, multiple dataset_ids dataframes are stored in a dictionary
         """
         if self.fetcher.dataset_id:
-            df = self.fetcher.to_pandas(
-                index_col="time (UTC)",
-                parse_dates=True,
-            )
+            df = self.fetcher.to_pandas()
         elif not self.fetcher.dataset_id and self.datasets is not None:
             df_all = _to_pandas_multiple(self)
             # We need to reset to avoid fetching a single dataset_id when making multiple requests.
@@ -93,7 +90,7 @@ class GliderDataFetcher:
                 f"Must provide a {self.fetcher.dataset_id} or `query` terms to download data.",
             )
 
-        # Standardize variable names.
+        # Standardize variable names for the single dataset_id.
         dataset_url = self.fetcher.get_download_url().split("?")[0]
         df = standardise_df(df, dataset_url)
         return df

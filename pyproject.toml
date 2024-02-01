@@ -86,7 +86,6 @@ ignore = [
   "tests",
   "tests/*",
 ]
-##
 
 [tool.pytest.ini_options]
 filterwarnings = [
