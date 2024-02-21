@@ -49,9 +49,14 @@ source_suffix = ".rst"
 # The master toctree document.
 master_doc = "index"
 
+from datetime import date
+
+year = date.today().year
+
+
 # General information about the project.
 project = "gliderpy"
-copyright = "2023, Filipe Fernandes"
+copyright =  str(year) + ", Filipe Fernandes"
 author = "Filipe Fernandes"
 
 # The version info for the project you're documenting, acts as replacement for
