@@ -53,7 +53,6 @@ from datetime import date
 
 year = date.today().year
 
-
 # General information about the project.
 project = "gliderpy"
 copyright =  str(year) + ", Filipe Fernandes"
