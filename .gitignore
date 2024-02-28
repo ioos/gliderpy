@@ -10,4 +10,3 @@ docs/source/*-output.ipynb
 gliderpy/_version.py
 *.idea
 *__pycache__/
-.venv/
