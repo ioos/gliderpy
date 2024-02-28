@@ -22,8 +22,8 @@ def plot_track(df):
     :return: figures, axes
     """
 
-    x = df["longitude (degrees_east)"]
-    y = df["latitude (degrees_north)"]
+    x = df["longitude"]
+    y = df["latitude"]
     dx, dy = 2, 4
 
     fig, ax = plt.subplots(
@@ -47,7 +47,7 @@ def plot_transect(df, var, **kw):
     fig, ax = plt.subplots(figsize=(17, 2))
     cs = ax.scatter(
         df.index,
-        df["depth (m)"],
+        df["pressure"],
         s=15,
         c=df[var],
         marker="o",
@@ -61,5 +61,5 @@ def plot_transect(df, var, **kw):
 
     cbar = fig.colorbar(cs, orientation="vertical", extend="both")
     cbar.ax.set_ylabel(var)
-    ax.set_ylabel("Depth (m)")
+    ax.set_ylabel("Pressure (dbar)")
     return fig, ax
