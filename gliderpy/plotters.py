@@ -18,10 +18,9 @@ except ModuleNotFoundError as err:
 
 def plot_track(df):
     """
-    Plots a track of glider path coloured by temperature
+    Plots a track of glider path colored by temperature
     :return: figures, axes
     """
-
     x = df["longitude (degrees_east)"]
     y = df["latitude (degrees_north)"]
     dx, dy = 2, 4
@@ -30,9 +29,12 @@ def plot_track(df):
         figsize=(9, 9),
         subplot_kw={"projection": ccrs.PlateCarree()},
     )
-    ax.scatter(x, y, c=None, s=25, alpha=0.25, edgecolor="none")
+    # Add a label to the scatter plot
+    ax.scatter(x, y, c=None, s=25, alpha=0.25, edgecolor="none", label="Glider Track")
     ax.coastlines("10m")
     ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
+    # Display the legend
+    plt.legend()
     return fig, ax
 
 
