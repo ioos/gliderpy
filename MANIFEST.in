@@ -11,8 +11,9 @@ prune *.egg-info
 
 global-exclude *.nc
 
-exclude *.yml
 exclude *.enc
+exclude *.yml
 exclude .gitignore
 exclude .isort.cfg
 exclude gliderpy/_version.py
+exclude ruff.toml
