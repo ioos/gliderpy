@@ -20,6 +20,7 @@ except ModuleNotFoundError:
 if TYPE_CHECKING:
     import pandas as pd
 
+
 def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
     """Plot a track of glider path coloured by temperature.
 
@@ -41,7 +42,8 @@ def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
 
 def plot_transect(
     df: pd.DataFrame,
-     var: str, **kw: dict,
+    var: str,
+    **kw: dict,
 ) -> tuple(plt.Figure, plt.Axes):
     """Make a scatter plot of depth vs time coloured by a user defined
     variable.

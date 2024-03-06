@@ -1,6 +1,5 @@
 """Test Fetchers."""
 
-
 import pytest
 
 from gliderpy.fetchers import GliderDataFetcher
@@ -10,7 +9,7 @@ from gliderpy.servers import server_parameter_rename
 @pytest.fixture()
 @pytest.mark.web()
 def glider_grab():
-    """"Create the basic query object for testing."""
+    """Create the basic query object for testing."""
     g = GliderDataFetcher()
     g.dataset_id = "whoi_406-20160902T1700"
     return g

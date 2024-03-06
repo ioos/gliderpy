@@ -176,7 +176,7 @@ class GliderDataFetcher:
                 info_urls = [
                     self.fetcher.get_info_url(
                         dataset_id=dataset_id,
-                         response="html",
+                        response="html",
                     )
                     for dataset_id in datasets["Dataset ID"]
                 ]
