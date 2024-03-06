@@ -1,7 +1,4 @@
-"""
-Server names and aliases that point to an ERDDAP instance
-
-"""
+"""Server names and aliases that point to an ERDDAP instance."""
 
 server_vars = {
     "https://gliders.ioos.us/erddap": [

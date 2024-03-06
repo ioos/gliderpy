@@ -1,27 +1,30 @@
-"""
-Some convenience functions to help visualize glider data.
-"""
+"""Some convenience functions to help visualize glider data."""
+
+from __future__ import annotations
 
 import warnings
+from typing import TYPE_CHECKING
 
 try:
     import cartopy.crs as ccrs
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
-except ModuleNotFoundError as err:
+except ModuleNotFoundError:
     warnings.warn(
         "gliderpy requires matplotlib and cartopy for plotting.",
         stacklevel=1,
     )
-    raise err
+    raise
 
 
-def plot_track(df):
-    """
-    Plots a track of glider path coloured by temperature
+if TYPE_CHECKING:
+    import pandas as pd
+
+def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
+    """Plot a track of glider path coloured by temperature.
+
     :return: figures, axes
     """
-
     x = df["longitude (degrees_east)"]
     y = df["latitude (degrees_north)"]
     dx, dy = 2, 4
@@ -36,9 +39,13 @@ def plot_track(df):
     return fig, ax
 
 
-def plot_transect(df, var, **kw):
-    """
-    Makes a scatter plot of depth vs time coloured by a user defined variable
+def plot_transect(
+    df: pd.DataFrame,
+     var: str, **kw: dict,
+) -> tuple(plt.Figure, plt.Axes):
+    """Make a scatter plot of depth vs time coloured by a user defined
+    variable.
+
     :param var: variable to colour the scatter plot
     :return: figure, axes
     """
