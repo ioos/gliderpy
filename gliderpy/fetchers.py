@@ -8,7 +8,7 @@ from numbers import Number
 import httpx
 import pandas as pd
 from erddapy import ERDDAP
-from erddapy.erddapy import urlopen
+from erddapy.core.url import urlopen
 
 from gliderpy.servers import (
     server_parameter_rename,
