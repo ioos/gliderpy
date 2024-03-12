@@ -16,6 +16,7 @@ from gliderpy.servers import (
 )
 
 OptionalBool = bool | None
+OptionalDF = pd.DataFrame | None
 OptionalDict = dict | None
 OptionalList = list[str] | tuple[str] | None
 OptionalStr = str | None
@@ -80,7 +81,7 @@ class GliderDataFetcher:
         )
         self.fetcher.variables = server_vars[server]
         self.fetcher.dataset_id: OptionalStr = None
-        self.datasets: OptionalBool = None
+        self.datasets: OptionalDF = None
 
     def to_pandas(self: "GliderDataFetcher") -> pd.DataFrame:
         """Return data from the server as a pandas dataframe.
@@ -97,10 +98,7 @@ class GliderDataFetcher:
             self.fetcher.dataset_id = None
             return glider_df
         else:
-            msg = (
-                f"Must provide a {self.fetcher.dataset_id} or "
-                "`query` terms to download data."
-            )
+            msg = "Must provide a dataset_id or query terms to download data."
             raise ValueError(msg)
 
         # Standardize variable names for the single dataset_id.
@@ -145,7 +143,7 @@ class GliderDataFetcher:
             "longitude>=": min_lon,
             "longitude<=": max_lon,
         }
-        if not self.datasets:
+        if self.datasets is None:
             url = self.fetcher.get_search_url(
                 search_for="glider",
                 response="csv",
