@@ -21,3 +21,7 @@ or, if you are a `pip` users
 ```shell
 pip install gliderpy
 ```
+
+```shell
+pip install cartopy
+```
