@@ -21,23 +21,28 @@ if TYPE_CHECKING:
     import pandas as pd
 
 
-def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
+def plot_track(df: pd.DataFrame) -> tuple:
     """Plot a track of glider path coloured by temperature.
 
     :return: figures, axes
     """
-    x = df["longitude (degrees_east)"]
-    y = df["latitude (degrees_north)"]
+    x = df["longitude"]
+    y = df["latitude"]
+    temperature = df["temperature"]  
     dx, dy = 2, 4
 
     fig, ax = plt.subplots(
         figsize=(9, 9),
         subplot_kw={"projection": ccrs.PlateCarree()},
     )
-    ax.scatter(x, y, c=None, s=25, alpha=0.25, edgecolor="none")
+
+    sc = ax.scatter(x, y, c=temperature, s=25, alpha=0.25, edgecolor="none", cmap='viridis')
     ax.coastlines("10m")
     ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
-    return fig, ax
+
+    cbar = plt.colorbar(sc, ax=ax, orientation='vertical', label='Temperature')
+    
+    return fig, ax, cbar
 
 
 def plot_transect(
