@@ -19,8 +19,8 @@ except ModuleNotFoundError:
 
 if TYPE_CHECKING:
     import pandas as pd
-
-
+    import pandas_flavor as pf
+@pf.register_dataframe_method
 def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
     """Plot a track of glider path coloured by temperature.
 
