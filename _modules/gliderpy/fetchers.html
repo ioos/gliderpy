@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gliderpy.fetchers &#8212; gliderpy 0.2.1 documentation</title>
+    <title>gliderpy.fetchers &#8212; gliderpy 0.2.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=a66d8bb5" />
-    <script src="../../_static/documentation_options.js?v=37f418d5"></script>
+    <script src="../../_static/documentation_options.js?v=000c92bf"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -91,76 +91,90 @@
           <div class="body" role="main">
             
   <h1>Source code for gliderpy.fetchers</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Helper methods to fetch glider data from multiple ERDDAP serves</span>
+<span></span><span class="sd">&quot;&quot;&quot;Helper methods to fetch glider data from multiple ERDDAP serves.&quot;&quot;&quot;</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-
+<span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
 
 <span class="kn">import</span> <span class="nn">httpx</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">erddapy</span> <span class="kn">import</span> <span class="n">ERDDAP</span>
-<span class="kn">from</span> <span class="nn">erddapy.erddapy</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">erddapy.core.url</span> <span class="kn">import</span> <span class="n">urlopen</span>
 
 <span class="kn">from</span> <span class="nn">gliderpy.servers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">server_parameter_rename</span><span class="p">,</span>
     <span class="n">server_vars</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">OptionalStr</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="n">OptionalBool</span> <span class="o">=</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="n">OptionalDF</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="n">OptionalDict</span> <span class="o">=</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="n">OptionalList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="n">OptionalStr</span> <span class="o">=</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="n">OptionalNum</span> <span class="o">=</span> <span class="n">Number</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="c1"># Should we add more or datetime.datetime catches all?</span>
+<span class="n">OptionalDateTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">|</span> <span class="nb">str</span>
 
 <span class="c1"># Defaults to the IOOS glider DAC.</span>
 <span class="n">_server</span> <span class="o">=</span> <span class="s2">&quot;https://gliders.ioos.us/erddap&quot;</span>
 
 
 <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">_to_pandas_multiple</span><span class="p">(</span><span class="n">glider_grab</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Thin wrapper to cache the results when multiple datasets are requested.&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_to_pandas_multiple</span><span class="p">(</span><span class="n">glider_grab</span><span class="p">:</span> <span class="s2">&quot;GliderDataFetcher&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Thin wrapper to cache results when multiple datasets are requested.&quot;&quot;&quot;</span>
     <span class="n">df_all</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">glider_grab_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">glider_grab</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">dataset_id</span> <span class="ow">in</span> <span class="n">glider_grab_copy</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="s2">&quot;Dataset ID&quot;</span><span class="p">]:</span>
         <span class="n">glider_grab_copy</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">=</span> <span class="n">dataset_id</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">glider_grab_copy</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+        <span class="n">glider_df</span> <span class="o">=</span> <span class="n">glider_grab_copy</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
         <span class="n">dataset_url</span> <span class="o">=</span> <span class="n">glider_grab_copy</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">get_download_url</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">standardise_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dataset_url</span><span class="p">)</span>
-        <span class="n">df_all</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">dataset_id</span><span class="p">:</span> <span class="n">df</span><span class="p">})</span>
+        <span class="n">glider_df</span> <span class="o">=</span> <span class="n">standardise_df</span><span class="p">(</span><span class="n">glider_df</span><span class="p">,</span> <span class="n">dataset_url</span><span class="p">)</span>
+        <span class="n">df_all</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">dataset_id</span><span class="p">:</span> <span class="n">glider_df</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">df_all</span>
 
 
 <div class="viewcode-block" id="standardise_df">
 <a class="viewcode-back" href="../../gliderpy.html#gliderpy.fetchers.standardise_df">[docs]</a>
-<span class="k">def</span> <span class="nf">standardise_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dataset_url</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Standardise variable names in a dataset and add column for url</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time (utc)&quot;</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">server_parameter_rename</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-    <span class="c1"># We need to sort b/c of the non-sequential submission of files due to the nature of glider data transmission.</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;dataset_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset_url</span>
-    <span class="k">return</span> <span class="n">df</span></div>
+<span class="k">def</span> <span class="nf">standardise_df</span><span class="p">(</span><span class="n">glider_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">dataset_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Standardise variable names in a dataset and add column for URL.&quot;&quot;&quot;</span>
+    <span class="n">glider_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">glider_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">glider_df</span> <span class="o">=</span> <span class="n">glider_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time (utc)&quot;</span><span class="p">)</span>
+    <span class="n">glider_df</span> <span class="o">=</span> <span class="n">glider_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">server_parameter_rename</span><span class="p">)</span>
+    <span class="n">glider_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+        <span class="n">glider_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># We need to sort b/c of the non-sequential submission of files due to</span>
+    <span class="c1"># the nature of glider data transmission.</span>
+    <span class="n">glider_df</span> <span class="o">=</span> <span class="n">glider_df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+    <span class="n">glider_df</span><span class="p">[</span><span class="s2">&quot;dataset_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset_url</span>
+    <span class="k">return</span> <span class="n">glider_df</span></div>
 
 
 
 <div class="viewcode-block" id="GliderDataFetcher">
 <a class="viewcode-back" href="../../gliderpy.html#gliderpy.fetchers.GliderDataFetcher">[docs]</a>
 <span class="k">class</span> <span class="nc">GliderDataFetcher</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Instantiate the glider fetcher.</span>
+
 <span class="sd">    Args:</span>
+<span class="sd">    ----</span>
 <span class="sd">        server: A glider ERDDAP server URL.</span>
 
 <span class="sd">    Attributes:</span>
+<span class="sd">    ----------</span>
 <span class="sd">        dataset_id: A dataset unique id.</span>
 <span class="sd">        constraints: Download constraints, defaults same as query.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">_server</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;GliderDataFetcher&quot;</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="n">OptionalStr</span> <span class="o">=</span> <span class="n">_server</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiate main class attributes.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span> <span class="o">=</span> <span class="n">ERDDAP</span><span class="p">(</span>
             <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
@@ -168,48 +182,47 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">server_vars</span><span class="p">[</span><span class="n">server</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span><span class="p">:</span> <span class="n">OptionalStr</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span> <span class="n">Optional</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span> <span class="n">OptionalDF</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="GliderDataFetcher.to_pandas">
 <a class="viewcode-back" href="../../gliderpy.html#gliderpy.fetchers.GliderDataFetcher.to_pandas">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Fetches data from the server and reads into a pandas dataframe</span>
+    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;GliderDataFetcher&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return data from the server as a pandas dataframe.</span>
 
-<span class="sd">        :return: pandas dataframe with datetime UTC as index, multiple dataset_ids dataframes are stored in a dictionary</span>
+<span class="sd">        :return: pandas a dataframe with datetime UTC as index,</span>
+<span class="sd">                 multiple dataset_ids dataframes are stored in a dictionary</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span><span class="p">:</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+            <span class="n">glider_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">df_all</span> <span class="o">=</span> <span class="n">_to_pandas_multiple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-            <span class="c1"># We need to reset to avoid fetching a single dataset_id when making multiple requests.</span>
+            <span class="n">glider_df</span> <span class="o">=</span> <span class="n">_to_pandas_multiple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="c1"># We need to reset to avoid fetching a single dataset_id when</span>
+            <span class="c1"># making multiple requests.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">return</span> <span class="n">df_all</span>
+            <span class="k">return</span> <span class="n">glider_df</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Must provide a </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">dataset_id</span><span class="si">}</span><span class="s2"> or `query` terms to download data.&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Must provide a dataset_id or query terms to download data.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="c1"># Standardize variable names for the single dataset_id.</span>
         <span class="n">dataset_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">get_download_url</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">standardise_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dataset_url</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span></div>
+        <span class="k">return</span> <span class="n">standardise_df</span><span class="p">(</span><span class="n">glider_df</span><span class="p">,</span> <span class="n">dataset_url</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GliderDataFetcher.query">
 <a class="viewcode-back" href="../../gliderpy.html#gliderpy.fetchers.GliderDataFetcher.query">[docs]</a>
-    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">min_lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">max_lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">min_lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">max_lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">min_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">max_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">delayed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Takes user supplied geographical and time constraints and adds them to the query</span>
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;GliderDataFetcher&quot;</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">min_lat</span><span class="p">:</span> <span class="n">OptionalNum</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_lat</span><span class="p">:</span> <span class="n">OptionalNum</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_lon</span><span class="p">:</span> <span class="n">OptionalNum</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_lon</span><span class="p">:</span> <span class="n">OptionalNum</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_time</span><span class="p">:</span> <span class="n">OptionalDateTime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_time</span><span class="p">:</span> <span class="n">OptionalDateTime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">delayed</span><span class="p">:</span> <span class="n">OptionalBool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add user supplied geographical and time constraints to the query.</span>
 
 <span class="sd">        :param min_lat: southernmost lat</span>
 <span class="sd">        :param max_lat: northermost lat</span>
@@ -219,7 +232,8 @@
 <span class="sd">        :param max_time: end time, can be datetime object or string</span>
 <span class="sd">        :return: search query with argument constraints applied</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># FIXME: The time constrain could be better implemented by just dropping it instead.</span>
+        <span class="c1"># NB: The time constrain could be better implemented by just</span>
+        <span class="c1"># dropping it instead.</span>
         <span class="n">min_time</span> <span class="o">=</span> <span class="n">min_time</span> <span class="k">if</span> <span class="n">min_time</span> <span class="k">else</span> <span class="s2">&quot;1970-01-01&quot;</span>
         <span class="n">max_time</span> <span class="o">=</span> <span class="n">max_time</span> <span class="k">if</span> <span class="n">max_time</span> <span class="k">else</span> <span class="s2">&quot;2038-01-19&quot;</span>
         <span class="n">min_lat</span> <span class="o">=</span> <span class="n">min_lat</span> <span class="k">if</span> <span class="n">min_lat</span> <span class="k">else</span> <span class="o">-</span><span class="mf">90.0</span>
@@ -235,7 +249,7 @@
             <span class="s2">&quot;longitude&gt;=&quot;</span><span class="p">:</span> <span class="n">min_lon</span><span class="p">,</span>
             <span class="s2">&quot;longitude&lt;=&quot;</span><span class="p">:</span> <span class="n">max_lon</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">get_search_url</span><span class="p">(</span>
                 <span class="n">search_for</span><span class="o">=</span><span class="s2">&quot;glider&quot;</span><span class="p">,</span>
                 <span class="n">response</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span>
@@ -250,19 +264,28 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Error, no datasets found in supplied range. Try relaxing your constraints: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">constraints</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
-                <span class="k">return</span> <span class="kc">None</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data</span><span class="p">)[[</span><span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="s2">&quot;Institution&quot;</span><span class="p">,</span> <span class="s2">&quot;Dataset ID&quot;</span><span class="p">]]</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;Error, no datasets found in supplied range. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Try relaxing the constraints: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">constraints</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="n">err</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">err</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">raise</span>
+
+            <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="s2">&quot;Institution&quot;</span><span class="p">,</span> <span class="s2">&quot;Dataset ID&quot;</span><span class="p">]</span>
+            <span class="n">datasets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="n">cols</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">delayed</span><span class="p">:</span>
-                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Dataset ID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;delayed&quot;</span><span class="p">)]</span>
-                <span class="n">info_urls</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">get_info_url</span><span class="p">(</span><span class="n">dataset_id</span><span class="o">=</span><span class="n">dataset_id</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">dataset_id</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Dataset ID&quot;</span><span class="p">]</span>
+                <span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                    <span class="o">~</span><span class="n">datasets</span><span class="p">[</span><span class="s2">&quot;Dataset ID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;delayed&quot;</span><span class="p">)</span>
                 <span class="p">]</span>
-                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;info_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info_urls</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">df</span>
+                <span class="n">info_urls</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">get_info_url</span><span class="p">(</span>
+                        <span class="n">dataset_id</span><span class="o">=</span><span class="n">dataset_id</span><span class="p">,</span>
+                        <span class="n">response</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">dataset_id</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">[</span><span class="s2">&quot;Dataset ID&quot;</span><span class="p">]</span>
+                <span class="p">]</span>
+                <span class="n">datasets</span><span class="p">[</span><span class="s2">&quot;info_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info_urls</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span></div>
 </div>
 
@@ -274,13 +297,23 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a glider dataset ids list.</span>
 
 
-<span class="sd">    Attributes:</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
 <span class="sd">        e: an ERDDAP server instance</span>
-<span class="sd">        TODO: search_terms: A list of terms to search the server for. Multiple terms will be combined as &quot;AND.&quot;</span>
+<span class="sd">        TODO -&gt; search_terms: A list of terms to search the server for.</span>
+<span class="sd">                Multiple terms will be combined as &quot;AND.&quot;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">_server</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;DatasetList&quot;</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">OptionalStr</span> <span class="o">=</span> <span class="n">_server</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiate main class attributes.</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">          server: the server URL.</span>
+<span class="sd">          protocol: ERDDAP&#39;s protocol (tabledap/griddap)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">ERDDAP</span><span class="p">(</span>
             <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
             <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;tabledap&quot;</span><span class="p">,</span>
@@ -288,7 +321,7 @@
 
 <div class="viewcode-block" id="DatasetList.get_ids">
 <a class="viewcode-back" href="../../gliderpy.html#gliderpy.fetchers.DatasetList.get_ids">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;DatasetList&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the allDatasets list for the glider server.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">.</span><span class="n">server</span> <span class="o">==</span> <span class="s2">&quot;https://gliders.ioos.us/erddap&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">=</span> <span class="s2">&quot;allDatasets&quot;</span>
@@ -296,8 +329,8 @@
             <span class="n">dataset_ids</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;allDatasets&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataset_ids</span> <span class="o">=</span> <span class="n">dataset_ids</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_ids</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">.</span><span class="n">server</span><span class="si">}</span><span class="s2"> does not supported this operation.&quot;</span><span class="p">)</span></div>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">.</span><span class="n">server</span><span class="si">}</span><span class="s2"> does not supported this operation.&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
@@ -309,7 +342,7 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &#169;2023, Filipe Fernandes.
+      &#169;2024, Filipe Fernandes.
       
       |
       Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
