@@ -47,7 +47,10 @@ def standardise_df(glider_df: pd.DataFrame, dataset_url: str) -> pd.DataFrame:
     glider_df.columns = glider_df.columns.str.lower()
     glider_df = glider_df.set_index("time (utc)")
     glider_df = glider_df.rename(columns=server_parameter_rename)
-    glider_df.index = pd.to_datetime(glider_df.index)
+    glider_df.index = pd.to_datetime(
+        glider_df.index,
+        format="%Y-%m-%dT%H:%M:%SZ",
+    )
     # We need to sort b/c of the non-sequential submission of files due to
     # the nature of glider data transmission.
     glider_df = glider_df.sort_index()
