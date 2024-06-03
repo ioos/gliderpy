@@ -40,7 +40,7 @@ def plot_transect(
     fig, ax = plt.subplots(figsize=(17, 2))
     cs = ax.scatter(
         df.index,
-        df["depth (m)"],
+        df["pressure"],
         s=15,
         c=df[var],
         marker="o",
@@ -56,3 +56,5 @@ def plot_transect(
     cbar.ax.set_ylabel(var)
     ax.set_ylabel("Depth (m)")
     return fig, ax
+
+
