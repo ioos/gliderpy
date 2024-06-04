@@ -23,7 +23,6 @@ if TYPE_CHECKING:
 from pandas_flavor import register_dataframe_method
 
 @register_dataframe_method
-
 def plot_transect(
     df: pd.DataFrame,
     var: str,
