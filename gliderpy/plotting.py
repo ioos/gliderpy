@@ -6,7 +6,6 @@ import warnings
 from typing import TYPE_CHECKING
 
 try:
-    import cartopy.crs as ccrs
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
 except ModuleNotFoundError:
@@ -23,7 +22,6 @@ if TYPE_CHECKING:
 from pandas_flavor import register_dataframe_method
 
 @register_dataframe_method
-
 def plot_transect(
     df: pd.DataFrame,
     var: str,
@@ -54,7 +52,7 @@ def plot_transect(
 
     cbar = fig.colorbar(cs, orientation="vertical", extend="both")
     cbar.ax.set_ylabel(var)
-    ax.set_ylabel("Depth (m)")
+    ax.set_ylabel("pressure")
     return fig, ax
 
 
