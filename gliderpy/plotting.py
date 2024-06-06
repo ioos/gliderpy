@@ -21,6 +21,7 @@ if TYPE_CHECKING:
 
 from pandas_flavor import register_dataframe_method
 
+
 @register_dataframe_method
 def plot_transect(
     df: pd.DataFrame,
@@ -54,5 +55,3 @@ def plot_transect(
     cbar.ax.set_ylabel(var)
     ax.set_ylabel("pressure")
     return fig, ax
-
-
