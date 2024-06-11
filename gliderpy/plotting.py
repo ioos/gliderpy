@@ -6,6 +6,7 @@ import warnings
 from typing import TYPE_CHECKING
 
 try:
+    import cartopy.crs as ccrs
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
 except ModuleNotFoundError:
@@ -20,6 +21,26 @@ if TYPE_CHECKING:
     import pandas as pd
 
 from pandas_flavor import register_dataframe_method
+
+
+@register_dataframe_method
+def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
+    """Plot a track of glider path coloured by temperature.
+
+    :return: figures, axes
+    """
+    x = df["longitude"]
+    y = df["latitude"]
+    dx, dy = 2, 4
+
+    fig, ax = plt.subplots(
+        figsize=(9, 9),
+        subplot_kw={"projection": ccrs.PlateCarree()},
+    )
+    ax.scatter(x, y, c=None, s=25, alpha=0.25, edgecolor="none")
+    ax.coastlines("10m")
+    ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
+    return fig, ax
 
 @register_dataframe_method
 def plot_transect(
