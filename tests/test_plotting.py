@@ -26,6 +26,7 @@ def test_plot_track():
 
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_transect():
+    """Image comparison test for plot_transect."""
     glider_grab = GliderDataFetcher()
 
     glider_grab.fetcher.dataset_id = "whoi_406-20160902T1700"
