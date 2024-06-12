@@ -2,13 +2,10 @@
 
 from pathlib import Path
 
-from gliderpy.plotting import plot_track
-from gliderpy.plotting import plot_transect
-
-
 import pytest
 
 from gliderpy.fetchers import GliderDataFetcher
+from gliderpy.plotting import plot_track, plot_transect
 
 root = Path(__file__).parent
 
@@ -24,7 +21,6 @@ def test_plot_track():
 
     # Return the figure for pytest-mpl to compare
     return fig
-
 
 
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
