@@ -2,7 +2,7 @@
 build-backend = "setuptools.build_meta"
 requires = [
   "setuptools>=42",
-  "setuptools_scm[toml]>=3.4",
+  "setuptools-scm[toml]>=3.4",
   "wheel",
 ]
 
@@ -10,11 +10,11 @@ requires = [
 name = "gliderpy"
 description = "Glider Data Fetcher"
 readme = "README.md"
-license = {file = "LICENSE.txt"}
+license = { file = "LICENSE.txt" }
 maintainers = [
-    {name = "Callum Rollo", email = "c.rollo@outlook.com"},
-    {name = "Lindsay Abrams"},
-    {name = "Filipe Fernandes"},
+  { name = "Callum Rollo", email = "c.rollo@outlook.com" },
+  { name = "Lindsay Abrams" },
+  { name = "Filipe Fernandes" },
 ]
 requires-python = ">=3.10"
 classifiers = [
@@ -27,18 +27,21 @@ dynamic = [
   "dependencies",
   "version",
 ]
-[project.urls]
-documentation = "https://ioos.github.io/gliderpy"
-homepage = "https://github.com/ioos/gliderpy"
-repository = "https://github.com/ioos/gliderpy"
+urls.documentation = "https://ioos.github.io/gliderpy"
+urls.homepage = "https://github.com/ioos/gliderpy"
+urls.repository = "https://github.com/ioos/gliderpy"
 
 [tool.setuptools]
-packages = ["gliderpy"]
+packages = [
+  "gliderpy",
+]
 include-package-data = true
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
-readme = {file = "README.md", content-type = "text/markdown"}
+dependencies = { file = [
+  "requirements.txt",
+] }
+readme = { file = "README.md", content-type = "text/markdown" }
 
 [tool.setuptools_scm]
 write_to = "gliderpy/_version.py"
@@ -60,9 +63,9 @@ ignore = [
 
 [tool.pytest.ini_options]
 filterwarnings = [
-    "error:::gliderpy.*",
-    "ignore::UserWarning",
-    "ignore::RuntimeWarning",
+  "error:::gliderpy.*",
+  "ignore::UserWarning",
+  "ignore::RuntimeWarning",
 ]
 
 [tool.interrogate]
@@ -73,7 +76,11 @@ ignore-semiprivate = false
 ignore-private = false
 ignore-module = false
 fail-under = 95
-exclude = ["setup.py", "docs", "tests"]
+exclude = [
+  "setup.py",
+  "docs",
+  "tests",
+]
 verbose = 1
 quiet = false
 color = true

@@ -75,5 +75,3 @@ def plot_transect(
     cbar.ax.set_ylabel(var)
     ax.set_ylabel("pressure")
     return fig, ax
-
-
