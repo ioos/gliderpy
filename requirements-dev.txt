@@ -12,6 +12,7 @@ pyarrow
 pytest
 pytest-cov
 pytest-flake8
+pytest-mpl
 pytest-sugar
 pytest-xdist
 setuptools_scm
