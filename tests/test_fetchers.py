@@ -15,6 +15,7 @@ def glider_grab():
     return g, g.to_pandas()
 
 
+@pytest.mark.vcr()
 def test_variables(glider_grab):
     """Check if expected variables are being fetched."""
     expected = [
@@ -30,6 +31,7 @@ def test_variables(glider_grab):
     assert sorted(g.fetcher.variables) == sorted(expected)
 
 
+@pytest.mark.vcr()
 def test_standardise_variables(glider_grab):
     """Check if IOOS variables are properly renamed."""
     g, df = glider_grab
