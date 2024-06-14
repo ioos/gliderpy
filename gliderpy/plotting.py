@@ -9,6 +9,7 @@ try:
     import cartopy.crs as ccrs
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
+
 except ModuleNotFoundError:
     warnings.warn(
         "gliderpy requires matplotlib and cartopy for plotting.",
@@ -81,4 +82,40 @@ def plot_transect(
     ax.set_ylabel("pressure")
     return fig, ax
 
+@register_dataframe_method
+def plot_ctd(
+    df: pd.DataFrame,
+    var: str,
+    ax: plt.Axes = None,
+    color: str = None
+) -> tuple:
+    """Make a CTD profile plot of pressure vs property
+    depending on what variable was chosen.
+      
+    :param var: variable to plot against pressure
+    :param ax: existing axis to plot on (default: None)
+    :param color: color for the plot line (default: None)
+    :return: figure, axes
+    """
+    g = df.groupby(["longitude", "latitude"])
+    profile = g.get_group((list(g.groups)[0]))
 
+    if ax is None:
+        fig, ax1 = plt.subplots(figsize=(5, 6))
+        ax1.plot(profile[var], -profile["pressure"], label=var, color=color)
+        ax1.set_ylabel('Pressure')
+        ax1.set_xlabel(var)
+        ax1.legend()
+        return fig, ax1
+    else:
+        fig = ax.get_figure()
+        ax2 = ax.twiny()  # Create a new twinned axis
+        ax2.plot(profile[var], -profile["pressure"], label=var, color=color)
+        ax2.set_xlabel(var)
+        
+        # Handle legends
+        lines, labels = ax.get_legend_handles_labels()
+        lines2, labels2 = ax2.get_legend_handles_labels()
+        ax.legend(lines + lines2, labels + labels2, loc="lower center")
+        
+        return fig, ax2
