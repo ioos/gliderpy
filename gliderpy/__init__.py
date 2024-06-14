@@ -5,10 +5,8 @@ try:
 except ImportError:
     __version__ = "unknown"
 
-from .plotting import plot_track
-from .plotting import plot_transect
 from .fetchers import GliderDataFetcher
-
+from .plotting import plot_track, plot_transect
 
 __all__ = [
     "GliderDataFetcher",

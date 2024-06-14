@@ -43,6 +43,7 @@ def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
     ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
     return fig, ax
 
+
 @register_dataframe_method
 def plot_transect(
     df: pd.DataFrame,
@@ -82,6 +83,7 @@ def plot_transect(
     ax.set_ylabel("pressure")
     return fig, ax
 
+  
 @register_dataframe_method
 def plot_ctd(
     df: pd.DataFrame,
@@ -119,3 +121,4 @@ def plot_ctd(
         ax.legend(lines + lines2, labels + labels2, loc="lower center")
         
         return fig, ax2
+
