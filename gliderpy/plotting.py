@@ -66,6 +66,9 @@ def plot_transect(
         ax = plt.gca()
         fig = plt.gcf()
 
+    if not ax.yaxis_inverted():
+        ax.invert_yaxis()
+
     cs = ax.scatter(
         df.index,
         df["pressure"],
@@ -76,7 +79,6 @@ def plot_transect(
         cmap=cmap,
     )
 
-    ax.invert_yaxis()
     xfmt = mdates.DateFormatter("%H:%Mh\n%d-%b")
     ax.xaxis.set_major_formatter(xfmt)
 
