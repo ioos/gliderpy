@@ -85,6 +85,9 @@ def plot_transect(
     cbar = fig.colorbar(cs, orientation="vertical", extend="both")
     cbar.ax.set_ylabel(var)
     ax.set_ylabel("pressure")
+
+    ax.set_ylim(ax.get_ylim()[0], 0)
+    
     return fig, ax
 
 
