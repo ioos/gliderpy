@@ -57,10 +57,14 @@ def plot_transect(
     """
     cmap = kw.get("cmap", None)
 
-    if ax is None:
+    fignums = plt.get_fignums()
+    if ax is None and not fignums:
         fig, ax = plt.subplots(figsize=(17, 2))
+    elif ax:
+        fig = ax.get_figure()
     else:
-        fig = ax.figure
+        ax = plt.gca()
+        fig = plt.gcf()
 
     cs = ax.scatter(
         df.index,
