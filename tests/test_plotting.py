@@ -1,5 +1,9 @@
 import pytest
+import matplotlib
+matplotlib.use('agg')  # Use the 'agg' backend
+
 import matplotlib.pyplot as plt
+import numpy as np
 from pathlib import Path
 from gliderpy.plotting import plot_track, plot_transect
 from gliderpy.fetchers import GliderDataFetcher
@@ -39,5 +43,6 @@ def test_plot_transect_multiple_figures(glider_data):
 def test_plot_transect_size(glider_data):
     # Generate the plot with a specific size
     fig, ax = plt.subplots(figsize=(15, 9))
-    glider_data.plot_transect(var="temperature", ax=ax)
-    assert fig.get_size_inches() == pytest.approx([15., 9.])
+    glider_data.plot_transect(var="temperature")
+    np.testing.assert_array_equal(fig.get_size_inches(), np.array([15.,  9.]))
+
