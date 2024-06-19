@@ -1,4 +1,3 @@
-import cmcrameri
 import pytest
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -33,7 +32,7 @@ def test_plot_transect_multiple_figures(glider_data):
     # Generate the plot with multiple figures
     fig, (ax0, ax1) = plt.subplots(figsize=(15, 9), nrows=2, sharex=True, sharey=True)
     glider_data.plot_transect(var="temperature", ax=ax0)
-    glider_data.plot_transect(var="salinity", ax=ax1, cmap=cmcrameri.cm.davos)
+    glider_data.plot_transect(var="salinity", ax=ax1,cmap='cividis')
     # Return the figure for pytest-mpl to compare
     return fig
 
