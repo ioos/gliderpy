@@ -27,7 +27,7 @@ def test_plot_track(glider_data):
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_transect(glider_data):
     # Generate the plot
-    fig, ax = plot_transect(glider_data, 'temperature')
+    fig, ax = plot_transect(glider_data, 'temperature', cmap='viridis')
     # Return the figure for pytest-mpl to compare
     return fig
 
@@ -35,7 +35,7 @@ def test_plot_transect(glider_data):
 def test_plot_transect_multiple_figures(glider_data):
     # Generate the plot with multiple figures
     fig, (ax0, ax1) = plt.subplots(figsize=(15, 9), nrows=2, sharex=True, sharey=True)
-    glider_data.plot_transect(var="temperature", ax=ax0)
+    glider_data.plot_transect(var="temperature", ax=ax0, cmap='viridis')
     glider_data.plot_transect(var="salinity", ax=ax1, cmap='cividis')
     # Return the figure for pytest-mpl to compare
     return fig
