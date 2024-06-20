@@ -6,6 +6,7 @@ matplotlib.use('agg')  # Use the 'agg' backend
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
+import pytest
 from gliderpy.plotting import plot_track, plot_transect
 from gliderpy.fetchers import GliderDataFetcher
 
