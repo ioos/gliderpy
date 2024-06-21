@@ -48,3 +48,30 @@ def test_plot_transect_size(glider_data):
     glider_data.plot_transect(var="temperature")
     np.testing.assert_array_equal(fig.get_size_inches(), np.array([15.,  9.]))
 
+def test_verify_plot_transect(glider_data):
+    # Create two plots with different variables and colormaps
+    fig, (ax0, ax1) = plt.subplots(2, 1, sharex=True, sharey=True)
+    glider_data.plot_transect('temperature', ax=ax0, cmap='viridis')
+    glider_data.plot_transect('salinity', ax=ax1, cmap='plasma')
+
+    # Check if the y-label is named 'pressure'
+    assert ax0.get_ylabel() == 'pressure'
+    assert ax1.get_ylabel() == 'pressure'
+
+    # Since sharex=True and sharey=True, xlim and ylim should be the same
+    assert ax0.get_xlim() == ax1.get_xlim()
+    assert ax0.get_ylim() == ax1.get_ylim()
+
+    # Check for colorbars
+    cbar0 = fig.colorbar(ax0.collections[0], ax=ax0)
+    cbar1 = fig.colorbar(ax1.collections[0], ax=ax1)
+    
+
+    # Check if colorbars exist
+    assert cbar0 is not None
+    assert cbar1 is not None
+
+    # Check colormap
+    assert cbar0.cmap.name == 'viridis'
+    assert cbar1.cmap.name == 'plasma'
+
