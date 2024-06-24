@@ -1,7 +1,7 @@
 """Test transect."""
 
 import matplotlib
-matplotlib.use('agg')  # Use the 'agg' backend
+matplotlib.use("agg")  # Use the "agg" backend
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,7 +29,7 @@ def test_plot_track(glider_data):
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_transect(glider_data):
     # Generate the plot
-    fig, ax = plot_transect(glider_data, 'temperature', cmap='viridis')
+    fig, ax = plot_transect(glider_data, "temperature", cmap="viridis")
     # Return the figure for pytest-mpl to compare
     return fig
 
@@ -37,8 +37,8 @@ def test_plot_transect(glider_data):
 def test_plot_transect_multiple_figures(glider_data):
     # Generate the plot with multiple figures
     fig, (ax0, ax1) = plt.subplots(figsize=(15, 9), nrows=2, sharex=True, sharey=True)
-    glider_data.plot_transect(var="temperature", ax=ax0, cmap='viridis')
-    glider_data.plot_transect(var="salinity", ax=ax1, cmap='cividis')
+    glider_data.plot_transect(var="temperature", ax=ax0, cmap="viridis")
+    glider_data.plot_transect(var="salinity", ax=ax1, cmap="cividis")
     # Return the figure for pytest-mpl to compare
     return fig
 
@@ -51,27 +51,26 @@ def test_plot_transect_size(glider_data):
 def test_verify_plot_transect(glider_data):
     # Create two plots with different variables and colormaps
     fig, (ax0, ax1) = plt.subplots(2, 1, sharex=True, sharey=True)
-    glider_data.plot_transect('temperature', ax=ax0, cmap='viridis')
-    glider_data.plot_transect('salinity', ax=ax1, cmap='plasma')
+    glider_data.plot_transect("temperature", ax=ax0, cmap="viridis")
+    glider_data.plot_transect("salinity", ax=ax1, cmap="plasma")
 
-    # Check if the y-label is named 'pressure'
-    assert ax0.get_ylabel() == 'pressure'
-    assert ax1.get_ylabel() == 'pressure'
+    # Check if the y-label is named "pressure"
+    assert ax0.get_ylabel() == "pressure"
+    assert ax1.get_ylabel() == "pressure"
 
     # Since sharex=True and sharey=True, xlim and ylim should be the same
     assert ax0.get_xlim() == ax1.get_xlim()
     assert ax0.get_ylim() == ax1.get_ylim()
 
-    # Check for colorbars
-    cbar0 = fig.colorbar(ax0.collections[0], ax=ax0)
-    cbar1 = fig.colorbar(ax1.collections[0], ax=ax1)
-    
-
-    # Check if colorbars exist
-    assert cbar0 is not None
-    assert cbar1 is not None
+    # Get the colorbars
+    cbar0 = ax0.collections[0].colorbar
+    cbar1 = ax1.collections[0].colorbar
 
     # Check colormap
-    assert cbar0.cmap.name == 'viridis'
-    assert cbar1.cmap.name == 'plasma'
+    assert cbar0.cmap.name == "viridis"
+    assert cbar1.cmap.name == "plasma"
+
+    #Check labels
+    assert cbar0.ax.get_ylabel() == 'temperature'
+    assert cbar1.ax.get_ylabel() == 'salinity'
 
