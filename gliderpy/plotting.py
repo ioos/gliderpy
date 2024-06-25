@@ -47,6 +47,7 @@ def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
 def plot_transect(
     df: pd.DataFrame,
     var: str,
+    ax: plt.Axes = None,
     **kw: dict,
 ) -> tuple(plt.Figure, plt.Axes):
     """Make a scatter plot of depth vs time coloured by a user defined
@@ -57,7 +58,18 @@ def plot_transect(
     """
     cmap = kw.get("cmap", None)
 
-    fig, ax = plt.subplots(figsize=(17, 2))
+    fignums = plt.get_fignums()
+    if ax is None and not fignums:
+        fig, ax = plt.subplots(figsize=(17, 2))
+    elif ax:
+        fig = ax.get_figure()
+    else:
+        ax = plt.gca()
+        fig = plt.gcf()
+
+    if not ax.yaxis_inverted():
+        ax.invert_yaxis()
+
     cs = ax.scatter(
         df.index,
         df["pressure"],
@@ -68,11 +80,13 @@ def plot_transect(
         cmap=cmap,
     )
 
-    ax.invert_yaxis()
     xfmt = mdates.DateFormatter("%H:%Mh\n%d-%b")
     ax.xaxis.set_major_formatter(xfmt)
 
     cbar = fig.colorbar(cs, orientation="vertical", extend="both")
     cbar.ax.set_ylabel(var)
     ax.set_ylabel("pressure")
+
+    ax.set_ylim(ax.get_ylim()[0], 0)
+
     return fig, ax
