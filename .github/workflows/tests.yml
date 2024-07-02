@@ -36,4 +36,4 @@ jobs:
     - name: Full Tests
       shell: bash -l {0}
       run: |
-        python -m pytest -rxs --cov=gliderpy --mpl tests
+        python -m pytest -rxs --cov=gliderpy --mpl --vcr-record=none tests
