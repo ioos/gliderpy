@@ -11,10 +11,11 @@ from gliderpy.servers import server_parameter_rename
 def glider_grab():
     """Create the basic query object for testing."""
     g = GliderDataFetcher()
-    g.dataset_id = "whoi_406-20160902T1700"
-    return g
+    g.fetcher.dataset_id = "whoi_406-20160902T1700"
+    return g, g.to_pandas()
 
 
+@pytest.mark.vcr()
 def test_variables(glider_grab):
     """Check if expected variables are being fetched."""
     expected = [
@@ -26,14 +27,14 @@ def test_variables(glider_grab):
         "temperature",
         "time",
     ]
-    assert sorted(glider_grab.fetcher.variables) == sorted(expected)
+    g, df = glider_grab
+    assert sorted(g.fetcher.variables) == sorted(expected)
 
 
-def test_standardise_variables_ioos():
+@pytest.mark.vcr()
+def test_standardise_variables(glider_grab):
     """Check if IOOS variables are properly renamed."""
-    glider_grab = GliderDataFetcher()
-    glider_grab.fetcher.dataset_id = "whoi_406-20160902T1700"
-    df = glider_grab.to_pandas()
+    g, df = glider_grab
     variables = df.columns
     for var in variables:
         assert var in server_parameter_rename.values()
