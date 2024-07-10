@@ -17,19 +17,19 @@ def glider_data():
     glider_grab.fetcher.dataset_id = "whoi_406-20160902T1700"
     return glider_grab.to_pandas()
 
-@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"), tolerance=17)
+@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_track(glider_data):
     """Test plot_track accessor."""
     fig, ax = plot_track(glider_data)
     return fig
 
-@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"), tolerance=17)
+@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_transect(glider_data):
     """Test plot_transect accessor."""
     fig, ax = plot_transect(glider_data, "temperature", cmap="viridis")
     return fig
 
-@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"), tolerance=17)
+@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_transect_multiple_figures(glider_data):
     """Test plot_transect in subplots."""
     fig, (ax0, ax1) = plt.subplots(
