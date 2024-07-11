@@ -1,14 +1,20 @@
+"""Test transect."""
+
 import matplotlib as mpl
+
 mpl.use("agg")  # Use the "agg" backend
 
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pytest
+
 from gliderpy.fetchers import GliderDataFetcher
 from gliderpy.plotting import plot_track, plot_transect
 
 root = Path(__file__).parent
+
 
 @pytest.fixture()
 def glider_data():
@@ -17,17 +23,20 @@ def glider_data():
     glider_grab.fetcher.dataset_id = "whoi_406-20160902T1700"
     return glider_grab.to_pandas()
 
+
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_track(glider_data):
     """Test plot_track accessor."""
     fig, ax = plot_track(glider_data)
     return fig
 
+
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_transect(glider_data):
     """Test plot_transect accessor."""
     fig, ax = plot_transect(glider_data, "temperature", cmap="viridis")
     return fig
+
 
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_transect_multiple_figures(glider_data):
@@ -57,6 +66,7 @@ def test_plot_transect_multiple_figures(glider_data):
     assert cbar1.ax.get_ylabel() == "salinity"
 
     return fig
+
 
 def test_plot_transect_size(glider_data):
     """Test plot_transect args."""
