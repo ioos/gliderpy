@@ -11,7 +11,7 @@ import numpy as np
 import pytest
 
 from gliderpy.fetchers import GliderDataFetcher
-from gliderpy.plotting import plot_track, plot_transect
+from gliderpy.plotting import plot_track, plot_transect, plot_ctd
 
 root = Path(__file__).parent
 
@@ -34,7 +34,7 @@ def test_plot_track(glider_data):
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_transect(glider_data):
     """Test plot_transect accessor."""
-    fig, ax = plot_transect(glider_data, "temperature", cmap="viridis")
+    fig, ax = plot_transect(glider_data, var="temperature", cmap="viridis")
     return fig
 
 
@@ -73,3 +73,10 @@ def test_plot_transect_size(glider_data):
     fig, ax = plt.subplots(figsize=(15, 9))
     glider_data.plot_transect(var="temperature")
     np.testing.assert_array_equal(fig.get_size_inches(), np.array([15.0, 9.0]))
+
+
+@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
+def test_plot_ctd(glider_data):
+    """Test plot_ctd accessor."""
+    fig, ax = plot_ctd(glider_data, 0, var="temperature")
+    return fig
