@@ -34,7 +34,7 @@ def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
         figsize=(9, 9),
         subplot_kw={"projection": ccrs.PlateCarree()},
     )
-    ax.scatter(x, y, c=None, s=25, alpha=0.25, edgecolor="none")
+    ax.scatter(x, y, c=None, s=50, alpha=0.75, edgecolor="none")
     ax.coastlines("10m")
     ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
     return fig, ax
