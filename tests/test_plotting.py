@@ -11,7 +11,7 @@ import numpy as np
 import pytest
 
 from gliderpy.fetchers import GliderDataFetcher
-from gliderpy.plotting import plot_track, plot_transect, plot_ctd
+from gliderpy.plotting import plot_ctd, plot_track, plot_transect
 
 root = Path(__file__).parent
 
