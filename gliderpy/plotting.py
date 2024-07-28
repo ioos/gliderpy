@@ -114,15 +114,16 @@ def plot_ctd(
 
     if ax is None:
         fig, ax1 = plt.subplots(figsize=(5, 6))
-        ax1.plot(profile[var], -profile["pressure"], label=var, color=color)
+        ax1.plot(profile[var], profile["pressure"], label=var, color=color)
         ax1.set_ylabel("Pressure")
         ax1.set_xlabel(var)
         ax1.legend()
+        ax1.invert_yaxis()
         return fig, ax1
 
     fig = ax.get_figure()
     ax2 = ax.twiny()  # Create a new twinned axis
-    ax2.plot(profile[var], -profile["pressure"], label=var, color=color)
+    ax2.plot(profile[var], profile["pressure"], label=var, color=color)
     ax2.set_xlabel(var)
 
     # Handle legends
