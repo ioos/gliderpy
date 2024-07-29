@@ -113,28 +113,28 @@ def plot_ctd(
     profile = g.get_group(list(g.groups)[profile_number])
 
     if ax is None:
-        fig, ax1 = plt.subplots(figsize=(5, 6))
-        ax1.plot(profile[var], profile["pressure"], label=var, color=color)
-        ax1.set_ylabel("Pressure")
-        ax1.set_xlabel(var)
-        ax1.legend()
-        ax1.invert_yaxis()
-        return fig, ax1
+        fig, ax = plt.subplots(figsize=(5, 6))
+        ax.plot(profile[var], profile["pressure"], label=var, color=color)
+        ax.set_ylabel("Pressure")
+        ax.set_xlabel(var)
+        ax.legend()
+        ax.invert_yaxis()
+        return fig, ax
 
     fig = ax.get_figure()
 
     # Check if the ax is already a twinx or twiny
     if hasattr(ax, "twinned_axis"):
-        ax2 = ax.twinned_axis
+        ax = ax.twinned_axis
     else:
-        ax2 = ax.twiny()
-        ax.twinned_axis = ax2  # Keep a reference to the twinned axis
+        ax = ax.twiny()
+        ax.twinned_axis = ax  # Keep a reference to the twinned axis
 
-    ax2.plot(profile[var], profile["pressure"], label=var, color=color)
-    ax2.set_xlabel(var)
+    ax.plot(profile[var], profile["pressure"], label=var, color=color)
+    ax.set_xlabel(var)
 
     lines, labels = ax.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
+    lines2, labels2 = ax.get_legend_handles_labels()
     ax.legend(lines + lines2, labels + labels2, loc="lower center")
 
-    return fig, ax2
+    return fig, ax
