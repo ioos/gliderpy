@@ -118,7 +118,7 @@ def plot_ctd(
         ax.set_ylabel("Pressure")
         ax.set_xlabel(var)
         ax.invert_yaxis()
-        ax.legend(loc='lower center', bbox_to_anchor=(0.5, 0.09)
+        ax.legend(loc="lower center", bbox_to_anchor=(0.5, 0.09)
 )
         return fig, ax
 
