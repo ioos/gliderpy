@@ -122,11 +122,17 @@ def plot_ctd(
         return fig, ax1
 
     fig = ax.get_figure()
-    ax2 = ax.twiny()  # Create a new twinned axis
+
+    # Check if the ax is already a twinx or twiny
+    if hasattr(ax, "twinned_axis"):
+        ax2 = ax.twinned_axis
+    else:
+        ax2 = ax.twiny()
+        ax.twinned_axis = ax2  # Keep a reference to the twinned axis
+
     ax2.plot(profile[var], profile["pressure"], label=var, color=color)
     ax2.set_xlabel(var)
 
-    # Handle legends
     lines, labels = ax.get_legend_handles_labels()
     lines2, labels2 = ax2.get_legend_handles_labels()
     ax.legend(lines + lines2, labels + labels2, loc="lower center")
