@@ -122,8 +122,4 @@ def plot_ctd(
     ax.set_xlabel(var)
     ax.invert_yaxis()
 
-    # Update legend
-    lines, labels = ax.get_legend_handles_labels()
-    ax.legend(lines, labels, loc="best")
-
     return fig, ax
