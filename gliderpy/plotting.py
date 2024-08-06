@@ -114,31 +114,16 @@ def plot_ctd(
 
     if ax is None:
         fig, ax = plt.subplots(figsize=(5, 6))
-        ax.plot(profile[var], profile["pressure"], label=var, color=color)
-        ax.set_ylabel("Pressure")
-        ax.set_xlabel(var)
-        ax.invert_yaxis()
-        ax.legend(loc="lower center", bbox_to_anchor=(0.5, 0.09)
-)
-        return fig, ax
-
-    fig = ax.get_figure()
-
-    # Check if the ax is already a twinx or twiny
-    if hasattr(ax, "twinned_axis"):
-        # If already twinned, get the correct twinned axis
-        ax = ax.twinned_axis
     else:
-        # Create a new twiny axis and keep reference
-        ax = ax.twiny()
-        ax.twinned_axis = ax
+        fig = ax.get_figure()
 
-    # Plotting the current variable
     ax.plot(profile[var], profile["pressure"], label=var, color=color)
+    ax.set_ylabel("Pressure")
     ax.set_xlabel(var)
-    
+    ax.invert_yaxis()
+
     # Update legend
     lines, labels = ax.get_legend_handles_labels()
-    ax.legend(lines, labels, loc="lower center")
+    ax.legend(lines, labels, loc="best")
 
     return fig, ax
