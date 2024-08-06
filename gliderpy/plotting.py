@@ -90,3 +90,36 @@ def plot_transect(
     ax.set_ylim(ax.get_ylim()[0], 0)
 
     return fig, ax
+
+
+@register_dataframe_method
+def plot_ctd(
+    df: pd.DataFrame,
+    profile_number: int,
+    var: str,
+    ax: plt.Axes = None,
+    color: str | None = None,
+) -> tuple:
+    """Make a CTD profile plot of pressure vs property
+    depending on what variable was chosen.
+
+    :param profile_number: profile number of CTD
+    :param var: variable to plot against pressure
+    :param ax: existing axis to plot on (default: None)
+    :param color: color for the plot line (default: None)
+    :return: figure, axes
+    """
+    g = df.groupby(["longitude", "latitude"])
+    profile = g.get_group(list(g.groups)[profile_number])
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(5, 6))
+    else:
+        fig = ax.get_figure()
+
+    ax.plot(profile[var], profile["pressure"], label=var, color=color)
+    ax.set_ylabel("Pressure")
+    ax.set_xlabel(var)
+    ax.invert_yaxis()
+
+    return fig, ax
