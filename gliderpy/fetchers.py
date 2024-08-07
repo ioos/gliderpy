@@ -61,14 +61,12 @@ def standardise_df(glider_df: pd.DataFrame, dataset_url: str) -> pd.DataFrame:
 class GliderDataFetcher:
     """Instantiate the glider fetcher.
 
-    Args:
-    ----
-        server: A glider ERDDAP server URL.
-
-    Attributes:
+    Attributes
     ----------
-        dataset_id: A dataset unique id.
-        constraints: Download constraints, defaults same as query.
+    dataset_id : str
+        A dataset unique id.
+    constraints : dict
+        Download constraints, defaults same as query.
 
     """
 
@@ -192,9 +190,9 @@ class DatasetList:
 
     Attributes
     ----------
-        e: an ERDDAP server instance
-        TODO -> search_terms: A list of terms to search the server for.
-                Multiple terms will be combined as "AND."
+      e : an ERDDAP server instance
+      TODO -> search_terms: A list of terms to search the server for.
+              Multiple terms will be combined as "AND."
 
     """
 
@@ -203,8 +201,10 @@ class DatasetList:
 
         Attributes
         ----------
-          server: the server URL.
-          protocol: ERDDAP's protocol (tabledap/griddap)
+        server : str
+            the server URL.
+        protocol : str
+            ERDDAP's protocol (tabledap/griddap)
 
         """
         self.e = ERDDAP(
