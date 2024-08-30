@@ -28,7 +28,7 @@ from pandas_flavor import register_dataframe_method
 
 
 @register_dataframe_method
-def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
+def plot_track(df: pd.DataFrame) -> tuple[plt.Figure, plt.Axes]:
     """Plot a track of glider path coloured by temperature.
 
     :return: figures, axes
@@ -53,7 +53,7 @@ def plot_transect(
     var: str,
     ax: plt.Axes = None,
     **kw: dict,
-) -> tuple(plt.Figure, plt.Axes):
+) -> tuple[plt.Figure, plt.Axes]:
     """Make a scatter plot of depth vs time coloured by a user defined
     variable.
 
@@ -103,7 +103,7 @@ def plot_cast(
     var: str,
     ax: plt.Axes = None,
     color: str | None = None,
-) -> tuple(plt.Figure, plt.Axes):
+) -> tuple[plt.Figure, plt.Axes]:
     """Make a CTD profile plot of pressure vs property
     depending on what variable was chosen.
 
@@ -133,8 +133,9 @@ def plot_cast(
 def plot_ts(
     df: pd.DataFrame,
     profile_number: int,
-) -> tuple(plt.Figure, plt.Axes):
-    """ Make a TS - Diagram from a chosen profile number.
+) -> tuple[plt.Figure, plt.Axes]:
+    """Make a TS diagram from a chosen profile number.
+
     :param profile_number: profile number of CTD
     :return: figure, axes
     """
