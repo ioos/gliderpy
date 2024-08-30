@@ -134,31 +134,37 @@ def plot_ts(
     df: pd.DataFrame,
     profile_number: int,
 ) -> tuple(plt.Figure, plt.Axes):
-    """ Make a TS - Diagram from a chosen profile number
+    """ Make a TS - Diagram from a chosen profile number.
     :param profile_number: profile number of CTD
+    :return: figure, axes
     """
     g = df.groupby(["longitude", "latitude"])
-    profile = g.get_group(list(g.groups)[profile_number])    
+    profile = g.get_group(list(g.groups)[profile_number])
 
-    SA = gsw.conversions.SA_from_SP(profile['salinity'], profile['pressure'], profile['longitude'].iloc[profile_number], profile['latitude'].iloc[profile_number])
-    CT = gsw.conversions.CT_from_t(SA, profile['temperature'], profile['pressure'])
+    sa = gsw.conversions.SA_from_SP(profile['salinity'], profile['pressure'],
+                                     profile['longitude'].iloc[profile_number],
+                                       profile['latitude'].iloc[profile_number])
 
-    min_temp, max_temp = np.min(CT), np.max(CT)
-    min_sal, max_sal = np.min(SA), np.max(SA)
+    ct = gsw.conversions.CT_from_t(sa, profile['temperature'],
+                                    profile['pressure'])
+
+    min_temp, max_temp = np.min(ct), np.max(ct)
+    min_sal, max_sal = np.min(sa), np.max(sa)
 
     num_points = len(profile['pressure'])
     temp_grid = np.linspace(min_temp - 1, max_temp + 1, num_points)
     sal_grid = np.linspace(min_sal - 1, max_sal + 1, num_points)
 
-    Tg, Sg = np.meshgrid(temp_grid, sal_grid)
-    sigma_theta = gsw.sigma0(Sg, Tg)
+    tg, sg = np.meshgrid(temp_grid, sal_grid)
+    sigma_theta = gsw.sigma0(sg, tg)
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
-    cs = ax.contour(Sg, Tg, sigma_theta, colors='grey', zorder=1)
+    cs = ax.contour(sg, tg, sigma_theta, colors='grey', zorder=1)
     plt.clabel(cs, fontsize=10, inline=False, fmt='%.1f')
 
-    sc = ax.scatter(SA, CT, c=profile['pressure'], cmap='plasma_r', marker='o', s=50)
+    sc = ax.scatter(sa, ct, c=profile['pressure'], cmap='plasma_r',
+                     marker='o', s=50)
 
     cb = plt.colorbar(sc)
     cb.ax.invert_yaxis()
@@ -171,6 +177,4 @@ def plot_ts(
     ax.tick_params(direction='out')
     cb.ax.tick_params(direction='out')
 
-    return fig, ax   
-
-
+    return fig, ax
