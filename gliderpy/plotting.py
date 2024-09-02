@@ -93,7 +93,7 @@ def plot_transect(
 
 
 @register_dataframe_method
-def plot_ctd(
+def plot_cast(
     df: pd.DataFrame,
     profile_number: int,
     var: str,
