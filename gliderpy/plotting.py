@@ -7,11 +7,11 @@ from typing import TYPE_CHECKING
 
 try:
     import cartopy.crs as ccrs
+    import gsw
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
-    import gsw
-    from matplotlib.ticker import MaxNLocator
     import numpy as np
+    from matplotlib.ticker import MaxNLocator
 
 except ModuleNotFoundError:
     warnings.warn(
@@ -142,17 +142,23 @@ def plot_ts(
     g = df.groupby(["longitude", "latitude"])
     profile = g.get_group(list(g.groups)[profile_number])
 
-    sa = gsw.conversions.SA_from_SP(profile['salinity'], profile['pressure'],
-                                     profile['longitude'].iloc[profile_number],
-                                       profile['latitude'].iloc[profile_number])
+    sa = gsw.conversions.SA_from_SP(
+        profile["salinity"],
+        profile["pressure"],
+        profile["longitude"].iloc[profile_number],
+        profile["latitude"].iloc[profile_number],
+    )
 
-    ct = gsw.conversions.CT_from_t(sa, profile['temperature'],
-                                    profile['pressure'])
+    ct = gsw.conversions.CT_from_t(
+        sa,
+        profile["temperature"],
+        profile["pressure"],
+    )
 
     min_temp, max_temp = np.min(ct), np.max(ct)
     min_sal, max_sal = np.min(sa), np.max(sa)
 
-    num_points = len(profile['pressure'])
+    num_points = len(profile["pressure"])
     temp_grid = np.linspace(min_temp - 1, max_temp + 1, num_points)
     sal_grid = np.linspace(min_sal - 1, max_sal + 1, num_points)
 
@@ -161,21 +167,27 @@ def plot_ts(
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
-    cs = ax.contour(sg, tg, sigma_theta, colors='grey', zorder=1)
-    plt.clabel(cs, fontsize=10, inline=False, fmt='%.1f')
+    cs = ax.contour(sg, tg, sigma_theta, colors="grey", zorder=1)
+    plt.clabel(cs, fontsize=10, inline=False, fmt="%.1f")
 
-    sc = ax.scatter(sa, ct, c=profile['pressure'], cmap='plasma_r',
-                     marker='o', s=50)
+    sc = ax.scatter(
+        sa,
+        ct,
+        c=profile["pressure"],
+        cmap="plasma_r",
+        marker="o",
+        s=50,
+    )
 
     cb = plt.colorbar(sc)
     cb.ax.invert_yaxis()
-    cb.set_label('Pressure')
+    cb.set_label("Pressure")
 
-    ax.set_xlabel('Salinity')
-    ax.set_ylabel('Temperature')
+    ax.set_xlabel("Salinity")
+    ax.set_ylabel("Temperature")
     ax.xaxis.set_major_locator(MaxNLocator(nbins=6))
     ax.yaxis.set_major_locator(MaxNLocator(nbins=8))
-    ax.tick_params(direction='out')
-    cb.ax.tick_params(direction='out')
+    ax.tick_params(direction="out")
+    cb.ax.tick_params(direction="out")
 
     return fig, ax
