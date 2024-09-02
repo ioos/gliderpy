@@ -6,8 +6,8 @@ from gliderpy.fetchers import GliderDataFetcher
 from gliderpy.servers import server_parameter_rename
 
 
-@pytest.fixture()
-@pytest.mark.web()
+@pytest.fixture
+@pytest.mark.web
 def glider_grab():
     """Create the basic query object for testing."""
     g = GliderDataFetcher()
@@ -15,7 +15,7 @@ def glider_grab():
     return g, g.to_pandas()
 
 
-@pytest.mark.vcr()
+@pytest.mark.vcr
 def test_variables(glider_grab):
     """Check if expected variables are being fetched."""
     expected = [
@@ -31,7 +31,7 @@ def test_variables(glider_grab):
     assert sorted(g.fetcher.variables) == sorted(expected)
 
 
-@pytest.mark.vcr()
+@pytest.mark.vcr
 def test_standardise_variables(glider_grab):
     """Check if IOOS variables are properly renamed."""
     g, df = glider_grab
