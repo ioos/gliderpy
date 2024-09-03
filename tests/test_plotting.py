@@ -16,7 +16,7 @@ from gliderpy.plotting import plot_ctd, plot_track, plot_transect
 root = Path(__file__).parent
 
 
-@pytest.fixture()
+@pytest.fixture
 def glider_data():
     """Fixture to load whoi_406-20160902T1700."""
     glider_grab = GliderDataFetcher()
