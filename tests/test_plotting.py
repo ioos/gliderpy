@@ -11,7 +11,7 @@ import numpy as np
 import pytest
 
 from gliderpy.fetchers import GliderDataFetcher
-from gliderpy.plotting import plot_ctd, plot_track, plot_transect
+from gliderpy.plotting import plot_cast, plot_track, plot_transect
 
 root = Path(__file__).parent
 
@@ -76,7 +76,7 @@ def test_plot_transect_size(glider_data):
 
 
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
-def test_plot_ctd(glider_data):
-    """Test plot_ctd accessor."""
-    fig, ax = plot_ctd(glider_data, 0, var="temperature", color="blue")
+def test_plot_cast(glider_data):
+    """Test plot_cast accessor."""
+    fig, ax = plot_cast(glider_data, 0, var="temperature", color="blue")
     return fig
