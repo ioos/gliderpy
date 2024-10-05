@@ -7,8 +7,12 @@ from typing import TYPE_CHECKING
 
 try:
     import cartopy.crs as ccrs
+    import gsw
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.ticker import MaxNLocator
+
 except ModuleNotFoundError:
     warnings.warn(
         "gliderpy requires matplotlib and cartopy for plotting.",
@@ -24,7 +28,7 @@ from pandas_flavor import register_dataframe_method
 
 
 @register_dataframe_method
-def plot_track(df: pd.DataFrame) -> tuple(plt.Figure, plt.Axes):
+def plot_track(df: pd.DataFrame) -> tuple[plt.Figure, plt.Axes]:
     """Plot a track of glider path coloured by temperature.
 
     :return: figures, axes
@@ -49,7 +53,7 @@ def plot_transect(
     var: str,
     ax: plt.Axes = None,
     **kw: dict,
-) -> tuple(plt.Figure, plt.Axes):
+) -> tuple[plt.Figure, plt.Axes]:
     """Make a scatter plot of depth vs time coloured by a user defined
     variable.
 
@@ -99,7 +103,7 @@ def plot_cast(
     var: str,
     ax: plt.Axes = None,
     color: str | None = None,
-) -> tuple:
+) -> tuple[plt.Figure, plt.Axes]:
     """Make a CTD profile plot of pressure vs property
     depending on what variable was chosen.
 
@@ -121,5 +125,69 @@ def plot_cast(
     ax.set_ylabel("Pressure")
     ax.set_xlabel(var)
     ax.invert_yaxis()
+
+    return fig, ax
+
+
+@register_dataframe_method
+def plot_ts(
+    df: pd.DataFrame,
+    profile_number: int,
+) -> tuple[plt.Figure, plt.Axes]:
+    """Make a TS diagram from a chosen profile number.
+
+    :param profile_number: profile number of CTD
+    :return: figure, axes
+    """
+    g = df.groupby(["longitude", "latitude"])
+    profile = g.get_group(list(g.groups)[profile_number])
+
+    sa = gsw.conversions.SA_from_SP(
+        profile["salinity"],
+        profile["pressure"],
+        profile["longitude"].iloc[profile_number],
+        profile["latitude"].iloc[profile_number],
+    )
+
+    ct = gsw.conversions.CT_from_t(
+        sa,
+        profile["temperature"],
+        profile["pressure"],
+    )
+
+    min_temp, max_temp = np.min(ct), np.max(ct)
+    min_sal, max_sal = np.min(sa), np.max(sa)
+
+    num_points = len(profile["pressure"])
+    temp_grid = np.linspace(min_temp - 1, max_temp + 1, num_points)
+    sal_grid = np.linspace(min_sal - 1, max_sal + 1, num_points)
+
+    tg, sg = np.meshgrid(temp_grid, sal_grid)
+    sigma_theta = gsw.sigma0(sg, tg)
+
+    fig, ax = plt.subplots(figsize=(10, 10))
+
+    cs = ax.contour(sg, tg, sigma_theta, colors="grey", zorder=1)
+    plt.clabel(cs, fontsize=10, inline=False, fmt="%.1f")
+
+    sc = ax.scatter(
+        sa,
+        ct,
+        c=profile["pressure"],
+        cmap="plasma_r",
+        marker="o",
+        s=50,
+    )
+
+    cb = plt.colorbar(sc)
+    cb.ax.invert_yaxis()
+    cb.set_label("Pressure")
+
+    ax.set_xlabel("Salinity")
+    ax.set_ylabel("Temperature")
+    ax.xaxis.set_major_locator(MaxNLocator(nbins=6))
+    ax.yaxis.set_major_locator(MaxNLocator(nbins=8))
+    ax.tick_params(direction="out")
+    cb.ax.tick_params(direction="out")
 
     return fig, ax

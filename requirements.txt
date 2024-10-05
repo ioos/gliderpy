@@ -1,4 +1,5 @@
 erddapy
+gsw
 httpx
 pandas
 pandas-flavor
