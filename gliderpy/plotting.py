@@ -56,7 +56,7 @@ def plot_transect(
     :param var: variable to colour the scatter plot
     :return: figure, axes
     """
-    cmap = kw.get("cmap", None)
+    cmap = kw.get("cmap")
 
     fignums = plt.get_fignums()
     if ax is None and not fignums:
