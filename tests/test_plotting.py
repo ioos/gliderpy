@@ -85,5 +85,5 @@ def test_plot_cast(glider_data):
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
 def test_plot_ts(glider_data):
     """Test plot_ts accessor."""
-    fig, ax = plot_ts(glider_data, 0)
+    fig, ax = plot_ts(glider_data)
     return fig

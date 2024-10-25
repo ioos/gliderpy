@@ -11,7 +11,6 @@ try:
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
     import numpy as np
-    from matplotlib.ticker import MaxNLocator
 
 except ModuleNotFoundError:
     warnings.warn(
@@ -132,62 +131,57 @@ def plot_cast(
 @register_dataframe_method
 def plot_ts(
     df: pd.DataFrame,
-    profile_number: int,
 ) -> tuple[plt.Figure, plt.Axes]:
-    """Make a TS diagram from a chosen profile number.
+    """Make a TS diagram for all profiles in the DataFrame.
 
-    :param profile_number: profile number of CTD
     :return: figure, axes
     """
+    df["sa"] = gsw.conversions.SA_from_SP(
+            df["salinity"],
+            df["pressure"],
+            df["longitude"],
+            df["latitude"],
+        )
+
+    df["ct"] = gsw.conversions.CT_from_t(
+            df["sa"],
+            df["temperature"],
+            df["pressure"],
+        )
+
     g = df.groupby(["longitude", "latitude"])
-    profile = g.get_group(list(g.groups)[profile_number])
-
-    sa = gsw.conversions.SA_from_SP(
-        profile["salinity"],
-        profile["pressure"],
-        profile["longitude"].iloc[profile_number],
-        profile["latitude"].iloc[profile_number],
-    )
-
-    ct = gsw.conversions.CT_from_t(
-        sa,
-        profile["temperature"],
-        profile["pressure"],
-    )
-
-    min_temp, max_temp = np.min(ct), np.max(ct)
-    min_sal, max_sal = np.min(sa), np.max(sa)
-
-    num_points = len(profile["pressure"])
-    temp_grid = np.linspace(min_temp - 1, max_temp + 1, num_points)
-    sal_grid = np.linspace(min_sal - 1, max_sal + 1, num_points)
-
-    tg, sg = np.meshgrid(temp_grid, sal_grid)
-    sigma_theta = gsw.sigma0(sg, tg)
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
-    cs = ax.contour(sg, tg, sigma_theta, colors="grey", zorder=1)
-    plt.clabel(cs, fontsize=10, inline=False, fmt="%.1f")
 
-    sc = ax.scatter(
-        sa,
-        ct,
-        c=profile["pressure"],
-        cmap="plasma_r",
-        marker="o",
-        s=50,
-    )
 
-    cb = plt.colorbar(sc)
-    cb.ax.invert_yaxis()
-    cb.set_label("Pressure")
+    for _name, group in g:
+        sc = plt.scatter(group["sa"],
+                        group["ct"],
+                        c=group["pressure"],
+                        cmap="plasma_r",
+                         s=30)
 
-    ax.set_xlabel("Salinity")
-    ax.set_ylabel("Temperature")
-    ax.xaxis.set_major_locator(MaxNLocator(nbins=6))
-    ax.yaxis.set_major_locator(MaxNLocator(nbins=8))
-    ax.tick_params(direction="out")
-    cb.ax.tick_params(direction="out")
+
+    plt.xlabel("Absolute Salinity(g/kg)")
+    plt.ylabel("Conservative Temperature (°C)")
+
+    cbar = plt.colorbar(sc)
+    cbar.set_label("Pressure (dbar)")
+
+    # Define salinity and temperature grids
+
+    salinity_grid = np.linspace(df["sa"].min() - 5, df["sa"].max()+5, 100)
+    temperature_grid = np.linspace(df["ct"].min() - 5, df["ct"].max()+5, 100)
+    sal, temp = np.meshgrid(salinity_grid, temperature_grid)
+
+
+    sigma = gsw.sigma0(sal, temp)
+
+    contours = plt.contour(sal, temp, sigma,
+                            levels=np.arange(20, 30, 1),
+                            colors="grey", linestyles="--")
+
+    plt.clabel(contours, inline=True, fmt="%1.1f", fontsize=8, colors="black")
 
     return fig, ax
