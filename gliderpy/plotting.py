@@ -137,50 +137,50 @@ def plot_ts(
     :return: figure, axes
     """
     df["sa"] = gsw.conversions.SA_from_SP(
-            df["salinity"],
-            df["pressure"],
-            df["longitude"],
-            df["latitude"],
-        )
+        df["salinity"],
+        df["pressure"],
+        df["longitude"],
+        df["latitude"],
+    )
 
     df["ct"] = gsw.conversions.CT_from_t(
-            df["sa"],
-            df["temperature"],
-            df["pressure"],
-        )
+        df["sa"],
+        df["temperature"],
+        df["pressure"],
+    )
 
     g = df.groupby(["longitude", "latitude"])
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
-
-
     for _name, group in g:
-        sc = plt.scatter(group["sa"],
-                        group["ct"],
-                        c=group["pressure"],
-                        cmap="plasma_r",
-                         s=30)
-
+        sc = plt.scatter(
+            group["sa"],
+            group["ct"],
+            c=group["pressure"],
+            cmap="plasma_r",
+            s=30,
+        )
 
     plt.xlabel("Absolute Salinity(g/kg)")
     plt.ylabel("Conservative Temperature (°C)")
-
     cbar = plt.colorbar(sc)
     cbar.set_label("Pressure (dbar)")
 
     # Define salinity and temperature grids
-
-    salinity_grid = np.linspace(df["sa"].min() - 5, df["sa"].max()+5, 100)
-    temperature_grid = np.linspace(df["ct"].min() - 5, df["ct"].max()+5, 100)
+    salinity_grid = np.linspace(df["sa"].min() - 5, df["sa"].max() + 5, 100)
+    temperature_grid = np.linspace(df["ct"].min() - 5, df["ct"].max() + 5, 100)
     sal, temp = np.meshgrid(salinity_grid, temperature_grid)
-
-
     sigma = gsw.sigma0(sal, temp)
 
-    contours = plt.contour(sal, temp, sigma,
-                            levels=np.arange(20, 30, 1),
-                            colors="grey", linestyles="--")
+    contours = plt.contour(
+        sal,
+        temp,
+        sigma,
+        levels=np.arange(20, 30, 1),
+        colors="grey",
+        linestyles="--",
+    )
 
     plt.clabel(contours, inline=True, fmt="%1.1f", fontsize=8, colors="black")
 
