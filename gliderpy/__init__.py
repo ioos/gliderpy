@@ -10,8 +10,8 @@ from .plotting import plot_cast, plot_track, plot_transect, plot_ts
 
 __all__ = [
     "GliderDataFetcher",
+    "plot_cast",
     "plot_track",
     "plot_transect",
-    "plot_cast",
     "plot_ts",
 ]
