@@ -2,5 +2,4 @@ erddapy
 gsw
 httpx
 pandas
-pandas-flavor
 xarray
