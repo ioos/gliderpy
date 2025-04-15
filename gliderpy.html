@@ -5,16 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>gliderpy API &#8212; gliderpy 0.2.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=a66d8bb5" />
-    <script src="_static/documentation_options.js?v=000c92bf"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <title>gliderpy API &#8212; gliderpy 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=f6a572b4" />
+    <script src="_static/documentation_options.js?v=e259d695"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Quick introduction" href="00-quick_intro-output.html" />
+    <link rel="prev" title="Plotting Intro" href="01-plotting_intro-output.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -25,7 +26,7 @@
   </head><body>
   <div class="document">
     
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="index.html">
@@ -54,6 +55,7 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="00-quick_intro-output.html">Quick introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-plotting_intro-output.html">Plotting Intro</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gliderpy</span> <span class="pre">API</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#gliderpy.fetchers.DatasetList"><code class="docutils literal notranslate"><span class="pre">DatasetList</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#gliderpy.fetchers.DatasetList.e"><code class="docutils literal notranslate"><span class="pre">DatasetList.e</span></code></a></li>
@@ -61,6 +63,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#gliderpy.fetchers.GliderDataFetcher"><code class="docutils literal notranslate"><span class="pre">GliderDataFetcher</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gliderpy.fetchers.GliderDataFetcher.dataset_id"><code class="docutils literal notranslate"><span class="pre">GliderDataFetcher.dataset_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gliderpy.fetchers.GliderDataFetcher.constraints"><code class="docutils literal notranslate"><span class="pre">GliderDataFetcher.constraints</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#gliderpy.fetchers.GliderDataFetcher.query"><code class="docutils literal notranslate"><span class="pre">GliderDataFetcher.query()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#gliderpy.fetchers.GliderDataFetcher.to_pandas"><code class="docutils literal notranslate"><span class="pre">GliderDataFetcher.to_pandas()</span></code></a></li>
 </ul>
@@ -74,11 +78,11 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="00-quick_intro-output.html" title="previous chapter">Quick introduction</a></li>
+      <li>Previous: <a href="01-plotting_intro-output.html" title="previous chapter">Plotting Intro</a></li>
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -86,7 +90,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
 
 
@@ -109,7 +113,7 @@
 <p>Helper methods to fetch glider data from multiple ERDDAP serves.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gliderpy.fetchers.DatasetList">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gliderpy.fetchers.</span></span><span class="sig-name descname"><span class="pre">DatasetList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://gliders.ioos.us/erddap'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#DatasetList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gliderpy.fetchers.DatasetList" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gliderpy.fetchers.</span></span><span class="sig-name descname"><span class="pre">DatasetList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://gliders.ioos.us/erddap'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#DatasetList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gliderpy.fetchers.DatasetList" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Build a glider dataset ids list.</p>
 <dl class="py attribute">
@@ -143,24 +147,34 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gliderpy.fetchers.GliderDataFetcher">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gliderpy.fetchers.</span></span><span class="sig-name descname"><span class="pre">GliderDataFetcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://gliders.ioos.us/erddap'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#GliderDataFetcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gliderpy.fetchers.</span></span><span class="sig-name descname"><span class="pre">GliderDataFetcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://gliders.ioos.us/erddap'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gliderpy/fetchers.html#GliderDataFetcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Instantiate the glider fetcher.</p>
-<section id="args">
-<h2>Args:<a class="headerlink" href="#args" title="Link to this heading">¶</a></h2>
-<blockquote>
-<div><p>server: A glider ERDDAP server URL.</p>
-</div></blockquote>
-</section>
-<section id="attributes">
-<h2>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
-<blockquote>
-<div><p>dataset_id: A dataset unique id.
-constraints: Download constraints, defaults same as query.</p>
-</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gliderpy.fetchers.GliderDataFetcher.dataset_id">
+<span class="sig-name descname"><span class="pre">dataset_id</span></span><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.dataset_id" title="Link to this definition">¶</a></dt>
+<dd><p>A dataset unique id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gliderpy.fetchers.GliderDataFetcher.constraints">
+<span class="sig-name descname"><span class="pre">constraints</span></span><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.constraints" title="Link to this definition">¶</a></dt>
+<dd><p>Download constraints, defaults same as query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="gliderpy.fetchers.GliderDataFetcher.query">
-<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delayed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/gliderpy/fetchers.html#GliderDataFetcher.query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.query" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delayed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/gliderpy/fetchers.html#GliderDataFetcher.query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gliderpy.fetchers.GliderDataFetcher.query" title="Link to this definition">¶</a></dt>
 <dd><p>Add user supplied geographical and time constraints to the query.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -191,7 +205,6 @@ multiple dataset_ids dataframes are stored in a dictionary</p>
 </dl>
 </dd></dl>
 
-</section>
 </dd></dl>
 
 <dl class="py function">
@@ -210,11 +223,11 @@ multiple dataset_ids dataframes are stored in a dictionary</p>
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &#169;2024, Filipe Fernandes.
+      &#169;2025, Filipe Fernandes.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |
       <a href="_sources/gliderpy.rst.txt"
@@ -223,7 +236,7 @@ multiple dataset_ids dataframes are stored in a dictionary</p>
 
     
     <a href="https://github.com/ioos/gliderpy" class="github">
-        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+        <img src="_static/github-banner.svg" alt="Fork me on GitHub" class="github"/>
     </a>
     
 

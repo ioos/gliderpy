@@ -5,19 +5,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Quick introduction &#8212; gliderpy 0.2.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=a66d8bb5" />
-    <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css" />
-    <script src="_static/documentation_options.js?v=000c92bf"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <title>Quick introduction &#8212; gliderpy 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="_static/documentation_options.js?v=e259d695"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="gliderpy API" href="gliderpy.html" />
+    <link rel="next" title="Plotting Intro" href="01-plotting_intro-output.html" />
     <link rel="prev" title="gliderpy" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -29,7 +28,7 @@
   </head><body>
   <div class="document">
     
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="index.html">
@@ -62,6 +61,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#Dataset-search">Dataset search</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="01-plotting_intro-output.html">Plotting Intro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gliderpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gliderpy</span> <span class="pre">API</span></code></a></li>
 </ul>
 
@@ -70,11 +70,11 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">gliderpy</a></li>
-      <li>Next: <a href="gliderpy.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gliderpy</span> <span class="pre">API</span></code></a></li>
+      <li>Next: <a href="01-plotting_intro-output.html" title="next chapter">Plotting Intro</a></li>
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -82,7 +82,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
 
 
@@ -115,7 +115,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">erddapy</span> <span class="kn">import</span> <span class="n">ERDDAP</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">erddapy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ERDDAP</span>
 
 <span class="n">e</span> <span class="o">=</span> <span class="n">ERDDAP</span><span class="p">(</span>
     <span class="n">server</span><span class="o">=</span><span class="s2">&quot;https://gliders.ioos.us/erddap&quot;</span><span class="p">,</span>
@@ -237,7 +237,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gliderpy.fetchers</span> <span class="kn">import</span> <span class="n">GliderDataFetcher</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gliderpy.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">GliderDataFetcher</span>
 
 <span class="n">glider_grab</span> <span class="o">=</span> <span class="n">GliderDataFetcher</span><span class="p">()</span>
 
@@ -399,17 +399,38 @@
   <tbody>
     <tr>
       <th>0</th>
+      <td>silbo-20110413T1600</td>
+      <td>Teledyne Webb Research Corporation,Rutgers Uni...</td>
+      <td>silbo-20110413T1600</td>
+      <td>https://gliders.ioos.us/erddap/info/silbo-2011...</td>
+    </tr>
+    <tr>
+      <th>6</th>
       <td>ru23-20130305T2004</td>
       <td>Rutgers University</td>
       <td>ru23-20130305T2004</td>
       <td>https://gliders.ioos.us/erddap/info/ru23-20130...</td>
     </tr>
     <tr>
-      <th>1</th>
+      <th>7</th>
       <td>ru23-20121025T1944</td>
       <td>Rutgers University</td>
       <td>ru23-20121025T1944</td>
       <td>https://gliders.ioos.us/erddap/info/ru23-20121...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>silbo-20110623T1215</td>
+      <td>Teledyne Webb Research Corporation,Rutgers Uni...</td>
+      <td>silbo-20110623T1215</td>
+      <td>https://gliders.ioos.us/erddap/info/silbo-2011...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>silbo-20120724T1247</td>
+      <td>Teledyne Webb Research Corporation,Rutgers Uni...</td>
+      <td>silbo-20120724T1247</td>
+      <td>https://gliders.ioos.us/erddap/info/silbo-2012...</td>
     </tr>
   </tbody>
 </table>
@@ -430,7 +451,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-dict_keys([&#39;ru23-20130305T2004&#39;, &#39;ru23-20121025T1944&#39;])
+dict_keys([&#39;silbo-20110413T1600&#39;, &#39;ru23-20130305T2004&#39;, &#39;ru23-20121025T1944&#39;, &#39;silbo-20110623T1215&#39;, &#39;silbo-20120724T1247&#39;])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -546,7 +567,7 @@ dict_keys([&#39;ru23-20130305T2004&#39;, &#39;ru23-20121025T1944&#39;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gliderpy.fetchers</span> <span class="kn">import</span> <span class="n">DatasetList</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gliderpy.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatasetList</span>
 
 <span class="n">datasets</span> <span class="o">=</span> <span class="n">DatasetList</span><span class="p">()</span>
 <span class="n">ds_ids</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">get_ids</span><span class="p">()</span>
@@ -560,7 +581,7 @@ dict_keys([&#39;ru23-20130305T2004&#39;, &#39;ru23-20121025T1944&#39;])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-found 1807 glider datasets on https://gliders.ioos.us/erddap.
+found 2204 glider datasets on https://gliders.ioos.us/erddap.
 </pre></div></div>
 </div>
 </section>
@@ -574,11 +595,11 @@ found 1807 glider datasets on https://gliders.ioos.us/erddap.
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &#169;2024, Filipe Fernandes.
+      &#169;2025, Filipe Fernandes.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |
       <a href="_sources/00-quick_intro-output.ipynb.txt"
@@ -587,7 +608,7 @@ found 1807 glider datasets on https://gliders.ioos.us/erddap.
 
     
     <a href="https://github.com/ioos/gliderpy" class="github">
-        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+        <img src="_static/github-banner.svg" alt="Fork me on GitHub" class="github"/>
     </a>
     
 
