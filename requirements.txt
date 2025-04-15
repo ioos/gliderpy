@@ -1,5 +1,0 @@
-erddapy
-gsw
-httpx
-pandas
-xarray

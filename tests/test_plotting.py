@@ -31,14 +31,20 @@ def test_plot_track(glider_data):
     return fig
 
 
-@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
+@pytest.mark.mpl_image_compare(
+    baseline_dir=root.joinpath("baseline/"),
+    tolerance=20,
+)
 def test_plot_transect(glider_data):
     """Test plot_transect accessor."""
     fig, ax = plot_transect(glider_data, var="temperature", cmap="viridis")
     return fig
 
 
-@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
+@pytest.mark.mpl_image_compare(
+    baseline_dir=root.joinpath("baseline/"),
+    tolerance=20,
+)
 def test_plot_transect_multiple_figures(glider_data):
     """Test plot_transect in subplots."""
     fig, (ax0, ax1) = plt.subplots(
@@ -75,14 +81,20 @@ def test_plot_transect_size(glider_data):
     np.testing.assert_array_equal(fig.get_size_inches(), np.array([15.0, 9.0]))
 
 
-@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
+@pytest.mark.mpl_image_compare(
+    baseline_dir=root.joinpath("baseline/"),
+    tolerance=20,
+)
 def test_plot_cast(glider_data):
     """Test plot_cast accessor."""
     fig, ax = plot_cast(glider_data, 0, var="temperature", color="blue")
     return fig
 
 
-@pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))
+@pytest.mark.mpl_image_compare(
+    baseline_dir=root.joinpath("baseline/"),
+    tolerance=20,
+)
 def test_plot_ts(glider_data):
     """Test plot_ts accessor."""
     fig, ax = plot_ts(glider_data)

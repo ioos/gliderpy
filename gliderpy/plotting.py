@@ -17,7 +17,6 @@ except ModuleNotFoundError:
         "gliderpy requires matplotlib and cartopy for plotting.",
         stacklevel=1,
     )
-    raise
 
 
 if TYPE_CHECKING:
