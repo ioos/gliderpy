@@ -28,10 +28,10 @@ dynamic = [
   "version",
 ]
 
-dependencies = [ "erddapy", "gsw", "httpx", "pandas", "pandas-flavor", "xarray" ]
+dependencies = [ "erddapy", "httpx", "pandas", "pandas-flavor", "xarray" ]
 
 optional-dependencies.docs = [ "jupyter", "nbconvert", "nbsphinx", "palettable", "sphinx" ]
-optional-dependencies.plotting = [ "cartopy", "matplotlib" ]
+optional-dependencies.plotting = [ "cartopy", "gsw", "matplotlib" ]
 optional-dependencies.test = [
   "check-manifest",
   "pre-commit",
