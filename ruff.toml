@@ -7,6 +7,7 @@ lint.ignore = [
     "D205",  # 1 blank line required between summary line and description
     "D213",  # incompatible. Ignoring `multi-line-summary-second-line`
     "TRY003",  # Avoid specifying long messages outside the exception class
+    "COM812",  # missing-trailing-comma
 ]
 
 [lint.extend-per-file-ignores]

@@ -25,10 +25,23 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 dynamic = [
-  "dependencies",
   "version",
 ]
-optional-dependencies.plotting = [ "cartopy", "matplotlib", "pandas-flavor" ]
+
+dependencies = [ "erddapy", "gsw", "httpx", "pandas", "pandas-flavor", "xarray" ]
+
+optional-dependencies.docs = [ "jupyter", "nbconvert", "nbsphinx", "palettable", "sphinx" ]
+optional-dependencies.plotting = [ "cartopy", "matplotlib" ]
+optional-dependencies.test = [
+  "check-manifest",
+  "pre-commit",
+  "pytest",
+  "pytest-cov",
+  "pytest-mpl",
+  "pytest-sugar",
+  "pytest-vcr",
+  "pytest-xdist",
+]
 urls.documentation = "https://ioos.github.io/gliderpy"
 urls.homepage = "https://github.com/ioos/gliderpy"
 urls.repository = "https://github.com/ioos/gliderpy"
@@ -40,9 +53,6 @@ packages = [
 include-package-data = true
 
 [tool.setuptools.dynamic]
-dependencies = { file = [
-  "requirements.txt",
-] }
 readme = { file = "README.md", content-type = "text/markdown" }
 
 [tool.setuptools_scm]
