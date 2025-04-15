@@ -28,6 +28,7 @@ dynamic = [
   "dependencies",
   "version",
 ]
+optional-dependencies.plotting = [ "cartopy", "matplotlib", "pandas-flavor" ]
 urls.documentation = "https://ioos.github.io/gliderpy"
 urls.homepage = "https://github.com/ioos/gliderpy"
 urls.repository = "https://github.com/ioos/gliderpy"
