@@ -191,12 +191,14 @@ class DatasetList:
     Attributes
     ----------
       e : an ERDDAP server instance
-      TODO -> search_terms: A list of terms to search the server for.
-              Multiple terms will be combined as "AND."
 
     """
 
-    def __init__(self: "DatasetList", server: OptionalStr = _server) -> None:
+    def __init__(
+        self: "DatasetList",
+        server: OptionalStr = _server,
+        search_for: OptionalStr = None,
+    ) -> None:
         """Instantiate main class attributes.
 
         Attributes
@@ -205,20 +207,27 @@ class DatasetList:
             the server URL.
         protocol : str
             ERDDAP's protocol (tabledap/griddap)
+        search_for : str
+            "Google-like" search of the datasets' metadata.
 
         """
         self.e = ERDDAP(
             server=server,
             protocol="tabledap",
         )
+        self.search_for = search_for
 
     def get_ids(self: "DatasetList") -> list:
         """Return the allDatasets list for the glider server."""
-        if self.e.server == "https://gliders.ioos.us/erddap":
+        if self.search_for is not None:
+            url = self.e.get_search_url(
+                search_for=self.search_for,
+                response="csv",
+            )
+            dataset_ids = pd.read_csv(url)["Dataset ID"].to_list()
+        else:
             self.e.dataset_id = "allDatasets"
             dataset_ids = self.e.to_pandas()["datasetID"].to_list()
             dataset_ids.remove("allDatasets")
-            self.dataset_ids = dataset_ids
-            return self.dataset_ids
-        msg = f"The {self.e.server} does not supported this operation."
-        raise ValueError(msg)
+        self.dataset_ids = dataset_ids
+        return self.dataset_ids
