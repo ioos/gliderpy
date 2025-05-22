@@ -19,9 +19,10 @@ root = Path(__file__).parent
 @pytest.fixture
 def glider_data():
     """Fixture to load whoi_406-20160902T1700."""
+    dataset_id = "whoi_406-20160902T1700"
     glider_grab = GliderDataFetcher()
-    glider_grab.fetcher.dataset_id = "whoi_406-20160902T1700"
-    return glider_grab.to_pandas()
+    glider_grab.dataset_ids = [dataset_id]
+    return glider_grab.to_pandas()[dataset_id]
 
 
 @pytest.mark.mpl_image_compare(baseline_dir=root.joinpath("baseline/"))

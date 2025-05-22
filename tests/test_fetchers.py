@@ -11,8 +11,10 @@ from gliderpy.servers import server_parameter_rename
 def glider_grab():
     """Create the basic query object for testing."""
     g = GliderDataFetcher()
-    g.dataset_ids = ["whoi_406-20160902T1700"]
-    return g, g.to_pandas()
+    dataset_id = "whoi_406-20160902T1700"
+    g.dataset_ids = [dataset_id]
+    df = g.to_pandas()[dataset_id]
+    return g, df
 
 
 @pytest.mark.vcr
@@ -35,6 +37,6 @@ def test_variables(glider_grab):
 def test_standardise_variables(glider_grab):
     """Check if IOOS variables are properly renamed."""
     g, df = glider_grab
-    variables = df["whoi_406-20160902T1700"].columns
+    variables = df.columns
     for var in variables:
         assert var in server_parameter_rename.values()
