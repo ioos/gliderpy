@@ -6,15 +6,29 @@ import warnings
 from typing import TYPE_CHECKING
 
 try:
-    import cartopy.crs as ccrs
-    import gsw
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
     import numpy as np
+except ModuleNotFoundError:
+    warnings.warn(
+        "gliderpy requires matplotlib plotting.",
+        stacklevel=1,
+    )
+
+try:
+    import cartopy.crs as ccrs
 
 except ModuleNotFoundError:
     warnings.warn(
-        "gliderpy requires matplotlib and cartopy for plotting.",
+        "gliderpy requires cartopy for plotting.",
+        stacklevel=1,
+    )
+
+try:
+    import gsw
+except ModuleNotFoundError:
+    warnings.warn(
+        "gliderpy requires gsw plotting.",
         stacklevel=1,
     )
 
