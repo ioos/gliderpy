@@ -28,7 +28,7 @@ dynamic = [
   "version",
 ]
 
-dependencies = [ "erddapy", "httpx", "pandas", "pandas-flavor", "xarray" ]
+dependencies = [ "erddapy", "httpx", "pandas", "pandas-flavor", "stamina", "xarray" ]
 
 optional-dependencies.docs = [ "jupyter", "nbconvert", "nbsphinx", "palettable", "sphinx" ]
 optional-dependencies.plotting = [ "cartopy", "gsw", "matplotlib" ]
