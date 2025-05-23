@@ -7,6 +7,7 @@ from numbers import Number
 
 import httpx
 import pandas as pd
+import stamina
 from erddapy import ERDDAP
 from erddapy.core.url import urlopen
 
@@ -28,14 +29,29 @@ OptionalDateTime = datetime.datetime | str
 _server = "https://gliders.ioos.us/erddap"
 
 
+@stamina.retry(on=httpx.HTTPError, attempts=3)
+def _call_erddapy(glider_grab: "GliderDataFetcher") -> pd.DataFrame:
+    """Temporary workaround until we move optional stamina to erddapy."""
+    return glider_grab.fetcher.to_pandas()
+
+
 @functools.lru_cache(maxsize=128)
-def _to_pandas_multiple(glider_grab: "GliderDataFetcher") -> pd.DataFrame:
+def _to_pandas(
+    glider_grab: "GliderDataFetcher",
+    *,
+    query: OptionalBool = True,
+) -> pd.DataFrame:
     """Thin wrapper to cache results when multiple datasets are requested."""
     df_all = {}
     glider_grab_copy = copy(glider_grab)
-    for dataset_id in glider_grab_copy.datasets["Dataset ID"]:
+    if query:
+        dataset_ids = glider_grab_copy.datasets["Dataset ID"]
+    else:
+        dataset_ids = glider_grab_copy.dataset_ids
+
+    for dataset_id in dataset_ids:
         glider_grab_copy.fetcher.dataset_id = dataset_id
-        glider_df = glider_grab_copy.fetcher.to_pandas()
+        glider_df = _call_erddapy(glider_grab_copy)
         dataset_url = glider_grab_copy.fetcher.get_download_url().split("?")[0]
         glider_df = standardise_df(glider_df, dataset_url)
         df_all.update({dataset_id: glider_df})
@@ -81,7 +97,7 @@ class GliderDataFetcher:
             protocol="tabledap",
         )
         self.fetcher.variables = server_vars[server]
-        self.fetcher.dataset_id: OptionalStr = None
+        self.dataset_ids: OptionalList = None
         self.datasets: OptionalDF = None
 
     def to_pandas(self: "GliderDataFetcher") -> pd.DataFrame:
@@ -90,21 +106,20 @@ class GliderDataFetcher:
         :return: pandas a dataframe with datetime UTC as index,
                  multiple dataset_ids dataframes are stored in a dictionary
         """
-        if self.fetcher.dataset_id:
-            glider_df = self.fetcher.to_pandas()
-        elif not self.fetcher.dataset_id and self.datasets is not None:
-            glider_df = _to_pandas_multiple(self)
-            # We need to reset to avoid fetching a single dataset_id when
-            # making multiple requests.
-            self.fetcher.dataset_id = None
-            return glider_df
+        if self.dataset_ids is not None:
+            query = False  # Passing known dataset_ids
+        elif self.dataset_ids is None and self.datasets is not None:
+            query = True  # Passing an ERDDAP query
         else:
             msg = "Must provide a dataset_id or query terms to download data."
             raise ValueError(msg)
 
-        # Standardize variable names for the single dataset_id.
-        dataset_url = self.fetcher.get_download_url().split("?")[0]
-        return standardise_df(glider_df, dataset_url)
+        glider_df = _to_pandas(self, query=query)
+        # We need to reset to avoid fetching a single dataset_id when
+        # making multiple requests.
+        self.fetcher.dataset_id = None
+
+        return glider_df
 
     def query(  # noqa: PLR0913
         self: "GliderDataFetcher",
@@ -196,8 +211,10 @@ class DatasetList:
 
     def __init__(
         self: "DatasetList",
+        *,
         server: OptionalStr = _server,
         search_for: OptionalStr = None,
+        delayed: OptionalBool = False,
     ) -> None:
         """Instantiate main class attributes.
 
@@ -216,6 +233,7 @@ class DatasetList:
             protocol="tabledap",
         )
         self.search_for = search_for
+        self.delayed = delayed
 
     def get_ids(self: "DatasetList") -> list:
         """Return the allDatasets list for the glider server."""
@@ -229,5 +247,10 @@ class DatasetList:
             self.e.dataset_id = "allDatasets"
             dataset_ids = self.e.to_pandas()["datasetID"].to_list()
             dataset_ids.remove("allDatasets")
-        self.dataset_ids = dataset_ids
+        if not self.delayed:
+            self.dataset_ids = [
+                dataset_id
+                for dataset_id in dataset_ids
+                if not dataset_id.endswith("-delayed")
+            ]
         return self.dataset_ids
