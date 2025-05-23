@@ -211,8 +211,10 @@ class DatasetList:
 
     def __init__(
         self: "DatasetList",
+        *,
         server: OptionalStr = _server,
         search_for: OptionalStr = None,
+        delayed: OptionalBool = False,
     ) -> None:
         """Instantiate main class attributes.
 
@@ -231,6 +233,7 @@ class DatasetList:
             protocol="tabledap",
         )
         self.search_for = search_for
+        self.delayed = delayed
 
     def get_ids(self: "DatasetList") -> list:
         """Return the allDatasets list for the glider server."""
@@ -244,5 +247,10 @@ class DatasetList:
             self.e.dataset_id = "allDatasets"
             dataset_ids = self.e.to_pandas()["datasetID"].to_list()
             dataset_ids.remove("allDatasets")
-        self.dataset_ids = dataset_ids
+        if not self.delayed:
+            self.dataset_ids = [
+                dataset_id
+                for dataset_id in dataset_ids
+                if not dataset_id.endswith("-delayed")
+            ]
         return self.dataset_ids
