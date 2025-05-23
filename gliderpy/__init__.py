@@ -27,7 +27,7 @@ def _num_profiles(df: pd.DataFrame) -> int:
 
 def _days(df: pd.DataFrame) -> pd.Timedelta:
     """Compute the glider days."""
-    return df.index[-1].ceil("D") - df.index[0].floor("D")
+    return df.index.dropna()[-1].ceil("D") - df.index.dropna()[0].floor("D")
 
 
 def _deployment_lat(df: pd.DataFrame) -> dict:
