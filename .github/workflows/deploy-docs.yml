@@ -1,23 +1,29 @@
-
-name: Documentation
+name: Build and Deploy docs
 
 on:
   pull_request:
   push:
-    branches:
-      - main
   release:
     types:
       - published
 
+defaults:
+  run:
+    shell: bash
+
+# no permissions by default
+permissions: {}
+
 jobs:
   build-docs:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
       with:
         fetch-depth: 0
+        persist-credentials: false
 
     - name: Setup Micromamba ${{ matrix.python-version }}
       uses: mamba-org/setup-micromamba@b09ef9b599704322748535812ca03efb2625677b  # v2.0.5
