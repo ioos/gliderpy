@@ -13,8 +13,8 @@ readme = "README.md"
 license = { file = "LICENSE.txt" }
 maintainers = [
   { name = "Callum Rollo", email = "c.rollo@outlook.com" },
-  { name = "Lindsay Abrams" },
   { name = "Filipe Fernandes" },
+  { name = "Lindsay Abrams" },
 ]
 requires-python = ">=3.10"
 classifiers = [
