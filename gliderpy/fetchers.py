@@ -253,4 +253,6 @@ class DatasetList:
                 for dataset_id in dataset_ids
                 if not dataset_id.endswith("-delayed")
             ]
+        else:
+            self.dataset_ids = dataset_ids
         return self.dataset_ids
