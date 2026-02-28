@@ -234,6 +234,7 @@ class DatasetList:
         )
         self.search_for = search_for
         self.delayed = delayed
+        self.dataset_ids: OptionalList = None
 
     def get_ids(self: "DatasetList") -> list:
         """Return the allDatasets list for the glider server."""
@@ -248,11 +249,10 @@ class DatasetList:
             dataset_ids = self.e.to_pandas()["datasetID"].to_list()
             dataset_ids.remove("allDatasets")
         if not self.delayed:
-            self.dataset_ids = [
+            dataset_ids = [                   
                 dataset_id
                 for dataset_id in dataset_ids
                 if not dataset_id.endswith("-delayed")
             ]
-        else:
-            self.dataset_ids = dataset_ids
+        self.dataset_ids = dataset_ids         
         return self.dataset_ids
