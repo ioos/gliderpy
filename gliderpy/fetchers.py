@@ -249,10 +249,10 @@ class DatasetList:
             dataset_ids = self.e.to_pandas()["datasetID"].to_list()
             dataset_ids.remove("allDatasets")
         if not self.delayed:
-            dataset_ids = [                   
+            dataset_ids = [
                 dataset_id
                 for dataset_id in dataset_ids
                 if not dataset_id.endswith("-delayed")
             ]
-        self.dataset_ids = dataset_ids         
+        self.dataset_ids = dataset_ids
         return self.dataset_ids
