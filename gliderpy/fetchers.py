@@ -144,12 +144,12 @@ class GliderDataFetcher:
         """
         # NB: The time constrain could be better implemented by just
         # dropping it instead.
-        min_time = min_time if min_time else "1970-01-01"
-        max_time = max_time if max_time else "2038-01-19"
-        min_lat = min_lat if min_lat else -90.0
-        max_lat = max_lat if max_lat else 90.0
-        min_lon = min_lon if min_lon else -180.0
-        max_lon = max_lon if max_lon else 180.0
+        min_time = min_time or "1970-01-01"
+        max_time = max_time or "2038-01-19"
+        min_lat = min_lat or -90.0
+        max_lat = max_lat or 90.0
+        min_lon = min_lon or -180.0
+        max_lon = max_lon or 180.0
 
         self.fetcher.constraints = {
             "time>=": min_time,
