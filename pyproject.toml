@@ -28,9 +28,7 @@ classifiers = [
 dynamic = [
   "version",
 ]
-
 dependencies = [ "erddapy", "httpx", "pandas", "pandas-flavor", "stamina", "xarray" ]
-
 optional-dependencies.docs = [ "jupyter", "nbconvert", "nbsphinx", "palettable", "sphinx" ]
 optional-dependencies.plotting = [ "cartopy", "gsw", "matplotlib" ]
 optional-dependencies.test = [
@@ -52,9 +50,7 @@ packages = [
   "gliderpy",
 ]
 include-package-data = true
-
-[tool.setuptools.dynamic]
-readme = { file = "README.md", content-type = "text/markdown" }
+dynamic.readme = { file = "README.md", content-type = "text/markdown" }
 
 [tool.setuptools_scm]
 write_to = "gliderpy/_version.py"
@@ -74,8 +70,8 @@ ignore = [
   "tests/*",
 ]
 
-[tool.pytest.ini_options]
-filterwarnings = [
+[tool.pytest]
+ini_options.filterwarnings = [
   "error:::gliderpy.*",
   "ignore::UserWarning",
   "ignore::RuntimeWarning",
