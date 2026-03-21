@@ -29,10 +29,28 @@ OptionalDateTime = datetime.datetime | str
 _server = "https://gliders.ioos.us/erddap"
 
 
-@stamina.retry(on=httpx.HTTPError, attempts=3)
+def retry_only_on_real_errors(exc: Exception) -> bool:
+    """Retry on real fetch errors."""
+    # If the error is an HTTP status error, only retry on 5xx errors.
+    html_code = 500
+    if isinstance(exc, httpx.HTTPStatusError):
+        return exc.response.status_code >= html_code
+    return isinstance(exc, httpx.HTTPError)
+
+
 def _call_erddapy(glider_grab: "GliderDataFetcher") -> pd.DataFrame:
     """Temporary workaround until we move optional stamina to erddapy."""
-    return glider_grab.fetcher.to_pandas()
+    # NB: We will attempt 3 times, but return an empty dataset after that.
+    stop = 3
+    for attempt in stamina.retry_context(
+        on=retry_only_on_real_errors,
+        attempts=4,
+    ):
+        with attempt:
+            if attempt.num == stop:
+                return pd.DataFrame()
+            return glider_grab.fetcher.to_pandas()
+    return pd.DataFrame()
 
 
 @functools.lru_cache(maxsize=128)
@@ -52,6 +70,8 @@ def _to_pandas(
     for dataset_id in dataset_ids:
         glider_grab_copy.fetcher.dataset_id = dataset_id
         glider_df = _call_erddapy(glider_grab_copy)
+        if glider_df.empty:
+            continue
         dataset_url = glider_grab_copy.fetcher.get_download_url().split("?")[0]
         glider_df = standardise_df(glider_df, dataset_url)
         df_all.update({dataset_id: glider_df})
