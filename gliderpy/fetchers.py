@@ -30,20 +30,28 @@ _server = "https://gliders.ioos.us/erddap"
 
 
 def retry_only_on_real_errors(exc: Exception) -> bool:
+    """Retry on real fetch errors."""
     # If the error is an HTTP status error, only retry on 5xx errors.
+    html_code = 500
     if isinstance(exc, httpx.HTTPStatusError):
-        return exc.response.status_code >= 500
+        return exc.response.status_code >= html_code
     return isinstance(exc, httpx.HTTPError)
 
 
 def _call_erddapy(glider_grab: "GliderDataFetcher") -> pd.DataFrame:
     """Temporary workaround until we move optional stamina to erddapy."""
     # NB: We will attempt 3 times, but return an empty dataset after that.
-    for attempt in stamina.retry_context(on=retry_only_on_real_errors, attempts=4):
+    stop = 3
+    for attempt in stamina.retry_context(
+        on=retry_only_on_real_errors,
+        attempts=4,
+    ):
         with attempt:
-            if attempt.num == 3:
+            if attempt.num == stop:
                 return pd.DataFrame()
             return glider_grab.fetcher.to_pandas()
+    return pd.DataFrame()
+
 
 @functools.lru_cache(maxsize=128)
 def _to_pandas(
