@@ -40,7 +40,10 @@ from pandas_flavor import register_dataframe_method
 
 
 @register_dataframe_method
-def plot_track(df: pd.DataFrame) -> tuple[plt.Figure, plt.Axes]:
+def plot_track(
+    df: pd.DataFrame,
+    ax: plt.Axes = None,
+) -> tuple[plt.Figure, plt.Axes]:
     """Plot a track of glider path coloured by temperature.
 
     :return: figures, axes
@@ -49,10 +52,18 @@ def plot_track(df: pd.DataFrame) -> tuple[plt.Figure, plt.Axes]:
     y = df["latitude"]
     dx, dy = 2, 4
 
-    fig, ax = plt.subplots(
-        figsize=(9, 9),
-        subplot_kw={"projection": ccrs.PlateCarree()},
-    )
+    fignums = plt.get_fignums()
+    if ax is None and not fignums:
+        fig, ax = plt.subplots(
+            figsize=(9, 9),
+            subplot_kw={"projection": ccrs.PlateCarree()},
+        )
+    elif ax:
+        fig = ax.get_figure()
+    else:
+        ax = plt.gca()
+        fig = plt.gcf()
+
     ax.scatter(x, y, c=None, s=25, alpha=0.25, edgecolor="none")
     ax.coastlines("10m")
     ax.set_extent([x.min() - dx, x.max() + dx, y.min() - dy, y.max() + dy])
