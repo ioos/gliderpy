@@ -16,10 +16,9 @@ maintainers = [
   { name = "Filipe Fernandes" },
   { name = "Lindsay Abrams" },
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -28,7 +27,7 @@ classifiers = [
 dynamic = [
   "version",
 ]
-dependencies = [ "erddapy", "pandas", "pandas-flavor", "requests", "stamina", "xarray" ]
+dependencies = [ "erddapy>=3.2", "pandas", "pandas-flavor", "requests", "stamina", "xarray" ]
 optional-dependencies.docs = [ "jupyter", "nbconvert", "nbsphinx", "palettable", "sphinx" ]
 optional-dependencies.plotting = [ "cartopy", "gsw", "matplotlib" ]
 optional-dependencies.test = [
