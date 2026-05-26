@@ -5,11 +5,11 @@ import functools
 from copy import copy
 from numbers import Number
 
-from requests.exceptions import HTTPError
 import pandas as pd
 import stamina
 from erddapy import ERDDAP
 from erddapy.core.url import urlopen
+from requests.exceptions import HTTPError
 
 from gliderpy.servers import (
     server_parameter_rename,
