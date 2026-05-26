@@ -5,7 +5,7 @@ import functools
 from copy import copy
 from numbers import Number
 
-import httpx
+from requests.exceptions import HTTPError
 import pandas as pd
 import stamina
 from erddapy import ERDDAP
@@ -33,9 +33,9 @@ def retry_only_on_real_errors(exc: Exception) -> bool:
     """Retry on real fetch errors."""
     # If the error is an HTTP status error, only retry on 5xx errors.
     html_code = 500
-    if isinstance(exc, httpx.HTTPStatusError):
+    if isinstance(exc, HTTPError):
         return exc.response.status_code >= html_code
-    return isinstance(exc, httpx.HTTPError)
+    return isinstance(exc, HTTPError)
 
 
 def _call_erddapy(glider_grab: "GliderDataFetcher") -> pd.DataFrame:
@@ -193,7 +193,7 @@ class GliderDataFetcher:
             self.query_url = url
             try:
                 data = urlopen(url)
-            except httpx.HTTPError as err:
+            except HTTPError as err:
                 msg = (
                     "Error, no datasets found in supplied range. "
                     f"Try relaxing the constraints: {self.fetcher.constraints}"
