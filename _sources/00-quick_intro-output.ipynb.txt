@@ -27,10 +27,10 @@
    "execution_count": 1,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2026-05-26T14:39:39.477035Z",
-     "iopub.status.busy": "2026-05-26T14:39:39.476860Z",
-     "iopub.status.idle": "2026-05-26T14:39:44.668809Z",
-     "shell.execute_reply": "2026-05-26T14:39:44.667855Z"
+     "iopub.execute_input": "2026-05-26T16:01:56.808973Z",
+     "iopub.status.busy": "2026-05-26T16:01:56.808852Z",
+     "iopub.status.idle": "2026-05-26T16:02:02.483887Z",
+     "shell.execute_reply": "2026-05-26T16:02:02.483261Z"
     }
    },
    "outputs": [
@@ -192,10 +192,10 @@
    "execution_count": 2,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2026-05-26T14:39:44.700053Z",
-     "iopub.status.busy": "2026-05-26T14:39:44.699817Z",
-     "iopub.status.idle": "2026-05-26T14:39:48.512210Z",
-     "shell.execute_reply": "2026-05-26T14:39:48.511298Z"
+     "iopub.execute_input": "2026-05-26T16:02:02.507077Z",
+     "iopub.status.busy": "2026-05-26T16:02:02.506921Z",
+     "iopub.status.idle": "2026-05-26T16:02:08.408982Z",
+     "shell.execute_reply": "2026-05-26T16:02:08.408441Z"
     }
    },
    "outputs": [
@@ -354,10 +354,10 @@
    "execution_count": 3,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2026-05-26T14:39:48.513894Z",
-     "iopub.status.busy": "2026-05-26T14:39:48.513707Z",
-     "iopub.status.idle": "2026-05-26T14:39:48.524447Z",
-     "shell.execute_reply": "2026-05-26T14:39:48.523637Z"
+     "iopub.execute_input": "2026-05-26T16:02:08.410598Z",
+     "iopub.status.busy": "2026-05-26T16:02:08.410442Z",
+     "iopub.status.idle": "2026-05-26T16:02:08.418700Z",
+     "shell.execute_reply": "2026-05-26T16:02:08.418187Z"
     }
    },
    "outputs": [
@@ -394,10 +394,10 @@
    "execution_count": 4,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2026-05-26T14:39:48.526009Z",
-     "iopub.status.busy": "2026-05-26T14:39:48.525839Z",
-     "iopub.status.idle": "2026-05-26T14:39:48.612371Z",
-     "shell.execute_reply": "2026-05-26T14:39:48.611397Z"
+     "iopub.execute_input": "2026-05-26T16:02:08.419958Z",
+     "iopub.status.busy": "2026-05-26T16:02:08.419837Z",
+     "iopub.status.idle": "2026-05-26T16:02:09.632324Z",
+     "shell.execute_reply": "2026-05-26T16:02:09.631806Z"
     }
    },
    "outputs": [
@@ -508,10 +508,10 @@
    "execution_count": 5,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2026-05-26T14:39:48.613942Z",
-     "iopub.status.busy": "2026-05-26T14:39:48.613785Z",
-     "iopub.status.idle": "2026-05-26T14:41:04.054270Z",
-     "shell.execute_reply": "2026-05-26T14:41:04.053378Z"
+     "iopub.execute_input": "2026-05-26T16:02:09.633832Z",
+     "iopub.status.busy": "2026-05-26T16:02:09.633683Z",
+     "iopub.status.idle": "2026-05-26T16:03:04.162248Z",
+     "shell.execute_reply": "2026-05-26T16:03:04.161670Z"
     }
    },
    "outputs": [
@@ -536,10 +536,10 @@
    "execution_count": 6,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2026-05-26T14:41:04.055993Z",
-     "iopub.status.busy": "2026-05-26T14:41:04.055814Z",
-     "iopub.status.idle": "2026-05-26T14:41:04.064036Z",
-     "shell.execute_reply": "2026-05-26T14:41:04.063200Z"
+     "iopub.execute_input": "2026-05-26T16:03:04.163494Z",
+     "iopub.status.busy": "2026-05-26T16:03:04.163362Z",
+     "iopub.status.idle": "2026-05-26T16:03:04.169199Z",
+     "shell.execute_reply": "2026-05-26T16:03:04.168720Z"
     }
    },
    "outputs": [
@@ -671,44 +671,6 @@
    ],
    "source": [
     "datasets[\"ru23-20121025T1944\"].head()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### Dataset search\n",
-    "\n",
-    "One can query all dataset_ids available in the server."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 7,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2026-05-26T14:41:04.065714Z",
-     "iopub.status.busy": "2026-05-26T14:41:04.065516Z",
-     "iopub.status.idle": "2026-05-26T14:41:04.320985Z",
-     "shell.execute_reply": "2026-05-26T14:41:04.320020Z"
-    }
-   },
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "found 1607 glider datasets on https://gliders.ioos.us/erddap.\n"
-     ]
-    }
-   ],
-   "source": [
-    "from gliderpy.fetchers import DatasetList\n",
-    "\n",
-    "datasets = DatasetList()\n",
-    "ds_ids = datasets.get_ids()\n",
-    "\n",
-    "print(f\"found {len(ds_ids)} glider datasets on {datasets.e.server}.\")"
    ]
   }
  ],
