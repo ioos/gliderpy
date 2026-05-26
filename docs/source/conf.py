@@ -51,7 +51,7 @@ master_doc = "index"
 
 import datetime
 
-year = datetime.datetime.now(tz=datetime.timezone.utc).date().year
+year = datetime.datetime.now(tz=datetime.UTC).date().year
 
 # General information about the project.
 project = "gliderpy"
