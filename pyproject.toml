@@ -28,7 +28,7 @@ classifiers = [
 dynamic = [
   "version",
 ]
-dependencies = [ "erddapy", "httpx", "pandas", "pandas-flavor", "stamina", "xarray" ]
+dependencies = [ "erddapy", "requests", "pandas", "pandas-flavor", "stamina", "xarray" ]
 optional-dependencies.docs = [ "jupyter", "nbconvert", "nbsphinx", "palettable", "sphinx" ]
 optional-dependencies.plotting = [ "cartopy", "gsw", "matplotlib" ]
 optional-dependencies.test = [
@@ -38,7 +38,7 @@ optional-dependencies.test = [
   "pytest-cov",
   "pytest-mpl",
   "pytest-sugar",
-  "pytest-vcr",
+  "pytest-recording",
   "pytest-xdist",
 ]
 urls.documentation = "https://ioos.github.io/gliderpy"
