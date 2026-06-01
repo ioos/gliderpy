@@ -52,14 +52,31 @@ include-package-data = true
 dynamic.readme = { file = "README.md", content-type = "text/markdown" }
 
 [tool.setuptools_scm]
+tag_regex = "^(?P<prefix>v)?(?P<version>[^\\+]+)(?P<suffix>.*)?$"
 write_to = "gliderpy/_version.py"
 write_to_template = "__version__ = '{version}'"
-tag_regex = "^(?P<prefix>v)?(?P<version>[^\\+]+)(?P<suffix>.*)?$"
+
+[tool.interrogate]
+fail-under = 95
+ignore-init-method = true
+ignore-init-module = false
+ignore-magic = false
+ignore-semiprivate = false
+ignore-private = false
+ignore-module = false
+exclude = [
+  "docs",
+  "setup.py",
+  "tests",
+]
+color = true
+verbose = 1
+quiet = false
 
 [tool.check-manifest]
 ignore = [
-  "*.yml",
   "*.yaml",
+  "*.yml",
   ".coveragerc",
   "docs",
   "docs/*",
@@ -72,23 +89,6 @@ ignore = [
 [tool.pytest]
 ini_options.filterwarnings = [
   "error:::gliderpy.*",
-  "ignore::UserWarning",
   "ignore::RuntimeWarning",
+  "ignore::UserWarning",
 ]
-
-[tool.interrogate]
-ignore-init-method = true
-ignore-init-module = false
-ignore-magic = false
-ignore-semiprivate = false
-ignore-private = false
-ignore-module = false
-fail-under = 95
-exclude = [
-  "setup.py",
-  "docs",
-  "tests",
-]
-verbose = 1
-quiet = false
-color = true
