@@ -7,7 +7,6 @@ from gliderpy.servers import server_parameter_rename
 
 
 @pytest.fixture
-@pytest.mark.web
 def glider_grab():
     """Create the basic query object for testing."""
     g = GliderDataFetcher()
