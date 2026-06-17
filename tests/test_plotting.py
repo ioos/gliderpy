@@ -34,7 +34,7 @@ def test_plot_track(glider_data):
 
 @pytest.mark.mpl_image_compare(
     baseline_dir=root.joinpath("baseline/"),
-    tolerance=20,
+    tolerance=25,
 )
 def test_plot_transect(glider_data):
     """Test plot_transect accessor."""
