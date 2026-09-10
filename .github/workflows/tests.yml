@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [ "3.11", "3.14" ]
+        python-version: [ "3.11", "3.15.0-rc.2" ]
         os: [ ubuntu-latest ]
         mpl: [ false ]
         include:
@@ -22,13 +22,13 @@ jobs:
             os: ubuntu-latest
             mpl: true
           - os: windows-latest
-            python-version: "3.14"
+            python-version: "3.15.0-rc.2"
             mpl: false
           - os: macos-latest
-            python-version: "3.14"
+            python-version: "3.15.0-rc.2"
             mpl: false
           - os: macos-15-intel
-            python-version: "3.14"
+            python-version: "3.15.0-rc.2"
             mpl: false
       fail-fast: false
     defaults:
@@ -51,7 +51,7 @@ jobs:
       if: matrix.mpl == true
       run: |
         python -m pip install .[test,plotting]
-        python -m pytest -rxs --cov=gliderpy --mpl tests
+        python -m pytest -rxs --mpl tests
 
     - name: Tests
       if: matrix.mpl == false
