@@ -198,7 +198,7 @@ class GliderDataFetcher:
                     "Error, no datasets found in supplied range. "
                     f"Try relaxing the constraints: {self.fetcher.constraints}"
                 )
-                err.message = f"{err.message}\n{msg}"
+                err.args = (f"{err}\n{msg}",)
                 raise
 
             cols = ["Title", "Institution", "Dataset ID"]
